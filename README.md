@@ -1,4 +1,4 @@
-# 🦊 Foxmen Studio HQ
+# Foxmen Studio HQ
 
 > **A high-performance implementation portfolio and agency platform built for the future.**
 > Featuring a custom Neo-Brutalist Admin Dashboard, dynamic content management, and a cutting-edge tech stack.
