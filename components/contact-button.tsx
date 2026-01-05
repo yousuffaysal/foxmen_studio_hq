@@ -19,8 +19,9 @@ export function ContactButton({ className, onClick }: ContactButtonProps) {
                     .button {
                         --main-size: 1.8em; /* Slightly adjusted for navbar fit */
                         --color-text: #ffffff;
-                        --color-background: #6E35FF; /* Brand Purple */
-                        --color-background-hover: #5a2bd9; /* Darker Purple */
+                        --color-background: #000000; /* Black background */
+                        --color-brand-primary: #6E35FF; /* Original Brand Purple */
+                        --color-brand-dark: #5a2bd9; /* Original Darker Purple */
                         --color-outline: #6e35ff40;
                         --color-shadow: #00000040;
                         cursor: pointer;
@@ -54,7 +55,7 @@ export function ContactButton({ className, onClick }: ContactButtonProps) {
                     .button:hover {
                         outline: 0.1em solid transparent;
                         outline-offset: 0.2em;
-                        box-shadow: 0 0 1em 0 var(--color-background);
+                        box-shadow: 0 0 1em 0 var(--color-brand-primary);
                         animation: ripple 1s linear infinite, colorize 1s infinite;
                         padding-right: 1.2em; /* Increase padding on hover */
                         gap: 0.6em; /* Increase gap on hover */
@@ -125,9 +126,9 @@ export function ContactButton({ className, onClick }: ContactButtonProps) {
                     }
 
                     @keyframes colorize {
-                        0% { background: var(--color-background); }
-                        50% { background: var(--color-background-hover); }
-                        100% { background: var(--color-background); }
+                        0% { background: var(--color-brand-primary); }
+                        50% { background: var(--color-brand-dark); }
+                        100% { background: var(--color-brand-primary); }
                     }
 
                     @keyframes ripple {

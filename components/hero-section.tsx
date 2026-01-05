@@ -1,6 +1,7 @@
 "use client"
 
 import { Mail, FolderOpen } from "lucide-react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { useEffect } from "react"
 import { HeroBookingButton } from "./hero-booking-button"
@@ -59,19 +60,24 @@ export function HeroSection() {
     <section className="relative w-full px-4 py-16 md:py-24">
 
       <div className="max-w-[1440px] mx-auto grid md:grid-cols-2 gap-12 items-center relative">
-        <div className="space-y-6 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="space-y-6 relative z-10"
+        >
           <div className="flex items-center gap-3 mb-4">
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#A886FF] opacity-75 duration-1000"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-[#A886FF] shadow-[0_0_8px_2px_rgba(168,134,255,0.5)]"></span>
             </span>
-            <span className="font-mono text-sm md:text-base font-medium text-[#393939]">
+            <span className="font-mono text-sm md:text-base font-medium text-[#393939]" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
               Available for new projects
             </span>
           </div>
           <h1
-            className="text-[36px] leading-[44px] sm:text-[44px] sm:leading-[52px] md:text-[92px] font-bold md:leading-[104px]"
-            style={{ fontFamily: "var(--font-owners-regular)" }}
+            className="text-[36px] leading-[44px] sm:text-[44px] sm:leading-[52px] md:text-[92px] md:leading-[104px] text-[#414042]"
+            style={{ fontFamily: "var(--font-ibm-plex-sans)" }}
           >
             Welcome to <br className="block md:hidden" />
             <span className="inline-block md:inline md:my-0">
@@ -94,7 +100,7 @@ export function HeroSection() {
             <HeroBookingButton />
             <ViewProjectsButton />
           </div>
-        </div>
+        </motion.div>
 
         <div className="flex justify-center md:justify-end">
           {/* Video removed as per request */}

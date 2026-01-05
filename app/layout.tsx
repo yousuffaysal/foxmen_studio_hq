@@ -49,6 +49,16 @@ const neueMontrealFont = localFont({
   variable: "--font-neue-montreal",
 })
 
+const ibmPlexSansRegularFont = localFont({
+  src: "./fonts/ibm-plex-sans-3/IBMPlexSans-Regular.ttf",
+  variable: "--font-ibm-plex-sans",
+})
+
+const ibmPlexMonoRegularFont = localFont({
+  src: "./fonts/IBMPlexMono-Regular.ttf",
+  variable: "--font-ibm-plex-mono",
+})
+
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://foxmen.studio"),
@@ -124,7 +134,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={`${ownersMediumFont.variable} ${ownersRegularFont.variable} ${interSemiBoldFont.variable} ${interRegularFont.variable} ${interLightFont.variable} ${interThinFont.variable} ${neueMontrealFont.variable} font-sans antialiased overflow-x-hidden`} suppressHydrationWarning>
+      <body className={`${ownersMediumFont.variable} ${ownersRegularFont.variable} ${interSemiBoldFont.variable} ${interRegularFont.variable} ${interLightFont.variable} ${interThinFont.variable} ${neueMontrealFont.variable} ${ibmPlexSansRegularFont.variable} ${ibmPlexMonoRegularFont.variable} font-sans antialiased overflow-x-hidden`} suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
