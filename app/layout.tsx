@@ -120,7 +120,7 @@ export const metadata: Metadata = {
     canonical: "https://foxmen.studio",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png",
   },
 }
 
@@ -132,7 +132,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png" sizes="any" />
       </head>
       <body className={`${ownersMediumFont.variable} ${ownersRegularFont.variable} ${interSemiBoldFont.variable} ${interRegularFont.variable} ${interLightFont.variable} ${interThinFont.variable} ${neueMontrealFont.variable} ${ibmPlexSansRegularFont.variable} ${ibmPlexMonoRegularFont.variable} font-sans antialiased overflow-x-hidden`} suppressHydrationWarning>
         <script
