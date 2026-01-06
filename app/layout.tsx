@@ -6,6 +6,7 @@ import "./globals.css"
 import { Geist_Mono as Geist_Mono_Font } from "next/font/google"
 import localFont from "next/font/local"
 import TargetCursor from "@/components/target-cursor"
+import { FoxoChatWidget } from "@/components/foxo-chat-widget"
 
 // Initialize fonts
 const _geistMono = Geist_Mono_Font({
@@ -175,6 +176,7 @@ export default function RootLayout({
           parallaxOn={true}
           targetSelector="a, button, input, textarea, .cursor-pointer, .cursor-target, [role='button'], [data-cal-link]"
         />
+        <FoxoChatWidget />
         {children}
       </body>
     </html>

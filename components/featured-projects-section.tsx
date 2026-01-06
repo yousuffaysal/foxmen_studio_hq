@@ -146,17 +146,15 @@ function FeaturedProjectCard({ project, index, className = "" }: { project: any,
 
     return (
         <motion.div
-            // Mobile: Sticky with fixed top to create overlapping stack effect.
-            // md+: Relative with top-0.
+            // Mobile: Sticky with stacking top offset
             style={{
-                // Fixed top offset for mobile overlapping
-                // @ts-ignore
-                "--mobile-top": "6rem"
+                top: `calc(6rem + ${index * 1}rem)`, // Staggered top for visible stacking
+                zIndex: index + 1
             }}
             className={`
                 group flex flex-col rounded-xl overflow-hidden ${className} bg-white shadow-2xl ring-1 ring-black/5 
                 hover:ring-black/10 transition-all duration-300 hover:shadow-3xl hover:-translate-y-2
-                sticky md:relative top-[var(--mobile-top)] md:top-0 z-[${index + 1}]
+                sticky md:relative md:top-0 md:z-auto w-full
             `}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
