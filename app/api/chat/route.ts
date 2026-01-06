@@ -23,31 +23,42 @@ export async function POST(req: Request) {
         const { messages, conversationId } = await req.json();
         const userMessage = messages[messages.length - 1].content;
 
-        // 1. Create or get conversation
+        // 1. Create or get conversation (Soft Fail)
         let convId = conversationId;
-        if (!convId) {
-            const conv = await prisma.conversation.create({
-                data: {},
-            });
-            convId = conv.id;
+        try {
+            if (!convId) {
+                const conv = await prisma.conversation.create({
+                    data: {},
+                });
+                convId = conv.id;
+            }
+        } catch (dbError) {
+            console.warn("DB Message: Failed to create conversation (likely read-only FS on Vercel)", dbError);
+            // Fallback: Generate a temporary ID if DB fails
+            if (!convId) convId = "temp-" + Date.now();
         }
 
-        // 2. Save User Message
-        await prisma.message.create({
-            data: {
-                conversationId: convId,
-                role: "user",
-                content: userMessage,
-            },
-        });
+        // 2. Save User Message (Soft Fail)
+        try {
+            if (!convId.startsWith("temp-")) {
+                await prisma.message.create({
+                    data: {
+                        conversationId: convId,
+                        role: "user",
+                        content: userMessage,
+                    },
+                });
+            }
+        } catch (dbError) {
+            console.warn("DB Warning: Failed to save user message", dbError);
+        }
 
         // 3. Call Groq API
         if (!process.env.GROQ_API_KEY) {
             throw new Error("GROQ_API_KEY is not defined in environment variables");
         }
 
-        // Construct history for Groq. Groq supports system messages.
-        // We limit history to last 10 messages for context window management
+        // Construct history for Groq
         const history = messages.slice(-11, -1).map((m: any) => ({
             role: m.role === "assistant" ? "assistant" : "user",
             content: m.content
@@ -59,10 +70,9 @@ export async function POST(req: Request) {
             { role: "user", content: userMessage }
         ];
 
-        // Retry logic for 429 Rate Limits
+        // Retry logic
         const sendMessageWithRetry = async (msgs: any[], retries = 3): Promise<any> => {
             try {
-                // Validate message structure
                 const validMsgs = msgs.filter(m => m.content && m.role);
 
                 return await groq.chat.completions.create({
@@ -72,9 +82,7 @@ export async function POST(req: Request) {
                     max_tokens: 1024,
                 });
             } catch (e: any) {
-                // Handle rate limits
                 if ((e.status === 429 || e.code === 'rate_limit_exceeded') && retries > 0) {
-                    console.warn(`Hit 429. Retrying... Attempts left: ${retries}`);
                     await new Promise(r => setTimeout(r, 2000));
                     return sendMessageWithRetry(msgs, retries - 1);
                 }
@@ -85,32 +93,44 @@ export async function POST(req: Request) {
         const result = await sendMessageWithRetry(apiMessages);
         const responseText = result.choices[0]?.message?.content || "";
 
-        // 4. Save Assistant Message
-        await prisma.message.create({
-            data: {
-                conversationId: convId,
-                role: "assistant",
-                content: responseText,
-            },
-        });
-
-        // 5. Check for Escalation
-        const escalationKeywords = ["problem", "complaint", "bug", "broken", "issue", "error", "fail", "bad service", "refund"];
-        const isEscalation = escalationKeywords.some(kw => userMessage.toLowerCase().includes(kw));
-
-        if (isEscalation) {
-            const existing = await prisma.escalation.findFirst({
-                where: { conversationId: convId },
-            });
-            if (!existing) {
-                await prisma.escalation.create({
+        // 4. Save Assistant Message (Soft Fail)
+        try {
+            if (!convId.startsWith("temp-")) {
+                await prisma.message.create({
                     data: {
                         conversationId: convId,
-                        reason: "Detected keywords in user message",
-                        status: "PENDING",
+                        role: "assistant",
+                        content: responseText,
                     },
                 });
             }
+        } catch (dbError) {
+            console.warn("DB Warning: Failed to save assistant message", dbError);
+        }
+
+        // 5. Check for Escalation (Soft Fail)
+        try {
+            if (!convId.startsWith("temp-")) {
+                const escalationKeywords = ["problem", "complaint", "bug", "broken", "issue", "error", "fail", "bad service", "refund"];
+                const isEscalation = escalationKeywords.some(kw => userMessage.toLowerCase().includes(kw));
+
+                if (isEscalation) {
+                    const existing = await prisma.escalation.findFirst({
+                        where: { conversationId: convId },
+                    });
+                    if (!existing) {
+                        await prisma.escalation.create({
+                            data: {
+                                conversationId: convId,
+                                reason: "Detected keywords in user message",
+                                status: "PENDING",
+                            },
+                        });
+                    }
+                }
+            }
+        } catch (dbError) {
+            console.warn("DB Warning: Failed to check escalation", dbError);
         }
 
         return NextResponse.json({
@@ -122,7 +142,6 @@ export async function POST(req: Request) {
     } catch (error: any) {
         console.error("Chat API Error:", error);
 
-        // Propagate 429 status code if strictly identified
         if (error.status === 429 || error.message?.includes("429")) {
             return NextResponse.json({
                 error: "Rate Limit Exceeded",
