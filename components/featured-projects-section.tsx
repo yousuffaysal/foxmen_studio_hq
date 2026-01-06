@@ -14,7 +14,7 @@ export function FeaturedProjectsSection() {
             logo: "/logos/company.svg",
             bgColor: "bg-[#FFC224]",
             illustration: "/images/studio-workspace.svg",
-            video: "https://res.cloudinary.com/duh7c5x99/video/upload/v1765916680/Screen_Recording_2025-12-16_at_4.13.24_PM_1_1_vtucjo.mp4",
+            video: "https://res.cloudinary.com/dk2txf8o3/video/upload/v1767674182/Screen_Recording_2025-12-16_at_4.13.24_PM_1_1_fcn7rj.mp4",
             poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1765916680/Screen_Recording_2025-12-16_at_4.13.24_PM_1_1_vtucjo.jpg",
             displayUrl: "vastspace.com",
         },
@@ -25,7 +25,7 @@ export function FeaturedProjectsSection() {
             logo: "/logos/startup.svg",
             bgColor: "bg-[#4F46E5]",
             illustration: "/images/studio-workspace.svg",
-            video: "https://res.cloudinary.com/duh7c5x99/video/upload/v1766068763/From_KlickPin_CF_UI_Design_for_money_transfer_and_digital_payment_services_Payoneer_Interactive_web_design_Mobile_app_design_inspiration_Banking_app_b58lz8.mp4",
+            video: "https://res.cloudinary.com/dk2txf8o3/video/upload/v1767674056/From_KlickPin_CF_UI_Design_for_money_transfer_and_digital_payment_services_Payoneer_Interactive_web_design_Mobile_app_design_inspiration_Banking_app_bazz7f.mp4",
             poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766068763/From_KlickPin_CF_UI_Design_for_money_transfer_and_digital_payment_services_Payoneer_Interactive_web_design_Mobile_app_design_inspiration_Banking_app_b58lz8.jpg",
             displayUrl: "app store",
         },
@@ -36,7 +36,7 @@ export function FeaturedProjectsSection() {
             logo: "/logos/agency.svg",
             bgColor: "bg-[#FF5F56]",
             illustration: "/images/venture-workspace.svg",
-            video: "https://res.cloudinary.com/duh7c5x99/video/upload/v1766061712/coinbase_brand_film_1080p_ym70u6.mp4",
+            video: "https://res.cloudinary.com/dk2txf8o3/video/upload/v1767674035/coinbase_brand_film_1080p_poh7aq.mp4",
             poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766061712/coinbase_brand_film_1080p_ym70u6.jpg",
             displayUrl: "coinbase.com",
         },
@@ -47,7 +47,7 @@ export function FeaturedProjectsSection() {
             logo: "/logos/healthcare.svg",
             bgColor: "bg-[#27C93F]",
             illustration: "/images/studio-workspace.svg",
-            video: "https://res.cloudinary.com/duh7c5x99/video/upload/v1766050597/Screen_Recording_2025-12-18_at_3.23.38_PM_1_b0becr.mp4",
+            video: "https://res.cloudinary.com/dk2txf8o3/video/upload/v1767674222/Screen_Recording_2025-12-18_at_3.23.38_PM_1_rmj7bp.mov",
             poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766050597/Screen_Recording_2025-12-18_at_3.23.38_PM_1_b0becr.jpg",
             displayUrl: "wefunder.com",
         },
@@ -58,7 +58,7 @@ export function FeaturedProjectsSection() {
             logo: "/logos/startup.svg",
             bgColor: "bg-[#FF90E8]",
             illustration: "/images/venture-workspace.svg",
-            video: "https://res.cloudinary.com/duh7c5x99/video/upload/v1766047326/Screen_Recording_2025-12-18_at_2.32.23_PM_nmuegb.mp4",
+            video: "https://res.cloudinary.com/dk2txf8o3/video/upload/v1767674245/Screen_Recording_2025-12-18_at_2.32.23_PM_1_onkxfj.mov",
             poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766047326/Screen_Recording_2025-12-18_at_2.32.23_PM_nmuegb.jpg",
             displayUrl: "pluralsight.com",
         },
@@ -192,7 +192,7 @@ function FeaturedProjectCard({ project, index, className = "" }: { project: any,
                         muted
                         playsInline={true}
                         preload="metadata"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-top"
                     />
                 ) : (
                     <Image

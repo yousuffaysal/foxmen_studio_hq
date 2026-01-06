@@ -5,13 +5,13 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #0a0a0a;
+  --foreground: #414042;
   --card: #ffffff;
   --card-foreground: #0a0a0a;
   --popover: #ffffff;
   --popover-foreground: #0a0a0a;
-  --primary: #0a0a0a;
-  --primary-foreground: #fafafa;
+  --primary: #8B5DFF;
+  --primary-foreground: #ffffff;
   --secondary: #f5f5f5;
   --secondary-foreground: #171717;
   --muted: #f5f5f5;
@@ -46,7 +46,7 @@
   --card-foreground: #fafafa;
   --popover: #262626;
   --popover-foreground: #fafafa;
-  --primary: #737373;
+  --primary: #8B5DFF;
   --primary-foreground: #fafafa;
   --secondary: #262626;
   --secondary-foreground: #fafafa;
@@ -77,9 +77,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-sfpro-regular), "Onest", "Onest Fallback", system-ui, sans-serif;
-  --font-heading: var(--font-sfpro), "Onest", "Onest Fallback", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", monospace;
+  --font-sans: var(--font-ibm-plex-mono), "IBM Plex Mono", monospace;
+  --font-heading: var(--font-ibm-plex-sans-medium), "IBM Plex Sans", sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), "IBM Plex Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

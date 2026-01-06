@@ -2,7 +2,6 @@ import { Footer } from "@/components/footer"
 import { Navigation } from "@/components/navigation"
 import {
     AboutHero,
-    AboutHighlights,
     AboutServices,
     AboutApproach,
     AboutTech,
@@ -16,7 +15,6 @@ export default function AboutPage() {
             <Navigation />
             <main>
                 <AboutHero />
-                <AboutHighlights />
                 <AboutServices />
                 <AboutApproach />
                 <AboutTech />

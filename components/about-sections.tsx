@@ -1,71 +1,79 @@
 "use client"
 
-import { ArrowRight, Check, Code, Cpu, Globe, Layout, Smartphone, Users, Zap, Award, Star, ShieldCheck } from "lucide-react"
+import { ArrowRight, Code, Cpu, Globe, Layout, Smartphone, Users, Zap, Star, MoveRight } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { useRef } from "react"
 
 export function AboutHero() {
     return (
-        <section className="py-24 md:py-32 bg-white px-4 md:px-8">
-            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-start gap-12 md:gap-24">
-                <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-[#6E35FF]"></div>
-                    <span className="text-gray-500 font-medium text-lg md:text-xl" style={{ fontFamily: "var(--font-inter-regular)" }}>&#123;01&#125; — About us</span>
-                </div>
-
-                <p className="text-2xl md:text-4xl lg:text-5xl text-[#0B0B0B] font-medium leading-tight max-w-4xl" style={{ fontFamily: "var(--font-inter-regular)" }}>
-                    We are a full-service digital agency specializing in website development, branding, 3D product animation, SEO, and digital marketing with affordable prices.
-                </p>
+        <section className="relative min-h-[90vh] flex flex-col justify-center px-4 md:px-8 overflow-hidden bg-[#050505] text-[#f0f0f0]">
+            {/* Background Atmosphere */}
+            <div className="absolute inset-0 z-0">
+                <div className="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-[#8B5DFF] opacity-20 blur-[150px] rounded-full mix-blend-screen animate-pulse duration-[10s]" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#6E35FF] opacity-10 blur-[120px] rounded-full mix-blend-screen" />
+                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
             </div>
-        </section>
-    )
-}
 
-export function AboutHighlights() {
-    return (
-        <section className="pb-24 px-4 md:px-8 bg-white">
-            <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Left Large Card - Top Rated */}
-                <div className="bg-[#F8F8F8] p-8 md:p-12 rounded-[32px] md:rounded-[40px] flex flex-col justify-between min-h-[400px] relative overflow-hidden group">
-                    <div className="absolute top-8 right-8 w-16 h-16 bg-[#00C48C] rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                        fi
-                    </div>
+            <div className="max-w-[1800px] mx-auto w-full relative z-10 pt-20">
+                <div className="flex flex-col gap-8">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="flex items-center gap-4"
+                    >
+                        <div className="h-[1px] w-12 bg-[#8B5DFF]" />
+                        <span className="text-[#8B5DFF] font-medium tracking-widest uppercase text-sm" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
+                            Who We Are
+                        </span>
+                    </motion.div>
 
-                    <div className="mt-auto z-10">
-                        <p className="text-gray-500 font-medium mb-4 text-sm md:text-base tracking-wide uppercase">2023 - Present</p>
-                        <h3 className="text-3xl md:text-5xl font-bold mb-8 text-[#0B0B0B]" style={{ fontFamily: "var(--font-owners-medium)" }}>Top Rated Seller on Fiverr</h3>
-
-                        <div className="flex flex-wrap gap-3">
-                            <span className="px-6 py-3 bg-white border border-gray-100 rounded-full text-sm font-bold text-gray-700">UI/UX Design</span>
-                            <span className="px-6 py-3 bg-white border border-gray-100 rounded-full text-sm font-bold text-gray-700">Branding</span>
+                    <h1 className="text-[clamp(3.5rem,8vw,9rem)] leading-[0.9] font-bold tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
+                        <div className="overflow-hidden">
+                            <motion.span
+                                initial={{ y: "100%" }}
+                                animate={{ y: 0 }}
+                                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                                className="block"
+                            >
+                                DIGITAL
+                            </motion.span>
                         </div>
-                    </div>
-                    <div className="absolute bottom-8 right-8 text-[#6E35FF]/20 font-bold text-lg">01</div>
+                        <div className="overflow-hidden text-[#8B5DFF]">
+                            <motion.span
+                                initial={{ y: "100%" }}
+                                animate={{ y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                                className="block"
+                            >
+                                ALCHEMY
+                            </motion.span>
+                        </div>
+                        <div className="overflow-hidden ml-[2vw]">
+                            <motion.span
+                                initial={{ y: "100%" }}
+                                animate={{ y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                                className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50"
+                            >
+                                STUDIO.
+                            </motion.span>
+                        </div>
+                    </h1>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        className="max-w-2xl mt-8 ml-auto mr-[5vw]"
+                    >
+                        <p className="text-xl md:text-2xl text-gray-400 leading-relaxed font-light" style={{ fontFamily: "var(--font-sans)" }}>
+                            We fuse creative chaos with engineering precision. Not just another agency, but your partner in crafting digital experiences that <span className="text-white font-medium">defy expectations</span>.
+                        </p>
+                    </motion.div>
                 </div>
-
-                {/* Right Column - 2 Smaller Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-                    {/* Card 02 */}
-                    <div className="bg-[#F8F8F8] p-8 rounded-[32px] md:rounded-[40px] flex flex-col justify-between min-h-[300px] relative">
-                        <div>
-                            <p className="text-gray-500 font-medium mb-4 text-sm tracking-wide uppercase">05 April, 2025</p>
-                            <h3 className="text-2xl md:text-4xl font-bold text-[#0B0B0B] leading-tight" style={{ fontFamily: "var(--font-owners-medium)" }}>Sites of the Day Winner</h3>
-                        </div>
-                        <div className="absolute bottom-8 right-8 text-gray-300 font-bold text-lg">02</div>
-                    </div>
-
-                    {/* Card 03 */}
-                    <div className="bg-[#F8F8F8] p-8 rounded-[32px] md:rounded-[40px] flex flex-col justify-between min-h-[300px] relative">
-                        <div>
-                            <p className="text-gray-500 font-medium mb-4 text-sm tracking-wide uppercase">2023 - 2025</p>
-                            <h3 className="text-2xl md:text-4xl font-bold text-[#0B0B0B] leading-tight" style={{ fontFamily: "var(--font-owners-medium)" }}>Google Premier Partner</h3>
-                        </div>
-                        <div className="absolute bottom-8 right-8 text-gray-300 font-bold text-lg">03</div>
-                    </div>
-                </div>
-            </div>
-            <div className="w-full h-1.5 bg-gray-100 mt-2 rounded-full overflow-hidden max-w-[1600px] mx-auto">
-                <div className="h-full bg-[#6E35FF] w-1/2 rounded-full"></div>
             </div>
         </section>
     )
@@ -73,30 +81,51 @@ export function AboutHighlights() {
 
 export function AboutServices() {
     const services = [
-        { title: "Mobile App Development", icon: Smartphone, desc: "Native and cross-platform apps that feel seamless." },
-        { title: "Web & Web App Dev", icon: Globe, desc: "Scalable, high-performance web solutions." },
-        { title: "AI & Automation", icon: Zap, desc: "Smart integrations to power up your workflow." },
-        { title: "Digital Product Dev", icon: Code, desc: "End-to-end product lifecycle management." },
-        { title: "UI/UX Design", icon: Layout, desc: "Interfaces that users love to touch and explore." },
-        { title: "Digital Marketing", icon: Users, desc: "Strategic growth and brand positioning." },
+        { title: "Mobile Evolution", icon: Smartphone, desc: "Native apps that feel alive." },
+        { title: "Web Architectures", icon: Globe, desc: "Scalable, high-performance ecosystems." },
+        { title: "Intelligent Systems", icon: Zap, desc: "AI integrations that power growth." },
+        { title: "Product Strategy", icon: Code, desc: "From napking sketch to market leader." },
+        { title: "Immersive UI/UX", icon: Layout, desc: "Interfaces that demand interaction." },
+        { title: "Growth Engine", icon: Users, desc: "Data-driven marketing campaigns." },
     ]
+
     return (
-        <section className="py-20 md:py-32 px-4 md:px-8 bg-white">
-            <div className="max-w-[1600px] mx-auto">
-                <div className="mb-16 md:mb-24 max-w-2xl">
-                    <h2 className="text-4xl md:text-6xl font-bold mb-6 text-[#0B0B0B]" style={{ fontFamily: "var(--font-owners-medium)" }}>What We Do</h2>
-                    <p className="text-lg text-gray-500" style={{ fontFamily: "var(--font-inter-regular)" }}>Comprehensive digital solutions tailored to your growth.</p>
-                </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {services.map((service, index) => (
-                        <div key={index} className="bg-white p-8 md:p-10 rounded-[32px] border border-gray-100 hover:shadow-lg hover:shadow-[#6E35FF]/5 hover:border-[#6E35FF]/20 transition-all duration-300 group">
-                            <div className="w-14 h-14 bg-[#F8F8F8] group-hover:bg-[#6E35FF] text-[#6E35FF] group-hover:text-white rounded-2xl flex items-center justify-center mb-8 transition-colors">
-                                <service.icon className="w-7 h-7" />
-                            </div>
-                            <h3 className="text-2xl font-bold mb-4 text-[#0B0B0B]" style={{ fontFamily: "var(--font-owners-medium)" }}>{service.title}</h3>
-                            <p className="text-gray-500 font-medium leading-relaxed" style={{ fontFamily: "var(--font-inter-regular)" }}>{service.desc}</p>
-                        </div>
-                    ))}
+        <section className="py-24 md:py-32 bg-white px-4 md:px-8 text-[#0a0a0a]">
+            <div className="max-w-[1800px] mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                    <div className="lg:col-span-4 sticky top-24 h-fit">
+                        <h2 className="text-5xl md:text-7xl font-bold mb-8 leading-none" style={{ fontFamily: "var(--font-heading)" }}>
+                            OUR <br /><span className="text-[#8B5DFF]">CRAFT</span>
+                        </h2>
+                        <p className="text-xl text-gray-500 max-w-sm mb-12" style={{ fontFamily: "var(--font-sans)" }}>
+                            Comprehensive digital solutions tailored to elevate your brand above the noise.
+                        </p>
+                        <div className="w-16 h-1 bg-[#8B5DFF]" />
+                    </div>
+
+                    <div className="lg:col-span-8 grid md:grid-cols-2 gap-6">
+                        {services.map((service, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="group relative bg-[#f4f4f4] hover:bg-[#0a0a0a] hover:text-white p-8 md:p-10 rounded-[2rem] transition-all duration-500 overflow-hidden"
+                            >
+                                <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <MoveRight className="w-6 h-6 -rotate-45 group-hover:rotate-0 transition-transform duration-500" />
+                                </div>
+
+                                <div className="mb-8 w-12 h-12 bg-white text-black group-hover:bg-[#8B5DFF] group-hover:text-white rounded-full flex items-center justify-center transition-colors duration-500">
+                                    <service.icon className="w-6 h-6" />
+                                </div>
+
+                                <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "var(--font-heading)" }}>{service.title}</h3>
+                                <p className="text-gray-500 group-hover:text-gray-300 font-medium transition-colors" style={{ fontFamily: "var(--font-sans)" }}>{service.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
@@ -105,26 +134,27 @@ export function AboutServices() {
 
 export function AboutApproach() {
     return (
-        <section className="py-20 md:py-32 px-4 md:px-8 bg-[#F8F8F8]">
-            <div className="max-w-[1600px] mx-auto">
-                <div className="mb-16 md:mb-24 text-center">
-                    <h2 className="text-4xl md:text-6xl font-bold mb-4 text-[#0B0B0B]" style={{ fontFamily: "var(--font-owners-medium)" }}>How We Work</h2>
+        <section className="py-32 bg-[#050505] text-white overflow-hidden">
+            <div className="container mx-auto px-4 md:px-8">
+                <div className="flex flex-col items-center text-center mb-24">
+                    <span className="text-[#8B5DFF] font-mono mb-4 text-sm tracking-widest uppercase">The Process</span>
+                    <h2 className="text-4xl md:text-6xl font-bold max-w-3xl leading-tight" style={{ fontFamily: "var(--font-heading)" }}>
+                        From Chaos to <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8B5DFF] to-white">Clarity</span>
+                    </h2>
                 </div>
-                <div className="grid md:grid-cols-3 gap-8 text-center relative">
-                    {/* Connector Line (Desktop) */}
-                    <div className="hidden md:block absolute top-[40px] left-[16%] right-[16%] h-[2px] bg-gray-200 z-0"></div>
 
+                <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {[
-                        { step: "01", title: "Think", desc: "Deeply understand problems" },
-                        { step: "02", title: "Design", desc: "Craft intuitive experiences" },
-                        { step: "03", title: "Build", desc: "Engineer scalable products" }
+                        { step: "01", title: "Dissect", desc: "We break down the problem to its core molecules." },
+                        { step: "02", title: "Synthesize", desc: "Reassembling ideas into coherent, powerful designs." },
+                        { step: "03", title: "Amplify", desc: "Engineering solutions that scale infinitely." }
                     ].map((item, i) => (
-                        <div key={i} className="relative z-10 flex flex-col items-center group">
-                            <div className="w-20 h-20 bg-white border border-gray-100 rounded-full flex items-center justify-center text-xl font-bold mb-8 shadow-sm group-hover:scale-110 group-hover:border-[#6E35FF] group-hover:text-[#6E35FF] transition-all duration-300">
+                        <div key={i} className="relative p-8 border border-white/10 rounded-3xl hover:border-[#8B5DFF]/50 hover:bg-white/5 transition-all duration-500 group">
+                            <div className="text-[8rem] font-bold text-white/5 absolute -top-10 -right-4 group-hover:text-[#8B5DFF]/10 transition-colors" style={{ fontFamily: "var(--font-heading)" }}>
                                 {item.step}
                             </div>
-                            <h3 className="text-3xl font-bold mb-4 text-[#0B0B0B]" style={{ fontFamily: "var(--font-owners-medium)" }}>{item.title}</h3>
-                            <p className="text-xl text-gray-500 font-medium" style={{ fontFamily: "var(--font-inter-regular)" }}>{item.desc}</p>
+                            <h3 className="text-3xl font-bold mb-4 mt-8 relative z-10" style={{ fontFamily: "var(--font-heading)" }}>{item.title}</h3>
+                            <p className="text-gray-400 font-light relative z-10" style={{ fontFamily: "var(--font-sans)" }}>{item.desc}</p>
                         </div>
                     ))}
                 </div>
@@ -136,14 +166,14 @@ export function AboutApproach() {
 export function AboutTech() {
     const techs = ["Django", "MERN", "Next.js", "Nest.js", "Python", "React", "Figma", "Framer", "AI Tools"]
     return (
-        <section className="py-20 md:py-32 px-4 md:px-8 bg-white">
-            <div className="max-w-[1600px] mx-auto text-center">
-                <h2 className="text-4xl md:text-5xl font-bold mb-12 text-[#0B0B0B]" style={{ fontFamily: "var(--font-owners-medium)" }}>Built on Modern Engineering</h2>
-                <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+        <section className="py-24 bg-white">
+            <div className="container mx-auto px-4 text-center">
+                <p className="text-[#8B5DFF] font-mono mb-6 text-sm">Powered By</p>
+                <div className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-4xl mx-auto">
                     {techs.map((tech, i) => (
-                        <div key={i} className="bg-white px-8 py-4 rounded-full border border-gray-200 hover:border-[#6E35FF] hover:text-[#6E35FF] transition-all font-bold text-lg text-gray-600 shadow-sm hover:shadow-md cursor-default">
+                        <span key={i} className="px-6 py-3 rounded-full border border-black/10 text-lg md:text-xl font-medium hover:bg-[#8B5DFF] hover:text-white hover:border-[#8B5DFF] transition-all duration-300 cursor-default" style={{ fontFamily: "var(--font-heading)" }}>
                             {tech}
-                        </div>
+                        </span>
                     ))}
                 </div>
             </div>
@@ -153,35 +183,31 @@ export function AboutTech() {
 
 export function AboutStatsMarquee() {
     const stats = [
-        { label: "satisfied clients", value: "+" },
-        { label: "projects finished", value: "3500+" },
-        { label: "orders in queue", value: "10+" },
-        { label: "years experience", value: "5+" },
-        { label: "team members", value: "20+" },
+        { label: "Satisfied Clients", value: "100%" },
+        { label: "Projects Shipped", value: "3.5k+" },
+        { label: "Active Orders", value: "10+" },
+        { label: "Years Experience", value: "05+" },
+        { label: "Team Strength", value: "20+" },
     ]
 
     return (
-        <section className="py-12 bg-[#111] overflow-hidden whitespace-nowrap relative flex items-center">
-            <div className="animate-marquee inline-flex items-center gap-12 md:gap-24 px-6">
-                {[...stats, ...stats, ...stats].map((stat, i) => (
-                    <div key={i} className="flex items-center gap-8 md:gap-12 shrink-0 opacity-80 hover:opacity-100 transition-opacity">
-                        <div className="w-10 h-10 md:w-12 md:h-12 bg-[#6E35FF] text-white rounded-xl flex items-center justify-center rotate-45 shrink-0">
-                            <Star className="w-5 h-5 md:w-6 md:h-6 -rotate-45 fill-white" />
-                        </div>
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-4xl md:text-5xl font-bold text-[#6E35FF]">{stat.value}</span>
-                            <span className="text-3xl md:text-4xl font-medium text-white/90">/ {stat.label}</span>
-                        </div>
+        <section className="py-16 bg-[#050505] overflow-hidden whitespace-nowrap border-y border-white/10">
+            <div className="flex items-center gap-16 animate-marquee">
+                {[...stats, ...stats, ...stats, ...stats].map((stat, i) => (
+                    <div key={i} className="flex items-center gap-4 opacity-50 hover:opacity-100 transition-opacity duration-300">
+                        <span className="text-5xl md:text-7xl font-bold text-white" style={{ fontFamily: "var(--font-heading)" }}>{stat.value}</span>
+                        <span className="text-sm md:text-base text-[#8B5DFF] font-mono uppercase tracking-wider">{stat.label}</span>
+                        <div className="w-2 h-2 rounded-full bg-white/20 ml-8" />
                     </div>
                 ))}
             </div>
             <style jsx>{`
+                .animate-marquee {
+                    animation: marquee 40s linear infinite;
+                }
                 @keyframes marquee {
                     0% { transform: translateX(0); }
                     100% { transform: translateX(-50%); }
-                }
-                .animate-marquee {
-                    animation: marquee 30s linear infinite;
                 }
             `}</style>
         </section>
@@ -190,14 +216,14 @@ export function AboutStatsMarquee() {
 
 export function AboutCTA() {
     return (
-        <section className="py-24 md:py-40 px-4 md:px-8 bg-white border-t border-gray-100">
-            <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-4xl md:text-7xl font-bold mb-8 md:mb-10 leading-tight text-[#0B0B0B]" style={{ fontFamily: "var(--font-owners-medium)" }}>Ready to Build Something Meaningful?</h2>
-                <p className="text-xl md:text-2xl text-gray-500 font-medium mb-12 md:mb-16 max-w-2xl mx-auto" style={{ fontFamily: "var(--font-inter-regular)" }}>
-                    Let's collaborate to bring your vision to life with precision and passion.
-                </p>
-                <Link href="/contact" className="inline-flex items-center justify-center bg-[#6E35FF] text-white rounded-full px-12 py-6 text-xl md:text-2xl font-bold hover:shadow-[0px_10px_25px_-5px_rgba(110,53,255,0.4)] transition-all hover:-translate-y-1" style={{ fontFamily: "var(--font-inter-regular)" }}>
-                    Start Your Project <ArrowRight className="ml-3 w-6 h-6 md:w-7 md:h-7" />
+        <section className="py-32 md:py-48 px-4 md:px-8 bg-[#8B5DFF] text-white flex flex-col items-center justify-center text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
+            <div className="relative z-10 max-w-4xl mx-auto">
+                <h2 className="text-[clamp(3rem,6vw,6rem)] font-bold leading-[0.9] mb-8" style={{ fontFamily: "var(--font-heading)" }}>
+                    READY TO <br /> BREAK THE MOLD?
+                </h2>
+                <Link href="/contact" className="inline-flex items-center gap-4 text-2xl md:text-3xl font-medium hover:gap-8 transition-all duration-300 border-b-2 border-white pb-2" style={{ fontFamily: "var(--font-mono)" }}>
+                    Start Your Project <ArrowRight className="w-8 h-8" />
                 </Link>
             </div>
         </section>

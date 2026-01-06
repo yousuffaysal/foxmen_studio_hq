@@ -44,7 +44,7 @@ export function Footer() {
               <div className="flex items-center gap-2 mb-4">
                 <div className="h-12 w-auto flex-shrink-0">
                   <img
-                    src="https://iili.io/fN1cOhu.png"
+                    src="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png"
                     alt="Foxmen Studio Logo"
                     className="h-full w-auto object-contain rounded-[1px]"
                   />

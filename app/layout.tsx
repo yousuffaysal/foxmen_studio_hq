@@ -54,6 +54,11 @@ const ibmPlexSansRegularFont = localFont({
   variable: "--font-ibm-plex-sans",
 })
 
+const ibmPlexSansMediumFont = localFont({
+  src: "./fonts/ibm-plex-sans-3/IBMPlexSans-Medium.ttf",
+  variable: "--font-ibm-plex-sans-medium",
+})
+
 const ibmPlexSansBoldFont = localFont({
   src: "./fonts/ibm-plex-sans-3/IBMPlexSans-Bold.ttf",
   variable: "--font-ibm-plex-sans-bold",
@@ -95,7 +100,7 @@ export const metadata: Metadata = {
     siteName: "Foxmen Studio",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png",
         width: 1200,
         height: 630,
         alt: "Foxmen Studio - Building the Future of Digital",
@@ -107,7 +112,7 @@ export const metadata: Metadata = {
     title: "Foxmen Studio | Premium Digital Product Development",
     description:
       "Expert web & mobile app development. We turn complex ideas into elegant digital solutions.",
-    images: ["/og-image.png"],
+    images: ["https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png"],
     creator: "@foxmenstudio",
   },
   robots: {
@@ -139,7 +144,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png" sizes="any" />
       </head>
-      <body className={`${ownersMediumFont.variable} ${ownersRegularFont.variable} ${interSemiBoldFont.variable} ${interRegularFont.variable} ${interLightFont.variable} ${interThinFont.variable} ${neueMontrealFont.variable} ${ibmPlexSansRegularFont.variable} ${ibmPlexSansBoldFont.variable} ${ibmPlexMonoRegularFont.variable} font-sans antialiased overflow-x-hidden`} suppressHydrationWarning>
+      <body className={`${ownersMediumFont.variable} ${ownersRegularFont.variable} ${interSemiBoldFont.variable} ${interRegularFont.variable} ${interLightFont.variable} ${interThinFont.variable} ${neueMontrealFont.variable} ${ibmPlexSansRegularFont.variable} ${ibmPlexSansMediumFont.variable} ${ibmPlexSansBoldFont.variable} ${ibmPlexMonoRegularFont.variable} font-sans antialiased overflow-x-hidden`} suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
