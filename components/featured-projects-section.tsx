@@ -83,18 +83,18 @@ export function FeaturedProjectsSection() {
                     <div>
                         <motion.h2
                             className="text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[0.9] mb-6"
-                            style={{ fontFamily: "var(--font-sfpro)" }}
+                            style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6 }}
                         >
-                            Selected <br />
-                            <span className="text-[#6E35FF]">Projects</span>
+                            Featured <br />
+                            <span className="text-[#6E35FF]">Work</span>
                         </motion.h2>
                         <motion.p
                             className="text-xl text-[#393939] font-medium leading-relaxed max-w-lg"
-                            style={{ fontFamily: 'var(--font-inter-regular)' }}
+                            style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
@@ -107,7 +107,7 @@ export function FeaturedProjectsSection() {
                     <motion.a
                         href="#"
                         className="inline-flex items-center gap-2 font-bold hover:gap-4 transition-all text-xl group whitespace-nowrap"
-                        style={{ fontFamily: 'var(--font-sfpro-regular)' }}
+                        style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
                         initial={{ opacity: 0, x: 20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
@@ -172,7 +172,7 @@ function FeaturedProjectCard({ project, index, className = "" }: { project: any,
                 </div>
                 {/* Address Bar */}
                 <div className="flex-1 max-w-[200px] md:max-w-xs mx-auto bg-white rounded flex items-center justify-center px-3 py-1 shadow-sm border border-[#e5e7eb]">
-                    <div className="flex items-center gap-2 text-[10px] md:text-xs text-gray-500 font-medium">
+                    <div className="flex items-center gap-2 text-[10px] md:text-xs text-gray-500 font-medium" style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}>
                         <span className="w-2 h-2 md:w-3 md:h-3 rounded-full border border-gray-400 opacity-50" />
                         {project.displayUrl}
                     </div>
@@ -205,7 +205,7 @@ function FeaturedProjectCard({ project, index, className = "" }: { project: any,
 
                 {/* Hover Content Overlay */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
-                    <div className="transform scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 ease-[0.16,1,0.3,1] text-center p-6 text-white">
+                    <div className="transform scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 ease-[0.16,1,0.3,1] text-center p-6 text-white" style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}>
                         <span className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-xs font-bold uppercase tracking-wider mb-3">
                             {project.tag}
                         </span>

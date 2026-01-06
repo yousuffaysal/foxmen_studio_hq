@@ -54,6 +54,11 @@ const ibmPlexSansRegularFont = localFont({
   variable: "--font-ibm-plex-sans",
 })
 
+const ibmPlexSansBoldFont = localFont({
+  src: "./fonts/ibm-plex-sans-3/IBMPlexSans-Bold.ttf",
+  variable: "--font-ibm-plex-sans-bold",
+})
+
 const ibmPlexMonoRegularFont = localFont({
   src: "./fonts/IBMPlexMono-Regular.ttf",
   variable: "--font-ibm-plex-mono",
@@ -134,7 +139,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png" sizes="any" />
       </head>
-      <body className={`${ownersMediumFont.variable} ${ownersRegularFont.variable} ${interSemiBoldFont.variable} ${interRegularFont.variable} ${interLightFont.variable} ${interThinFont.variable} ${neueMontrealFont.variable} ${ibmPlexSansRegularFont.variable} ${ibmPlexMonoRegularFont.variable} font-sans antialiased overflow-x-hidden`} suppressHydrationWarning>
+      <body className={`${ownersMediumFont.variable} ${ownersRegularFont.variable} ${interSemiBoldFont.variable} ${interRegularFont.variable} ${interLightFont.variable} ${interThinFont.variable} ${neueMontrealFont.variable} ${ibmPlexSansRegularFont.variable} ${ibmPlexSansBoldFont.variable} ${ibmPlexMonoRegularFont.variable} font-sans antialiased overflow-x-hidden`} suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
