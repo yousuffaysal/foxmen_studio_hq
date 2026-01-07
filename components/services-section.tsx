@@ -46,10 +46,10 @@ export function ServicesSection() {
       <div className="w-full px-4 md:px-8 lg:px-16">
         <div className="max-w-full mx-auto">
           <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-4xl md:text-[52px] md:leading-[60px] font-bold mb-4" style={{ fontFamily: "var(--font-owners-medium)" }}>
-              Our broad <span className="bg-[#FF4A60] text-white px-3 py-1 inline-block">set of services</span>
+            <h2 className="text-4xl md:text-[52px] md:leading-[60px] font-bold mb-4" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
+              Our broad <span className="bg-[#FF4A60] text-white px-3 py-1 inline-block rounded-lg -rotate-2 mx-2 transform">set of services</span>
             </h2>
-            <p className="text-[#393939] text-base md:text-lg font-medium leading-relaxed md:leading-[30px] max-w-2xl mx-auto" style={{ fontFamily: "var(--font-inter-regular)" }}>
+            <p className="text-[#393939] text-base md:text-lg font-medium leading-relaxed md:leading-[30px] max-w-2xl mx-auto" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
               We craft bespoke web, mobile, and AI solutions that transform ambitious brands.
             </p>
           </div>
@@ -69,11 +69,11 @@ export function ServicesSection() {
                   className="w-10 h-10 object-contain"
                 />
               </div>
-              <h3 className="text-[28px] leading-[40px] font-bold mb-4 text-white" style={{ fontFamily: "var(--font-owners-medium)" }}>Get in touch</h3>
-              <p className="text-[18px] leading-[30px] font-medium text-white/90 mb-6" style={{ fontFamily: "var(--font-inter-regular)" }}>
+              <h3 className="text-[28px] leading-[40px] font-bold mb-4 text-white" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>Get in touch</h3>
+              <p className="text-[18px] leading-[30px] font-medium text-white/90 mb-6" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
                 Looking for another service? Get in touch with us!
               </p>
-              <Button className="bg-black text-white hover:bg-gray-900 rounded-[16px] px-12 py-4 font-medium text-[18px] w-full max-w-[340px] h-[52px]" style={{ fontFamily: "var(--font-inter-regular)" }}>
+              <Button className="bg-black text-white hover:bg-gray-900 rounded-[16px] px-12 py-4 font-medium text-[18px] w-full max-w-[340px] h-[52px]" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
                 <Mail className="w-5 h-5 mr-2" />
                 Get in touch
               </Button>
@@ -119,8 +119,8 @@ function ServiceCard({ service }: { service: any }) {
         )}
       </div>
       <div className="p-5 flex flex-col">
-        <h3 className="text-2xl font-bold mb-2 text-[#0B0B0B]" style={{ fontFamily: "var(--font-owners-medium)" }}>{service.title}</h3>
-        <p className="text-sm leading-relaxed font-medium text-[#393939]" style={{ fontFamily: "var(--font-inter-regular)" }}>{service.description}</p>
+        <h3 className="text-2xl font-bold mb-2 text-[#0B0B0B]" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>{service.title}</h3>
+        <p className="text-sm leading-relaxed font-medium text-[#393939]" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>{service.description}</p>
       </div>
     </div>
   )

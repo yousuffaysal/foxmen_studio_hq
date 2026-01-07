@@ -112,13 +112,16 @@ const Texts: React.FC<Pick<MorphingTextProps, "texts">> = ({ texts }) => {
     return (
         <>
             <span
-                className="absolute inset-x-0 top-0 m-auto inline-block w-full bg-gradient-to-r from-[#2E156D] to-[#6E35FF] bg-clip-text text-transparent px-1"
+                className="absolute left-0 top-0 inline-block min-w-full w-max bg-gradient-to-r from-[#2E156D] to-[#6E35FF] bg-clip-text text-transparent px-1 whitespace-nowrap"
                 ref={text1Ref}
             />
             <span
-                className="absolute inset-x-0 top-0 m-auto inline-block w-full bg-gradient-to-r from-[#2E156D] to-[#6E35FF] bg-clip-text text-transparent px-1"
+                className="absolute left-0 top-0 inline-block min-w-full w-max bg-gradient-to-r from-[#2E156D] to-[#6E35FF] bg-clip-text text-transparent px-1 whitespace-nowrap"
                 ref={text2Ref}
             />
+            <span className="invisible opacity-0 px-10 whitespace-nowrap">
+                {texts.reduce((a, b) => (a.length > b.length ? a : b), '')}
+            </span>
         </>
     );
 };

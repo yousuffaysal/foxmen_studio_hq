@@ -154,7 +154,7 @@ function FeaturedProjectCard({ project, index, className = "" }: { project: any,
             className={`
                 group flex flex-col rounded-xl overflow-hidden ${className} bg-white shadow-2xl ring-1 ring-black/5 
                 hover:ring-black/10 transition-all duration-300 hover:shadow-3xl hover:-translate-y-2
-                sticky md:relative md:top-0 md:z-auto w-full
+                sticky md:relative md:!top-0 md:!z-auto w-full
             `}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
