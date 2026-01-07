@@ -10,14 +10,12 @@ export function ServicesSection() {
     {
       title: "Website Development",
       description: "Custom, high-performance websites built with modern technologies to capture your brand's essence and convert visitors.",
-      image: "/images/web-design.svg",
-      video: "https://res.cloudinary.com/duh7c5x99/video/upload/v1765989198/ef3c79c3a83dd64ca8a9ee6aa8cc5bab_gk2t5n.mov"
+      image: "https://ik.imagekit.io/2lax2ytm2/Website%20Developemt.svg",
     },
     {
       title: "UI/UX design",
       description: "User-centric design that blends aesthetics with functionality, creating intuitive and engaging digital experiences.",
-      image: "/images/ui-ux-design.svg",
-      video: "https://res.cloudinary.com/duh7c5x99/video/upload/v1765984569/Cinematic_screen_recording_1080p_20251217202_uwdlly.mov"
+      image: "https://ik.imagekit.io/2lax2ytm2/thursday.social%20(1).svg",
     },
     {
       title: "Mobile app development",
@@ -96,8 +94,8 @@ function ServiceCard({ service }: { service: any }) {
   }, [])
 
   return (
-    <div className="bg-white border-[3px] border-black rounded-[32px] overflow-hidden hover:translate-y-[-4px] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 aspect-square flex flex-col group">
-      <div className="flex-1 -mx-[3px] -mt-[3px] overflow-hidden rounded-t-[29px] relative bg-[#F3F4F6]">
+    <div className="bg-[#A085F3] border-[3px] border-black rounded-[32px] overflow-hidden hover:translate-y-[-4px] shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 aspect-square flex flex-col group">
+      <div className="h-[65%] -mx-[3px] -mt-[3px] overflow-hidden rounded-t-[29px] relative bg-[#F3F4F6]">
         {service.video ? (
           <video
             ref={videoRef}
@@ -114,13 +112,15 @@ function ServiceCard({ service }: { service: any }) {
             src={service.image || "/placeholder.svg"}
             alt={service.title}
             fill
-            className="object-contain rounded-t-[29px] group-hover:scale-110 transition-transform duration-500 ease-out"
+            className="object-cover rounded-t-[29px] group-hover:scale-110 transition-transform duration-500 ease-out"
           />
         )}
       </div>
-      <div className="p-5 flex flex-col">
-        <h3 className="text-2xl font-bold mb-2 text-[#0B0B0B]" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>{service.title}</h3>
-        <p className="text-sm leading-relaxed font-medium text-[#393939]" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>{service.description}</p>
+      <div className="p-2 flex flex-col h-[35%]">
+        <div className="bg-[#1a1a1a]/80 backdrop-blur-md rounded-2xl px-4 py-2 flex flex-col gap-1 h-full justify-center border border-white/10">
+          <h3 className="text-xl font-bold text-white leading-tight" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>{service.title}</h3>
+          <p className="text-xs leading-relaxed font-medium text-white/80 line-clamp-3" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>{service.description}</p>
+        </div>
       </div>
     </div>
   )
