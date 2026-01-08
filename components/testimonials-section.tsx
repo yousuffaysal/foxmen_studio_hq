@@ -10,7 +10,7 @@ export function TestimonialsSection() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-[1.3]" style={{ fontFamily: "var(--font-sfpro)" }}>
             What our clients say
             <br />
-            about <span className="bg-[#2F81F7] text-white px-3 py-1 inline-block">our work</span>
+            about <span className="bg-[#8B5DFF] text-white px-3 py-1 inline-block">our work</span>
           </h2>
           <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto pb-8">
             Delivering luxurious impact-driven web development, premium UI/UX design, and scalable SaaS solutions for visionary leaders.

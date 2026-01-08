@@ -11,7 +11,7 @@ export default function ServicesPage() {
     return (
         <div className="min-h-screen bg-white font-sans selection:bg-[#FFC224] selection:text-black">
             <Navigation />
-            <main className="pt-20">
+            <main>
                 <ServicesListSection />
             </main>
             <Footer />

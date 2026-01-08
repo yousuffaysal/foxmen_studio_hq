@@ -179,7 +179,7 @@ function FeaturedProjectCard({ project, index, className = "" }: { project: any,
             </div>
 
             {/* Window Content */}
-            <div className="relative flex-1 bg-white overflow-hidden">
+            <div className="relative flex-1 bg-white overflow-hidden group">
                 {project.video ? (
                     <video
                         ref={videoRef}
@@ -201,16 +201,18 @@ function FeaturedProjectCard({ project, index, className = "" }: { project: any,
                     />
                 )}
 
-                {/* Hover Content Overlay */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
-                    <div className="transform scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 ease-[0.16,1,0.3,1] text-center p-6 text-white" style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}>
-                        <span className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-xs font-bold uppercase tracking-wider mb-3">
-                            {project.tag}
-                        </span>
-                        <h3 className="text-2xl md:text-3xl font-bold mb-2">
-                            {project.title}
-                        </h3>
-                        <p className="text-white/80 max-w-sm mx-auto text-sm md:text-base">
+                {/* Text Overlay Box */}
+                <div className="absolute bottom-6 left-6 right-6">
+                    <div className="bg-white/70 backdrop-blur-xl p-5 rounded-2xl shadow-lg border border-white/50 flex flex-col gap-2 transform transition-transform duration-300 group-hover:translate-y-[-4px]" style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}>
+                        <div className="flex items-start justify-between gap-4">
+                            <h3 className="text-lg font-bold text-[#0a0a0a] leading-tight flex-1">
+                                {project.title}
+                            </h3>
+                            <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider bg-[#f3f4f6] px-2 py-1 rounded-md text-gray-500">
+                                {project.tag}
+                            </span>
+                        </div>
+                        <p className="text-[#717171] text-xs leading-relaxed line-clamp-2">
                             {project.description}
                         </p>
                     </div>

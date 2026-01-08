@@ -26,7 +26,7 @@ import {
 
 export default function ProjectsPage() {
     return (
-        <div className="min-h-screen bg-white font-sans selection:bg-[#FFC224] selection:text-black">
+        <div className="min-h-screen bg-[#050505] font-sans selection:bg-[#8B5DFF] selection:text-white">
             <Navigation />
             <main>
                 <ProjectsHero />

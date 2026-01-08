@@ -21,7 +21,7 @@ export function Navigation() {
     >
       <nav className="flex items-center justify-between px-6 py-4 md:py-10 w-full">
         <Link href="/" className="h-12 md:h-[70px] w-auto flex items-center justify-center flex-shrink-0 cursor-pointer">
-          <img src="https://iili.io/fN1cOhu.png" alt="Foxmen Studio Logo" className="h-full w-auto object-contain" />
+          <img src="/images/navlogo.svg" alt="Foxmen Studio Logo" className="h-full w-auto object-contain" />
         </Link>
 
         {/* Desktop Navigation */}
