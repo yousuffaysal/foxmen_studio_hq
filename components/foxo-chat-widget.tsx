@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type Message = {
     role: "user" | "assistant";
@@ -96,7 +98,9 @@ export function FoxoChatWidget() {
                         {/* Header */}
                         <div className="p-4 bg-[#8B5DFF] text-white flex items-center justify-between shrink-0">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg">🦊</div>
+                                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                                    <img src="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png" alt="Foxo Logo" className="w-8 h-8 object-contain" />
+                                </div>
                                 <div>
                                     <h3 className="font-bold">Foxo</h3>
                                     <p className="text-xs text-white/80">AI Assistant</p>
@@ -126,7 +130,16 @@ export function FoxoChatWidget() {
                                             : "bg-white text-gray-800 border border-gray-100 rounded-bl-none shadow-sm"
                                             }`}
                                     >
-                                        {msg.content}
+                                        <ReactMarkdown
+                                            remarkPlugins={[remarkGfm]}
+                                            components={{
+                                                a: ({ node, ...props }) => (
+                                                    <a {...props} target="_blank" rel="noopener noreferrer" className="underline font-semibold text-inherit hover:opacity-80 break-all" />
+                                                )
+                                            }}
+                                        >
+                                            {msg.content}
+                                        </ReactMarkdown>
                                     </div>
                                 </div>
                             ))}

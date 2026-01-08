@@ -153,9 +153,11 @@ export default function RootLayout({
               url: "https://foxmen.studio",
               logo: "https://foxmen.studio/logo.png",
               sameAs: [
-                "https://twitter.com/foxmenstudio",
-                "https://linkedin.com/company/foxmenstudio",
-                "https://github.com/foxmenstudio",
+                "https://x.com/FoxmenStudio",
+                "https://www.linkedin.com/company/foxmen-studio/",
+                "https://www.facebook.com/profile.php?id=61579940840061&sk=about",
+                "https://dribbble.com/foxmen-studio",
+                "https://www.youtube.com/@Foxmen-Studio",
               ],
               contactPoint: {
                 "@type": "ContactPoint",

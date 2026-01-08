@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
 
-import { ArrowRight, Mail, Phone, MapPin, ChevronDown, Check, Video, MessageCircle, Facebook, Linkedin, Instagram, Dribbble, Upload, Youtube, Plus, Minus } from "lucide-react"
+import { ArrowRight, Mail, Phone, MapPin, ChevronDown, Check, Video, MessageCircle, Facebook, Linkedin, Twitter, Dribbble, Upload, Youtube, Plus, Minus } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -365,11 +365,11 @@ export function QuickActions() {
 
 export function SocialConnect() {
     const socials = [
-        { icon: Facebook, name: "Facebook", color: "hover:bg-[#1877F2] hover:text-white" },
-        { icon: Linkedin, name: "LinkedIn", color: "hover:bg-[#0A66C2] hover:text-white" },
-        { icon: Instagram, name: "Instagram", color: "hover:bg-[#E1306C] hover:text-white" },
-        { icon: Youtube, name: "Youtube", color: "hover:bg-[#FF0000] hover:text-white" },
-        { icon: Dribbble, name: "Dribbble", color: "hover:bg-[#EA4C89] hover:text-white" },
+        { icon: Facebook, name: "Facebook", color: "hover:bg-[#1877F2] hover:text-white", link: "https://www.facebook.com/profile.php?id=61579940840061&sk=about" },
+        { icon: Linkedin, name: "LinkedIn", color: "hover:bg-[#0A66C2] hover:text-white", link: "https://www.linkedin.com/company/foxmen-studio/" },
+        { icon: Twitter, name: "Twitter", color: "hover:bg-[#000000] hover:text-white", link: "https://x.com/FoxmenStudio" },
+        { icon: Youtube, name: "Youtube", color: "hover:bg-[#FF0000] hover:text-white", link: "https://www.youtube.com/@Foxmen-Studio" },
+        { icon: Dribbble, name: "Dribbble", color: "hover:bg-[#EA4C89] hover:text-white", link: "https://dribbble.com/foxmen-studio" },
     ]
     return (
         <section className="py-12 md:py-24 px-4 bg-[#F3F4F6] border-b-4 border-black">
@@ -377,9 +377,15 @@ export function SocialConnect() {
                 <h2 className="text-3xl md:text-5xl font-bold mb-10 md:mb-16" style={{ fontFamily: "var(--font-owners-medium)" }}>Stay Connected</h2>
                 <div className="flex justify-center gap-4 md:gap-10 flex-wrap">
                     {socials.map((soc, i) => (
-                        <div key={i} className={`group cursor-pointer bg-white w-20 h-20 md:w-32 md:h-32 rounded-[20px] md:rounded-[24px] border-4 border-black flex items-center justify-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 transition-all ${soc.color}`}>
+                        <a
+                            key={i}
+                            href={soc.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`group cursor-pointer bg-white w-20 h-20 md:w-32 md:h-32 rounded-[20px] md:rounded-[24px] border-4 border-black flex items-center justify-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-2 transition-all ${soc.color}`}
+                        >
                             <soc.icon className="w-8 h-8 md:w-12 md:h-12 transition-colors duration-300" />
-                        </div>
+                        </a>
                     ))}
                 </div>
             </div>

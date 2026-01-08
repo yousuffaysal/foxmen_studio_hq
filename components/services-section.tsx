@@ -20,8 +20,7 @@ export function ServicesSection() {
     {
       title: "Mobile app development",
       description: "Scalable, native and cross-platform mobile applications engineered for seamless performance and user retention.",
-      image: "/images/product-design.svg",
-      video: "https://res.cloudinary.com/duh7c5x99/video/upload/v1765987892/A_darkthemed_code_1080p_202512172206_s6n6n1.mov"
+      image: "https://ik.imagekit.io/2lax2ytm2/Mobile%20Deve%20(1).svg",
     },
     {
       title: "AI Agent & Automation",
