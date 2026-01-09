@@ -12,7 +12,7 @@ export function ArticlesSection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://paperfolio-backend.vercel.app/api'}/posts`)
+    fetch('/api/posts')
       .then(res => res.json())
       .then(data => {
         setArticles(data)

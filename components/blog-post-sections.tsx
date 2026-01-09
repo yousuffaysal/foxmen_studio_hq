@@ -217,7 +217,7 @@ export function CommentsSection({ postId }: { postId: string }) {
 
     React.useEffect(() => {
         if (!postId) return;
-        fetch(`https://paperfolio-backend.vercel.app/api/posts/${postId}/comments`)
+        fetch(`/api/posts/${postId}/comments`)
             .then(res => res.json())
             .then(data => {
                 setComments(Array.isArray(data) ? data : []);
@@ -233,7 +233,7 @@ export function CommentsSection({ postId }: { postId: string }) {
         e.preventDefault();
         setSubmitting(true);
         try {
-            const res = await fetch(`https://paperfolio-backend.vercel.app/api/posts/${postId}/comments`, {
+            const res = await fetch(`/api/posts/${postId}/comments`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(newItem)

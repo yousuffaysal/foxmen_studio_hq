@@ -2,13 +2,13 @@ import { Footer } from "@/components/footer"
 import { Navigation } from "@/components/navigation"
 import {
     ContactHero,
+    ContactOptions,
     ContactSplitSection,
     ContactFAQ,
     StartProcess,
     QuickActions,
     SocialConnect,
     LocationMap,
-    ContactCTA
 } from "@/components/contact-sections"
 import { Metadata } from "next"
 
@@ -23,13 +23,13 @@ export default function ContactPage() {
             <Navigation />
             <main>
                 <ContactHero />
+                <ContactOptions />
                 <ContactSplitSection />
                 <ContactFAQ />
                 <StartProcess />
                 <QuickActions />
                 <SocialConnect />
                 <LocationMap />
-                <ContactCTA />
             </main>
             <Footer />
         </div>

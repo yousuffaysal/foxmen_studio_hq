@@ -49,7 +49,7 @@ export function ProjectGrid() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://paperfolio-backend.vercel.app/api'}/projects`)
+        fetch('/api/projects')
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
