@@ -251,12 +251,12 @@ export function CommentsSection({ postId }: { postId: string }) {
     };
 
     return (
-        <section className="py-16" id="comments">
+        <section className="py-16 bg-[#1C1C1C] rounded-3xl p-8 md:p-12 mb-12" id="comments">
             <div className="flex items-center gap-3 mb-10">
-                <div className="bg-[#6E35FF]/10 p-2.5 rounded-xl text-[#6E35FF]">
+                <div className="bg-[#6E35FF]/10 p-2.5 rounded-xl text-[#6E35FF] bg-white/5">
                     <MessageSquare className="w-6 h-6" />
                 </div>
-                <h2 className="text-3xl font-bold" style={{ fontFamily: "var(--font-owners-regular)" }}>Discussion ({comments.length})</h2>
+                <h2 className="text-3xl font-bold text-white" style={{ fontFamily: "var(--font-owners-regular)" }}>Discussion ({comments.length})</h2>
             </div>
 
             <div className="grid lg:grid-cols-[1fr_400px] gap-12">
@@ -349,5 +349,82 @@ export function PostCTA() {
                 </Link>
             </div>
         </section>
+    )
+}
+
+export function SidebarShare() {
+    const [copied, setCopied] = React.useState(false);
+
+    const handleCopy = () => {
+        if (typeof window !== 'undefined') {
+            navigator.clipboard.writeText(window.location.href);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
+    const handleShare = (platform: string) => {
+        if (typeof window === 'undefined') return;
+        const url = encodeURIComponent(window.location.href);
+        const text = encodeURIComponent(document.title);
+        let shareUrl = '';
+
+        switch (platform) {
+            case 'twitter':
+                shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+                break;
+            case 'linkedin':
+                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                break;
+            case 'facebook':
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                break;
+        }
+
+        if (shareUrl) {
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+    };
+
+    return (
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            <h4 className="font-bold text-lg mb-4 flex items-center gap-2" style={{ fontFamily: "var(--font-owners-regular)" }}>
+                <Share2 className="w-5 h-5 text-[#6E35FF]" /> Share this Article
+            </h4>
+            <div className="grid grid-cols-4 gap-2">
+                <button
+                    onClick={handleCopy}
+                    className={`flex flex-col items-center justify-center gap-2 p-3 rounded-xl transition-all group ${copied ? 'bg-[#6E35FF] text-white' : 'bg-gray-50 hover:bg-[#6E35FF] hover:text-white'}`}
+                    title="Copy Link"
+                >
+                    <LinkIcon className="w-5 h-5" />
+                    <span className="text-[10px] font-bold uppercase tracking-wide">{copied ? 'Copied' : 'Link'}</span>
+                </button>
+                <button
+                    onClick={() => handleShare('twitter')}
+                    className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-[#6E35FF] hover:text-white transition-all group"
+                    title="Share on Twitter"
+                >
+                    <Twitter className="w-5 h-5" />
+                    <span className="text-[10px] font-bold uppercase tracking-wide">X</span>
+                </button>
+                <button
+                    onClick={() => handleShare('linkedin')}
+                    className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-[#6E35FF] hover:text-white transition-all group"
+                    title="Share on LinkedIn"
+                >
+                    <Linkedin className="w-5 h-5" />
+                    <span className="text-[10px] font-bold uppercase tracking-wide">Linked</span>
+                </button>
+                <button
+                    onClick={() => handleShare('facebook')}
+                    className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-[#6E35FF] hover:text-white transition-all group"
+                    title="Share on Facebook"
+                >
+                    <Facebook className="w-5 h-5" />
+                    <span className="text-[10px] font-bold uppercase tracking-wide">Facebook</span>
+                </button>
+            </div>
+        </div>
     )
 }

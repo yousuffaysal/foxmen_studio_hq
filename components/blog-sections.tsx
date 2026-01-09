@@ -91,7 +91,7 @@ export function ArticleGrid() {
 
                     if (isFeatured) {
                         return (
-                            <Link href={`/blog/${art.slug}`} key={art._id} className="block group md:col-span-2 row-span-1 h-full">
+                            <Link href={`/blog/${art.slug}`} key={art.id} className="block group md:col-span-2 row-span-1 h-full">
                                 <div className="bg-[#6E35FF] text-white rounded-2xl w-full relative overflow-hidden transition-all duration-300 hover:shadow-xl aspect-video">
                                     {/* Background Image */}
                                     {art.coverImage && <Image src={art.coverImage} alt={art.title} fill className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 mix-blend-multiply" />}
@@ -122,7 +122,7 @@ export function ArticleGrid() {
                     }
 
                     return (
-                        <Link href={`/blog/${art.slug}`} key={art._id} className="block group">
+                        <Link href={`/blog/${art.slug}`} key={art.id} className="block group">
                             <div className="bg-white rounded-2xl p-5 h-full border border-transparent hover:border-black/5 hover:shadow-lg transition-all duration-300 flex flex-col">
 
                                 {/* Top Row: Image & Plus Icon */}

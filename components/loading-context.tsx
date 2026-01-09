@@ -53,17 +53,12 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
     // The state is just a tailored boolean.
 
     useEffect(() => {
-        // If we navigate away from home, ensure loading is false
-        if (pathname !== "/") {
-            setIsLoading(false)
-        } else {
-            // If we are on home, we *might* want to load, but only on fresh visit? 
-            // The user likely wants it every time home is visited or just fresh refresh?
-            // Usually these animations are every time for "portfolio" sites.
-            // preloader logic handles simple "refresh" vs "navigation" often.
-            // For now, let's allow HomePreloader to mount and control this.
-            // But we need the initial state to be correct.
+        // If we navigate away from home or blog, ensure loading is false
+        // But if we navigate TO home or blog, we want to trigger the animation
+        if (pathname === "/" || pathname?.startsWith("/blog")) {
             setIsLoading(true)
+        } else {
+            setIsLoading(false)
         }
     }, [pathname])
 

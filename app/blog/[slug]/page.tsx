@@ -9,10 +9,13 @@ import {
     SidebarRelated,
     SidebarReferences,
     CommentsSection,
-    PostCTA
+    PostCTA,
+    SidebarShare
 } from "@/components/blog-post-sections"
 
 import { notFound } from "next/navigation"
+import { HomePreloader } from "@/components/home-preloader"
+import { ScrollAnimation } from "@/components/scroll-animation"
 
 async function getPost(slug: string) {
     try {
@@ -55,26 +58,32 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
             <Navigation />
 
             {/* Full Width Header & Hero */}
-            <PostHeader post={post} />
+            <HomePreloader />
+            <ScrollAnimation>
+                <PostHeader post={post} />
+            </ScrollAnimation>
             <main className="px-6 md:px-12 pt-12 pb-24">
                 <div className="max-w-[1400px] mx-auto grid lg:grid-cols-[1fr_350px] xl:grid-cols-[1fr_400px] gap-12 lg:gap-24">
 
                     {/* Left Column: Content */}
-                    <div className="min-w-0">
+                    <ScrollAnimation delay={0.2} className="min-w-0">
                         <PostHero image={post.coverImage} />
                         <PostBody content={post.content} />
                         <div className="mt-16 border-t border-gray-100 pt-16">
                             <CommentsSection postId={post.id} />
                         </div>
-                    </div>
+                    </ScrollAnimation>
 
                     {/* Right Column: Sidebar */}
-                    <div className="space-y-8 mt-12 lg:mt-0">
-                        <SidebarAuthorBio post={post} />
-                        <SidebarTags tags={post.tags} />
-                        <SidebarReferences references={post.references} />
-                        <SidebarRelated posts={otherPosts} />
-                    </div>
+                    <ScrollAnimation delay={0.4} className="mt-12 lg:mt-0 min-w-0">
+                        <div className="flex flex-col space-y-8 lg:sticky lg:top-32">
+                            <SidebarAuthorBio post={post} />
+                            <SidebarShare />
+                            <SidebarTags tags={post.tags} />
+                            <SidebarReferences references={post.references} />
+                            <SidebarRelated posts={otherPosts} />
+                        </div>
+                    </ScrollAnimation>
                 </div>
             </main>
 

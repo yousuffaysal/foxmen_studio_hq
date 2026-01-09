@@ -156,7 +156,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
       </head>
-      <body className={`${ownersMediumFont.variable} ${ownersRegularFont.variable} ${interSemiBoldFont.variable} ${interRegularFont.variable} ${interLightFont.variable} ${interThinFont.variable} ${neueMontrealFont.variable} ${ibmPlexSansRegularFont.variable} ${ibmPlexSansMediumFont.variable} ${ibmPlexSansBoldFont.variable} ${ibmPlexMonoRegularFont.variable} font-sans antialiased overflow-x-hidden`} suppressHydrationWarning>
+      <body className={`${ownersMediumFont.variable} ${ownersRegularFont.variable} ${interSemiBoldFont.variable} ${interRegularFont.variable} ${interLightFont.variable} ${interThinFont.variable} ${neueMontrealFont.variable} ${ibmPlexSansRegularFont.variable} ${ibmPlexSansMediumFont.variable} ${ibmPlexSansBoldFont.variable} ${ibmPlexMonoRegularFont.variable} font-sans antialiased`} suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
