@@ -84,6 +84,7 @@ export function Footer() {
               <a href="https://x.com/FoxmenStudio" target="_blank" className="hover:text-white transition-colors">Twitter</a>
               <a href="https://dribbble.com/foxmen-studio" target="_blank" className="hover:text-white transition-colors">Dribbble</a>
               <a href="https://www.facebook.com/profile.php?id=61579940840061&sk=about" target="_blank" className="hover:text-white transition-colors">Facebook</a>
+              <a href="https://www.instagram.com/foxmen_studio?igsh=MW91bGdxNTJ1dG9jbQ%3D%3D&utm_source=qr" target="_blank" className="hover:text-white transition-colors">Instagram</a>
             </div>
           </div>
         </div>
@@ -122,10 +123,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="flex gap-8">
-            <a href="#" className="hover:opacity-70 transition-opacity">Instagram</a>
-            <a href="#" className="hover:opacity-70 transition-opacity">LinkedIn</a>
-          </div>
+
         </div>
       </div>
     </footer>
