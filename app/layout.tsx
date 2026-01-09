@@ -138,7 +138,9 @@ export const metadata: Metadata = {
   },
 }
 
-export const viewport: Metadata = {
+import type { Viewport } from "next"
+
+export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,

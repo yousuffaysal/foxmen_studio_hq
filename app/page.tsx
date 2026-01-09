@@ -15,7 +15,7 @@ import { HomePreloader } from "@/components/home-preloader"
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#fffff0]">
+    <main className="min-h-screen bg-[#fffff0] w-full overflow-x-hidden">
       <HomePreloader />
       <Navigation delay={3.2} />
       <HeroSection />

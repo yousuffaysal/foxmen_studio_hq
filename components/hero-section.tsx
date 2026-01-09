@@ -88,10 +88,12 @@ export function HeroSection() {
               <span className="whitespace-normal md:whitespace-nowrap bg-white/20 backdrop-blur-md border border-white/20 rounded-lg px-0 md:px-2 md:py-1 inline-block">A creative agency for Building</span>
             </span>
             <br className="max-md:hidden" />
-            <MorphingText
-              className="!text-[32px] sm:!text-[44px] md:!text-[92px] !leading-[40px] sm:!leading-[52px] md:!leading-[104px] !text-left !mx-0 w-full md:w-auto h-[40px] sm:h-28 md:h-[112px] !whitespace-nowrap !max-w-none mt-1 md:mt-0 block"
-              texts={['Web Platforms', 'Mobile Apps', 'Global UI/UX', '3D Website', 'AI Agents', 'Digital Marketing', 'Branding']}
-            />
+            <div className="max-w-[85vw] sm:max-w-full overflow-hidden">
+              <MorphingText
+                className="!text-[32px] sm:!text-[44px] md:!text-[92px] !leading-[40px] sm:!leading-[52px] md:!leading-[104px] !text-left !mx-0 w-full md:w-auto h-[40px] sm:h-28 md:h-[112px] !whitespace-nowrap !max-w-none mt-1 md:mt-0 block"
+                texts={['Web Platforms', 'Mobile Apps', 'Global UI/UX', '3D Website', 'AI Agents', 'Digital Marketing', 'Branding']}
+              />
+            </div>
           </h1>
 
 
