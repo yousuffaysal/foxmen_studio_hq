@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
 
+import { FooterEmail } from "@/components/footer-email"
+
 export function Footer() {
   return (
     <footer className="bg-[#050505] text-white pt-24 relative overflow-hidden flex flex-col h-full">
@@ -15,9 +17,7 @@ export function Footer() {
             <span className="text-gray-400 text-sm" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
               Uncover the potency of Foxmen Studio at
             </span>
-            <a href="mailto:contact@foxmenstudio.com" className="text-[5vw] md:text-4xl lg:text-6xl font-bold border-b border-gray-700 pb-2 hover:text-[#8B5DFF] hover:border-[#8B5DFF] transition-colors whitespace-nowrap" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
-              contact@foxmenstudio.com
-            </a>
+            <FooterEmail />
           </div>
 
           {/* Right: Get Started Card */}
