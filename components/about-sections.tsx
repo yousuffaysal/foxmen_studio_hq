@@ -1,6 +1,7 @@
 "use client"
 
-import { ArrowRight, Code, Cpu, Globe, Layout, Smartphone, Users, Zap, Star, MoveRight } from "lucide-react"
+import { ArrowRight, Code, Cpu, Globe, Layout, Smartphone, Users, Zap, Star, MoveRight, Atom, Bot, Database, Palette, Server, Terminal } from "lucide-react"
+import { GoogleIcon, OpenAIIcon, AnthropicIcon, MetaIcon, VercelIcon } from "@/components/ui/brand-icons"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, useScroll, useTransform } from "framer-motion"
@@ -17,16 +18,23 @@ export function AboutHero() {
             </div>
 
             {/* Rotating Cutoff Logo - Top Right */}
-            <div className="absolute top-0 right-0 z-20 overflow-hidden pointer-events-none w-[30vh] h-[30vh] opacity-50 xl:opacity-100">
+            <div className="absolute top-0 right-0 z-20 overflow-hidden pointer-events-none w-[60vh] h-[60vh] opacity-60 xl:opacity-100">
                 <motion.div
                     className="absolute -top-[30%] -right-[30%] w-full h-full"
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
                 >
                     <div className="relative w-full h-full border-[1px] border-dashed border-[#8B5DFF]/30 rounded-full flex items-center justify-center">
                         <div className="absolute inset-0 border-[1px] border-white/10 rounded-full scale-75" />
                         <div className="absolute inset-0 border-[1px] border-[#8B5DFF]/20 rounded-full scale-125" />
-                        <Layout className="text-[#8B5DFF] w-1/4 h-1/4" strokeWidth={1} />
+                        <div className="relative w-1/2 h-1/2 perspective-1000">
+                            <Image
+                                src="/images/logo_sn_fox.svg"
+                                alt="Foxmen Studio Logo"
+                                fill
+                                className="object-contain drop-shadow-[0_25px_35px_rgba(139,93,255,0.6)]"
+                            />
+                        </div>
                     </div>
                 </motion.div>
             </div>
@@ -210,16 +218,28 @@ export function AboutApproach() {
     )
 }
 
+
+
+
 export function AboutTech() {
-    const techs = ["Django", "MERN", "Next.js", "Nest.js", "Python", "React", "Figma", "Framer", "AI Tools"]
+    const techs = [
+        { name: "Google", icon: GoogleIcon },
+        { name: "OpenAI", icon: OpenAIIcon },
+        { name: "Claude", icon: AnthropicIcon },
+        { name: "Meta", icon: MetaIcon },
+        { name: "Vercel", icon: VercelIcon },
+        { name: "Groq", icon: Zap },
+        { name: "Mistral", icon: Bot }
+    ]
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4 text-center">
                 <p className="text-[#8B5DFF] font-mono mb-6 text-sm">Powered By</p>
                 <div className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-4xl mx-auto">
                     {techs.map((tech, i) => (
-                        <span key={i} className="px-6 py-3 rounded-full border border-black/10 text-lg md:text-xl font-medium hover:bg-[#8B5DFF] hover:text-white hover:border-[#8B5DFF] transition-all duration-300 cursor-default" style={{ fontFamily: "var(--font-heading)" }}>
-                            {tech}
+                        <span key={i} className="px-6 py-3 rounded-full border border-black/10 text-lg md:text-xl font-medium hover:bg-[#8B5DFF] hover:text-white hover:border-[#8B5DFF] transition-all duration-300 cursor-default flex items-center gap-2" style={{ fontFamily: "var(--font-heading)" }}>
+                            <tech.icon className="w-5 h-5 md:w-6 md:h-6" />
+                            {tech.name}
                         </span>
                     ))}
                 </div>

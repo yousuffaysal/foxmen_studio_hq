@@ -1,23 +1,23 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Linkedin, Twitter, Dribbble, Github } from "lucide-react"
+import { Linkedin, Twitter, Dribbble, Github, Facebook } from "lucide-react"
 import Image from "next/image"
 
 const teamMembers = [
     {
-        name: "Yusuf Faysal",
+        name: "Yousuf H Faysal",
         role: "Founder & Lead Alchemist",
         bio: "Visionary traversing the void between design and code.",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop", // Placeholder
-        socials: { twitter: "#", linkedin: "#", github: "#" }
+        image: "/images/Gemini_Generated_Image_ug8ze2ug8ze2ug8z (1).png",
+        socials: { twitter: "https://x.com/yousuf_faysal_", linkedin: "https://www.linkedin.com/in/yusuf-faysal/", github: "https://github.com/yousuffaysal" }
     },
     {
-        name: "Sarah Chen",
-        role: "Head of Engineering",
-        bio: "Architecting scalable systems that power the impossible.",
-        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop",
-        socials: { twitter: "#", linkedin: "#", dribbble: "#" }
+        name: "Rayhan Ahmed",
+        role: "Principal Software Engineer",
+        bio: "(Core architecture, complex systems, clean code)",
+        image: "/images/rhn (1).png",
+        socials: { twitter: "#", linkedin: "https://www.linkedin.com/in/rayhan-ahmed-0ab5aa33a", facebook: "#" }
     },
     {
         name: "Marcus Thorne",
@@ -92,7 +92,7 @@ export function AboutTeam() {
     )
 }
 
-function TeamCard({ member, index }: { member: typeof teamMembers[0], index: number }) {
+function TeamCard({ member, index }: { member: typeof teamMembers[number], index: number }) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -151,6 +151,11 @@ function TeamCard({ member, index }: { member: typeof teamMembers[0], index: num
                             {member.socials.github && (
                                 <a href={member.socials.github} className="text-white/60 hover:text-[#8B5DFF] transition-colors">
                                     <Github size={20} />
+                                </a>
+                            )}
+                            {member.socials.facebook && (
+                                <a href={member.socials.facebook} className="text-white/60 hover:text-[#8B5DFF] transition-colors">
+                                    <Facebook size={20} />
                                 </a>
                             )}
                         </div>

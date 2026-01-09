@@ -106,6 +106,22 @@ export function Footer() {
       <div className="bg-[#8B5DFF] py-6 px-4 md:px-12">
         <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 text-black font-medium text-sm" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
           <p>Copyright © Foxmen Studio 2026</p>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs">Built by</span>
+            <div className="flex items-center gap-2 bg-black/10 px-2 py-1 rounded-full">
+              <div className="relative w-5 h-5 overflow-hidden rounded-full">
+                <Image
+                  src="/images/Gemini_Generated_Image_ug8ze2ug8ze2ug8z (1).png"
+                  alt="Yousuf H Faysal"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <span className="font-semibold text-xs">Yousuf H Faysal</span>
+            </div>
+          </div>
+
           <div className="flex gap-8">
             <a href="#" className="hover:opacity-70 transition-opacity">Instagram</a>
             <a href="#" className="hover:opacity-70 transition-opacity">LinkedIn</a>

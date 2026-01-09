@@ -322,7 +322,7 @@ const TargetCursor = ({
     return (
         <div
             ref={cursorRef}
-            className="fixed top-0 left-0 w-0 h-0 pointer-events-none z-[9999] hidden md:block"
+            className="fixed top-0 left-0 w-0 h-0 pointer-events-none z-[99999] hidden md:block"
             style={{ willChange: 'transform', mixBlendMode: 'difference' }}
         >
             <div
