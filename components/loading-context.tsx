@@ -13,7 +13,7 @@ const LoadingContext = createContext<LoadingContextType | undefined>(undefined)
 export function LoadingProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
     // Only start as loading if we are on the home page
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
     // We need to handle the initial state carefully because pathname might not be available immediately during SSR correctly matching client
     // However, for this specific request "when in home page", we want to ensure we catch the home page visit.
