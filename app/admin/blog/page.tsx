@@ -135,9 +135,15 @@ export default function BlogAdmin() {
                 setCurrentPost({});
                 setIsEditing(false);
                 fetchPosts();
+                alert("Post saved successfully!");
+            } else {
+                const errorData = await res.json();
+                alert(`Error saving post: ${errorData.error}`);
+                console.error("Server error:", errorData);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to save post", error);
+            alert(`Network or Logic error: ${error.message}`);
         }
     };
 

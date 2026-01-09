@@ -1,11 +1,10 @@
 
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 
-const prisma = new PrismaClient();
-
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
     try {
+        const params = await props.params;
         const post = await prisma.post.findUnique({
             where: { id: params.id },
             include: { comments: true }
@@ -19,9 +18,12 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, props: { params: Promise<{ id: string }> }) {
     try {
+        const params = await props.params;
         const body = await request.json();
+        console.log(`[PUT] Updating post ${params.id}`, body);
+
         const updatedPost = await prisma.post.update({
             where: { id: params.id },
             data: {
@@ -41,15 +43,17 @@ export async function PUT(request: Request, { params }: { params: { id: string }
                 date: body.date ? new Date(body.date) : undefined,
             },
         });
+        console.log(`[PUT] Update success`, updatedPost);
         return NextResponse.json(updatedPost);
-    } catch (error) {
+    } catch (error: any) {
         console.error("Failed to update post:", error);
-        return NextResponse.json({ error: 'Failed to update post' }, { status: 500 });
+        return NextResponse.json({ error: error.message || 'Failed to update post' }, { status: 500 });
     }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, props: { params: Promise<{ id: string }> }) {
     try {
+        const params = await props.params;
         await prisma.post.delete({
             where: { id: params.id },
         });

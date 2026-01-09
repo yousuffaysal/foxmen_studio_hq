@@ -218,24 +218,7 @@ export function RecommendedReads() {
     )
 }
 
-export function AuthorSpotlight() {
-    return (
-        <section className="py-16 md:py-24 px-4 md:px-8 bg-[#F3F4F6]">
-            <div className="max-w-5xl mx-auto text-center">
-                <h2 className="text-3xl md:text-4xl font-bold mb-12 md:mb-16" style={{ fontFamily: "var(--font-owners-regular)" }}>Meet the Writers</h2>
-                <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-                    {['Alex Fox', 'Sarah Chen', 'Mike Ross'].map((name, i) => (
-                        <div key={i} className="bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
-                            <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-100 rounded-full mx-auto mb-4 md:mb-6 overflow-hidden relative"></div>
-                            <h3 className="font-bold text-xl md:text-2xl mb-1" style={{ fontFamily: "var(--font-owners-regular)" }}>{name}</h3>
-                            <p className="text-sm md:text-base text-gray-500 font-bold uppercase tracking-wide opacity-60" style={{ fontFamily: "var(--font-neue-montreal)" }}>Tech Lead</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    )
-}
+
 
 export function BlogCTA() {
     return (

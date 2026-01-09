@@ -7,7 +7,6 @@ import {
     ArticleGrid,
     Pagination,
     EmailSubscribe,
-    AuthorSpotlight,
     BlogCTA
 } from "@/components/blog-sections"
 import { Metadata } from "next"
@@ -29,7 +28,6 @@ export default function BlogPage() {
                 <ArticleGrid />
                 <Pagination />
                 <EmailSubscribe />
-                <AuthorSpotlight />
                 <BlogCTA />
             </main>
             <Footer />
