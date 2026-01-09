@@ -28,11 +28,7 @@ export function FooterEmail() {
         setTimeout(() => setCopied(false), 2000)
     }
 
-    const handleSend = (e: React.MouseEvent) => {
-        e.stopPropagation()
-        window.location.href = "mailto:contact@foxmenstudio.com"
-        setIsOpen(false)
-    }
+
 
     // Toggle for mobile tap / desktop click
     const toggleOpen = (e: React.MouseEvent) => {
@@ -78,15 +74,16 @@ export function FooterEmail() {
 
                         <div className="w-px bg-white/20 my-2" />
 
-                        <button
-                            onClick={handleSend}
+                        <a
+                            href="mailto:contact@foxmenstudio.com"
+                            onClick={() => setIsOpen(false)}
                             className="flex-1 flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-white/10 transition-colors text-white group"
                         >
                             <div className="p-2 bg-[#8B5DFF] rounded-full group-hover:scale-110 transition-transform">
                                 <Mail className="w-5 h-5" />
                             </div>
                             <span className="text-xs font-bold uppercase tracking-wider">Send</span>
-                        </button>
+                        </a>
 
                         {/* Pointy Arrow */}
                         <div className="absolute left-8 -bottom-2 w-4 h-4 bg-white/10 border-r border-b border-white/20 transform rotate-45 backdrop-blur-md" />
