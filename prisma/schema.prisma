@@ -3,24 +3,37 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Conversation {
   id        String   @id @default(uuid())
   startedAt DateTime @default(now())
-  messages  Message[]
+  messages  ChatMessage[]
   escalations Escalation[]
 }
 
-model Message {
+model ChatMessage {
   id             String       @id @default(uuid())
   conversationId String
   role           String       // "user" or "model"
   content        String
   createdAt      DateTime     @default(now())
   conversation   Conversation @relation(fields: [conversationId], references: [id])
+}
+
+model ContactMessage {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  projectType String?
+  country     String?
+  subject     String?
+  message     String
+  createdAt   DateTime @default(now())
 }
 
 model Escalation {
@@ -30,4 +43,74 @@ model Escalation {
   status         String       @default("PENDING") // PENDING, RESOLVED
   createdAt      DateTime     @default(now())
   conversation   Conversation @relation(fields: [conversationId], references: [id])
+}
+
+model Admin {
+  id       String @id @default(uuid())
+  username String @unique
+  password String
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  description String
+  image       String?
+  video       String?
+  gallery     String[]
+  tags        String[]
+  techStack   String[]
+  features    String[]
+  link        String?
+  github      String?
+
+  // Meta
+  client      String?
+  role        String?
+  duration    String?
+
+  // Case Study
+  challenge   String?
+  solution    String?
+  outcome     String?
+
+  // Structured Data
+  process     Json?    // Array of { title, desc, icon }
+  results     Json?    // Array of { label, value }
+  testimonial Json?    // Object { text, author, role }
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Post {
+  id         String   @id @default(uuid())
+  title      String
+  slug       String   @unique
+  excerpt    String
+  content    String
+  coverImage String?
+  tags       String[]
+  references String[]
+  author     String
+  authorRole String?
+  authorBio  String?
+  authorImage String?
+  authorTwitter String?
+  authorLinkedin String?
+  date       DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  comments   Comment[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  name      String
+  email     String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  createdAt DateTime @default(now())
 }

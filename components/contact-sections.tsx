@@ -130,20 +130,18 @@ export function ContactSplitSection() {
         setStatus("sending")
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://paperfolio-backend.vercel.app/api'}/messages`, {
+            const res = await fetch(`/api/messages`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     name: formData.name,
                     email: formData.email,
+                    phone: formData.phone,
+                    company: formData.company,
+                    projectType: formData.projectType,
+                    country: formData.country,
                     subject: `${formData.projectType || 'Inquiry'} from ${formData.name}`,
-                    message: `
-                        Name: ${formData.name}
-                        Phone: ${formData.phone}
-                        Company: ${formData.company}
-                        Country: ${formData.country}
-                        Message: ${formData.message}
-                    `
+                    message: formData.message
                 })
             })
             if (res.ok) {

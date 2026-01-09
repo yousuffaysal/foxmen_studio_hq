@@ -3,11 +3,19 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
+import { useLoading } from "@/components/loading-context"
 
 export function HomePreloader() {
-    const [isLoading, setIsLoading] = useState(true)
+    const { isLoading, setIsLoading } = useLoading()
+    // No local state needed for isLoading, but if we need unique logic we can keep it.
+    // However, the goal is to sync with other components.
 
     useEffect(() => {
+        // If we are not loading (e.g. navigated back), this might still run if mounted.
+        // But LoadingProvider handles initial state. 
+        // We only want to run the timer if we are currently loading.
+        if (!isLoading) return
+
         // Lock scroll
         document.body.style.overflow = "hidden"
 
@@ -21,7 +29,7 @@ export function HomePreloader() {
             clearTimeout(timer)
             document.body.style.overflow = "unset"
         }
-    }, [])
+    }, [isLoading, setIsLoading])
 
     return (
         <AnimatePresence>

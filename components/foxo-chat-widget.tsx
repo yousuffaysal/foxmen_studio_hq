@@ -5,13 +5,17 @@ import { MessageCircle, X, Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useLoading } from "@/components/loading-context";
 
 type Message = {
     role: "user" | "assistant";
     content: string;
 };
 
+
+
 export function FoxoChatWidget() {
+    const { isLoading: isGlobalLoading } = useLoading();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
         { role: "assistant", content: "Hi! I'm Foxo. How can I help you today?" }
@@ -84,6 +88,8 @@ export function FoxoChatWidget() {
             }, 1500);
         }
     };
+
+    if (isGlobalLoading) return null;
 
     return (
         <>

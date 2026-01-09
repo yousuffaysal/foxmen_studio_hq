@@ -18,7 +18,7 @@ import {
 import { Label } from "@/components/ui/label";
 
 type Post = {
-    _id: string;
+    id: string;
     title: string;
     slug: string;
     content?: string;
@@ -46,7 +46,7 @@ export default function BlogAdmin() {
 
     const fetchPosts = async () => {
         try {
-            const res = await fetch("https://paperfolio-backend.vercel.app/api/posts");
+            const res = await fetch("/api/posts");
             const data = await res.json();
             setPosts(data);
         } catch (error) {
@@ -116,8 +116,8 @@ export default function BlogAdmin() {
 
         try {
             const url = isEditing
-                ? `https://paperfolio-backend.vercel.app/api/posts/${currentPost._id}`
-                : "https://paperfolio-backend.vercel.app/api/posts";
+                ? `/api/posts/${currentPost.id}`
+                : "/api/posts";
 
             const method = isEditing ? "PUT" : "POST";
 
@@ -145,7 +145,7 @@ export default function BlogAdmin() {
         if (!confirm("Are you sure?")) return;
         const token = localStorage.getItem("adminToken");
         try {
-            await fetch(`https://paperfolio-backend.vercel.app/api/posts/${id}`, {
+            await fetch(`/api/posts/${id}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -173,7 +173,7 @@ export default function BlogAdmin() {
 
     const fetchComments = async (postId: string) => {
         try {
-            const res = await fetch(`https://paperfolio-backend.vercel.app/api/posts/${postId}/comments`);
+            const res = await fetch(`/api/posts/${postId}/comments`);
             const data = await res.json();
             setComments(Array.isArray(data) ? data : []);
         } catch (error) {
@@ -183,18 +183,18 @@ export default function BlogAdmin() {
 
     const openCommentsManager = (post: Post) => {
         setManagingComments(post);
-        fetchComments(post._id);
+        fetchComments(post.id);
     };
 
     const handleDeleteComment = async (commentId: string) => {
         if (!confirm("Delete this comment?")) return;
         const token = localStorage.getItem("adminToken");
         try {
-            await fetch(`https://paperfolio-backend.vercel.app/api/posts/comments/${commentId}`, {
+            await fetch(`/api/comments/${commentId}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
             });
-            if (managingComments) fetchComments(managingComments._id);
+            if (managingComments) fetchComments(managingComments.id);
         } catch (error) {
             console.error("Failed to delete comment", error);
         }
@@ -203,7 +203,7 @@ export default function BlogAdmin() {
     const handleUpdateComment = async (commentId: string) => {
         const token = localStorage.getItem("adminToken");
         try {
-            await fetch(`https://paperfolio-backend.vercel.app/api/posts/comments/${commentId}`, {
+            await fetch(`/api/comments/${commentId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -212,7 +212,7 @@ export default function BlogAdmin() {
                 body: JSON.stringify({ content: editCommentContent })
             });
             setEditingCommentId(null);
-            if (managingComments) fetchComments(managingComments._id);
+            if (managingComments) fetchComments(managingComments.id);
         } catch (error) {
             console.error("Failed to update comment", error);
         }
@@ -242,7 +242,7 @@ export default function BlogAdmin() {
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 pb-12">
                     {posts.map((post) => (
                         <div
-                            key={post._id}
+                            key={post.id}
                             className="group relative border-4 border-black rounded-[32px] overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-y-1 aspect-square"
                         >
                             {/* Full Background Image */}
@@ -287,7 +287,7 @@ export default function BlogAdmin() {
                                             <MessageSquare className="w-4 h-4" />
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(post._id)}
+                                            onClick={() => handleDelete(post.id)}
                                             className="h-10 w-10 flex items-center justify-center rounded-lg bg-white/90 text-[#FF4A60] hover:bg-black hover:text-white transition-colors shadow-sm"
                                         >
                                             <Trash2 className="w-4 h-4" />

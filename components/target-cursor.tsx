@@ -1,4 +1,5 @@
 "use client"
+import { useLoading } from "@/components/loading-context";
 
 import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
@@ -315,6 +316,8 @@ const TargetCursor = ({
         }
     }, [spinDuration, isMobile]);
 
+    const { isLoading } = useLoading();
+
     // if (isMobile) {
     //     return null;
     // }
@@ -322,7 +325,7 @@ const TargetCursor = ({
     return (
         <div
             ref={cursorRef}
-            className="fixed top-0 left-0 w-0 h-0 pointer-events-none z-[99999] hidden md:block"
+            className={`fixed top-0 left-0 w-0 h-0 pointer-events-none z-[99999] hidden md:block ${isLoading ? 'opacity-0' : 'opacity-100'}`}
             style={{ willChange: 'transform', mixBlendMode: 'difference' }}
         >
             <div

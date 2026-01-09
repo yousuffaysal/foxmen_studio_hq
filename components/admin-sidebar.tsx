@@ -69,13 +69,8 @@ export function AdminSidebar() {
                 isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
             )}>
                 {/* Header / Brand */}
-                <div className="p-8 border-b-4 border-black">
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center text-white font-black text-2xl rotate-3">
-                            F
-                        </div>
-                        <span className="text-2xl font-black uppercase tracking-tighter">FOXMEN STUDIO</span>
-                    </div>
+                <div className="p-8 border-b-4 border-black flex justify-center">
+                    <img src="/images/navlogo.svg" alt="Logo" className="h-12 w-auto" />
                 </div>
 
                 {/* Navigation */}

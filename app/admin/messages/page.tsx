@@ -5,7 +5,7 @@ import { Trash2, Mail, Calendar, User, MessageSquare, Phone, Building, Wallet, Q
 import { format } from "date-fns";
 
 type Message = {
-    _id: string;
+    id: string;
     name: string;
     email: string;
     subject: string;
@@ -21,7 +21,7 @@ export default function MessagesAdmin() {
     const fetchMessages = async () => {
         try {
             const token = localStorage.getItem("adminToken");
-            const res = await fetch("https://paperfolio-backend.vercel.app/api/messages", {
+            const res = await fetch("/api/messages", {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -39,7 +39,7 @@ export default function MessagesAdmin() {
             if (Array.isArray(data)) {
                 setMessages(data);
                 if (data.length > 0 && !selectedMessageId) {
-                    setSelectedMessageId(data[0]._id);
+                    setSelectedMessageId(data[0].id);
                 }
             } else {
                 console.error("API returned non-array:", data);
@@ -60,23 +60,23 @@ export default function MessagesAdmin() {
         if (!confirm("Are you sure you want to delete this message?")) return;
         const token = localStorage.getItem("adminToken");
         try {
-            await fetch(`https://paperfolio-backend.vercel.app/api/messages/${id}`, {
+            await fetch(`/api/messages/${id}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
             });
 
             // Refetch and adjust selection
-            const remaining = messages.filter(m => m._id !== id);
+            const remaining = messages.filter(m => m.id !== id);
             setMessages(remaining);
             if (selectedMessageId === id) {
-                setSelectedMessageId(remaining.length > 0 ? remaining[0]._id : null);
+                setSelectedMessageId(remaining.length > 0 ? remaining[0].id : null);
             }
         } catch (error) {
             console.error("Failed to delete message", error);
         }
     };
 
-    const selectedMessage = messages.find(m => m._id === selectedMessageId);
+    const selectedMessage = messages.find(m => m.id === selectedMessageId);
 
     // Helper to parse the message content
     const renderMessageContent = (rawMessage: string) => {
@@ -205,24 +205,24 @@ export default function MessagesAdmin() {
                     `}>
                         {messages.map((msg) => (
                             <div
-                                key={msg._id}
-                                onClick={() => setSelectedMessageId(msg._id)}
+                                key={msg.id}
+                                onClick={() => setSelectedMessageId(msg.id)}
                                 className={`
                                     cursor-pointer p-5 rounded-2xl border-2 transition-all group relative
-                                    ${selectedMessageId === msg._id
+                                    ${selectedMessageId === msg.id
                                         ? "bg-black text-white border-black shadow-[4px_4px_0px_0px_rgba(80,80,80,1)]"
                                         : "bg-white border-gray-200 hover:border-black hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] text-gray-900"
                                     }
                                 `}
                             >
                                 <div className="flex justify-between items-start mb-2">
-                                    <span className={`text-xs font-bold uppercase tracking-wide px-2 py-0.5 rounded-md border ${selectedMessageId === msg._id ? "bg-white/20 border-transparent text-white" : "bg-gray-100 border-gray-200 text-gray-500"}`}>
+                                    <span className={`text-xs font-bold uppercase tracking-wide px-2 py-0.5 rounded-md border ${selectedMessageId === msg.id ? "bg-white/20 border-transparent text-white" : "bg-gray-100 border-gray-200 text-gray-500"}`}>
                                         {format(new Date(msg.createdAt), 'MMM dd')}
                                     </span>
-                                    {selectedMessageId === msg._id && <ChevronRight className="w-5 h-5 text-[#FFC224]" />}
+                                    {selectedMessageId === msg.id && <ChevronRight className="w-5 h-5 text-[#FFC224]" />}
                                 </div>
                                 <h4 className="font-bold text-lg leading-tight mb-1 truncate">{msg.subject || "No Subject"}</h4>
-                                <p className={`text-sm truncate ${selectedMessageId === msg._id ? "text-gray-300" : "text-gray-500"}`}>
+                                <p className={`text-sm truncate ${selectedMessageId === msg.id ? "text-gray-300" : "text-gray-500"}`}>
                                     {msg.name}
                                 </p>
                             </div>
@@ -286,7 +286,7 @@ export default function MessagesAdmin() {
                                 {/* Footer Actions */}
                                 <div className="pt-8 border-t-2 border-gray-100 flex justify-end mt-auto">
                                     <button
-                                        onClick={() => handleDelete(selectedMessage._id)}
+                                        onClick={() => handleDelete(selectedMessage.id)}
                                         className="w-full md:w-auto inline-flex justify-center items-center px-8 py-4 rounded-2xl bg-white text-[#FF4A60] border-4 border-[#FF4A60] hover:bg-[#FF4A60] hover:text-white font-bold text-lg transition-all hover:shadow-[6px_6px_0px_0px_rgba(255,74,96,0.3)] hover:-translate-y-1"
                                     >
                                         <Trash2 className="w-5 h-5 mr-3" />

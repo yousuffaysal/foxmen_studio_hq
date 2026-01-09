@@ -68,7 +68,7 @@ export async function POST(req: Request) {
         // 2. Save User Message (Soft Fail)
         try {
             if (!convId.startsWith("temp-")) {
-                await prisma.message.create({
+                await prisma.chatMessage.create({
                     data: {
                         conversationId: convId,
                         role: "user",
@@ -123,7 +123,7 @@ export async function POST(req: Request) {
         // 4. Save Assistant Message (Soft Fail)
         try {
             if (!convId.startsWith("temp-")) {
-                await prisma.message.create({
+                await prisma.chatMessage.create({
                     data: {
                         conversationId: convId,
                         role: "assistant",
