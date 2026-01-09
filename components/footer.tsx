@@ -11,11 +11,11 @@ export function Footer() {
         {/* Top Section */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-16 md:mb-24 gap-12">
           {/* Left: Email */}
-          <div className="flex flex-col gap-4 max-w-2xl w-full">
+          <div className="flex flex-col gap-4 w-full">
             <span className="text-gray-400 text-sm" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
               Uncover the potency of Foxmen Studio at
             </span>
-            <a href="mailto:contact@foxmenstudio.com" className="text-[6vw] md:text-5xl lg:text-7xl font-bold border-b border-gray-700 pb-2 hover:text-[#8B5DFF] hover:border-[#8B5DFF] transition-colors break-words" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
+            <a href="mailto:contact@foxmenstudio.com" className="text-[5vw] md:text-4xl lg:text-6xl font-bold border-b border-gray-700 pb-2 hover:text-[#8B5DFF] hover:border-[#8B5DFF] transition-colors whitespace-nowrap" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
               contact@foxmenstudio.com
             </a>
           </div>
@@ -25,7 +25,7 @@ export function Footer() {
             <h3 className="text-2xl md:text-3xl font-bold mb-12 md:mb-16 relative z-10" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
               Get Started
             </h3>
-            <a href="#" className="flex items-center justify-between bg-black text-white px-5 py-2.5 md:px-6 md:py-3 rounded-full relative z-10 group-hover:scale-105 transition-transform duration-300">
+            <a href="/contact" className="flex items-center justify-between bg-black text-white px-5 py-2.5 md:px-6 md:py-3 rounded-full relative z-10 group-hover:scale-105 transition-transform duration-300">
               <span className="font-medium">Go</span>
               <span className="text-xl">→</span>
             </a>

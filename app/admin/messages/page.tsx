@@ -24,10 +24,26 @@ export default function MessagesAdmin() {
             const res = await fetch("https://paperfolio-backend.vercel.app/api/messages", {
                 headers: { Authorization: `Bearer ${token}` }
             });
+
+            if (!res.ok) {
+                if (res.status === 401) {
+                    console.error("Unauthorized. Redirecting to login.");
+                    window.location.href = "/admin"; // Redirect to login
+                    return;
+                }
+                throw new Error(`API Error: ${res.status}`);
+            }
+
             const data = await res.json();
-            setMessages(data);
-            if (data.length > 0 && !selectedMessageId) {
-                setSelectedMessageId(data[0]._id);
+
+            if (Array.isArray(data)) {
+                setMessages(data);
+                if (data.length > 0 && !selectedMessageId) {
+                    setSelectedMessageId(data[0]._id);
+                }
+            } else {
+                console.error("API returned non-array:", data);
+                setMessages([]);
             }
         } catch (error) {
             console.error("Failed to fetch messages", error);

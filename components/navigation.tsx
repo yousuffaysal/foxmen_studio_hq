@@ -10,14 +10,18 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { ContactButton } from "@/components/contact-button"
 
 
-export function Navigation() {
+interface NavigationProps {
+  delay?: number
+}
+
+export function Navigation({ delay = 0 }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <motion.div
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-      className="w-full relative z-50 bg-white/80 backdrop-blur-md border-b border-black/30"
+      transition={{ duration: 0.8, delay: delay, ease: "easeOut" }}
+      className="w-full relative z-50 bg-[#fffff0]/80 backdrop-blur-md border-b border-black/30"
     >
       <nav className="flex items-center justify-between px-6 py-4 md:py-10 w-full">
         <Link href="/" className="h-12 md:h-[70px] w-auto flex items-center justify-center flex-shrink-0 cursor-pointer">

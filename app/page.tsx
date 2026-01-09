@@ -11,10 +11,13 @@ import { ArticlesSection } from "@/components/articles-section"
 import { Footer } from "@/components/footer"
 import { ScrollAnimation } from "@/components/scroll-animation"
 
+import { HomePreloader } from "@/components/home-preloader"
+
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#FFFFFF]">
-      <Navigation />
+    <main className="min-h-screen bg-[#fffff0]">
+      <HomePreloader />
+      <Navigation delay={3.2} />
       <HeroSection />
 
       <ScrollAnimation>

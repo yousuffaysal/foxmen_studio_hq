@@ -24,9 +24,9 @@ const staggerContainer = {
 
 export function ProjectStats() {
     const stats = [
-        { label: "Projects Delivered", value: "120+" },
-        { label: "Industries Served", value: "50+" },
-        { label: "Repeat Clients", value: "95%" },
+        { label: "Projects Delivered", value: "200+" },
+        { label: "Served Brands", value: "300+" },
+        { label: "Assisted Projects", value: "120+" },
         { label: "Years of Expertise", value: "5+" },
     ]
     return (

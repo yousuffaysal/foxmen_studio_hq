@@ -93,7 +93,7 @@ export function FoxoChatWidget() {
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        className="w-[350px] md:w-[400px] h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden"
+                        className="w-[380px] md:w-[480px] h-[600px] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden"
                     >
                         {/* Header */}
                         <div className="p-4 bg-[#8B5DFF] text-white flex items-center justify-between shrink-0">
@@ -134,8 +134,26 @@ export function FoxoChatWidget() {
                                             remarkPlugins={[remarkGfm]}
                                             components={{
                                                 a: ({ node, ...props }) => (
-                                                    <a {...props} target="_blank" rel="noopener noreferrer" className="underline font-semibold text-inherit hover:opacity-80 break-all" />
-                                                )
+                                                    <a {...props} target="_blank" rel="noopener noreferrer" className="underline font-bold text-inherit hover:opacity-80 break-all" />
+                                                ),
+                                                p: ({ node, ...props }) => (
+                                                    <p {...props} className="mb-3 last:mb-0 leading-7" />
+                                                ),
+                                                ul: ({ node, ...props }) => (
+                                                    <ul {...props} className="list-disc pl-4 mb-3 space-y-1" />
+                                                ),
+                                                ol: ({ node, ...props }) => (
+                                                    <ol {...props} className="list-decimal pl-4 mb-3 space-y-1" />
+                                                ),
+                                                li: ({ node, ...props }) => (
+                                                    <li {...props} className="leading-6" />
+                                                ),
+                                                h3: ({ node, ...props }) => (
+                                                    <h3 {...props} className="font-bold text-lg mb-2 mt-4 first:mt-0" />
+                                                ),
+                                                strong: ({ node, ...props }) => (
+                                                    <strong {...props} className="font-bold" />
+                                                ),
                                             }}
                                         >
                                             {msg.content}
@@ -179,9 +197,9 @@ export function FoxoChatWidget() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-14 h-14 bg-[#8B5DFF] text-white rounded-full shadow-xl flex items-center justify-center hover:bg-[#7a4ee0] transition-colors"
+                className="w-16 h-16 bg-[#8B5DFF] text-white rounded-full shadow-xl flex items-center justify-center hover:bg-[#7a4ee0] transition-colors"
             >
-                {isOpen ? <X size={28} /> : <MessageCircle size={28} />}
+                {isOpen ? <X size={32} /> : <MessageCircle size={32} />}
             </motion.button>
         </div>
     );

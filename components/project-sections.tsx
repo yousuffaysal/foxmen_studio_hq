@@ -154,38 +154,41 @@ export function ProjectGrid() {
     )
 }
 
+import ChainCarousel, { ChainItem } from "@/components/ui/chain-carousel"
+import { TrendingUp } from "lucide-react"
+
 export function ProjectTech() {
-    const techs = [
-        { name: "Django", color: "#092E20" },
-        { name: "Next.js", color: "#000000" },
-        { name: "Python", color: "#3776AB" },
-        { name: "React", color: "#61DAFB" },
-        { name: "Three.js", color: "#000000" },
-        { name: "AWS", color: "#232F3E" },
-        { name: "Framer", color: "#0055FF" },
-        { name: "Figma", color: "#F24E1E" },
+    const techs: ChainItem[] = [
+        { id: 1, name: "Django", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain.svg", details: "Backend Framework", icon: TrendingUp },
+        { id: 2, name: "Next.js", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg", details: "React Framework", icon: TrendingUp },
+        { id: 3, name: "Python", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg", details: "Programming Language", icon: TrendingUp },
+        { id: 4, name: "React", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg", details: "UI Library", icon: TrendingUp },
+        { id: 5, name: "Three.js", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/threejs/threejs-original.svg", details: "3D Graphics", icon: TrendingUp },
+        { id: 6, name: "AWS", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg", details: "Cloud Infrastructure", icon: TrendingUp },
+        { id: 7, name: "Framer", logo: "https://www.vectorlogo.zone/logos/framer/framer-icon.svg", details: "Motion Library", icon: TrendingUp },
+        { id: 8, name: "Figma", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg", details: "Design Tool", icon: TrendingUp },
+        { id: 9, name: "Docker", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg", details: "Containerization", icon: TrendingUp },
+        { id: 10, name: "Golang", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original-wordmark.svg", details: "Backend Language", icon: TrendingUp },
+        { id: 11, name: "Node.js", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg", details: "Runtime Environment", icon: TrendingUp },
+        { id: 12, name: "Express.js", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg", details: "Web Framework", icon: TrendingUp },
     ]
 
     return (
-        <section className="py-24 bg-[#080808] border-t border-white/5 overflow-hidden">
-            <div className="container mx-auto px-6 mb-12 flex flex-col md:flex-row justify-between items-end">
-                <h2 className="text-3xl md:text-4xl font-bold text-white max-w-sm leading-tight" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
-                    Powered by Modern<br /><span className="text-[#8B5DFF]">Technology</span>
+        <section className="py-24 bg-[#080808] border-t border-white/5 overflow-hidden relative">
+            {/* Ambient Background */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-900/10 via-transparent to-transparent opacity-50 blur-3xl pointer-events-none"></div>
+
+            <div className="w-full px-4 md:px-12 mb-12 flex flex-col md:flex-row justify-between items-end relative z-10">
+                <h2 className="text-4xl md:text-6xl font-bold text-white max-w-4xl leading-tight" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
+                    Powered by Modern<br /><span className="text-[#8B5DFF]">Engineering</span>
                 </h2>
-                <p className="text-gray-400 text-sm md:text-base max-w-md mt-4 md:mt-0" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
+                <p className="text-gray-400 text-base md:text-lg max-w-xl mt-6 md:mt-0 text-right" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
                     We leverage the bleeding edge of tech to build scalable, secure, and high-performance digital solutions.
                 </p>
             </div>
 
-            <div className="relative w-full overflow-hidden py-8">
-                <div className="flex gap-4 md:gap-8 w-max animate-marquee">
-                    {[...techs, ...techs, ...techs].map((tech, i) => (
-                        <div key={i} className="flex items-center gap-3 px-6 py-3 bg-[#111] rounded-full border border-white/10 hover:border-[#8B5DFF]/50 transition-colors group">
-                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: tech.color }}></div>
-                            <span className="text-lg font-medium text-gray-300 group-hover:text-white" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>{tech.name}</span>
-                        </div>
-                    ))}
-                </div>
+            <div className="w-full">
+                <ChainCarousel items={techs} className="w-full max-w-none" />
             </div>
         </section>
     )

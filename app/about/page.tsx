@@ -8,6 +8,7 @@ import {
     AboutStatsMarquee,
     AboutCTA
 } from "@/components/about-sections"
+import { AboutTeam } from "@/components/about-team-section"
 
 export default function AboutPage() {
     return (
@@ -17,6 +18,7 @@ export default function AboutPage() {
                 <AboutHero />
                 <AboutServices />
                 <AboutApproach />
+                <AboutTeam />
                 <AboutTech />
                 <AboutStatsMarquee />
                 <AboutCTA />

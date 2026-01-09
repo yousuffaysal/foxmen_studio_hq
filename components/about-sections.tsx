@@ -16,6 +16,21 @@ export function AboutHero() {
                 <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
             </div>
 
+            {/* Rotating Cutoff Logo - Top Right */}
+            <div className="absolute top-0 right-0 z-20 overflow-hidden pointer-events-none w-[30vh] h-[30vh] opacity-50 xl:opacity-100">
+                <motion.div
+                    className="absolute -top-[30%] -right-[30%] w-full h-full"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                >
+                    <div className="relative w-full h-full border-[1px] border-dashed border-[#8B5DFF]/30 rounded-full flex items-center justify-center">
+                        <div className="absolute inset-0 border-[1px] border-white/10 rounded-full scale-75" />
+                        <div className="absolute inset-0 border-[1px] border-[#8B5DFF]/20 rounded-full scale-125" />
+                        <Layout className="text-[#8B5DFF] w-1/4 h-1/4" strokeWidth={1} />
+                    </div>
+                </motion.div>
+            </div>
+
             <div className="max-w-[1800px] mx-auto w-full relative z-10 pt-20">
                 <div className="flex flex-col gap-8">
                     <motion.div

@@ -63,7 +63,7 @@ export function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8, delay: 2.5, ease: "easeOut" }}
           className="space-y-6 relative z-10"
         >
           <div className="flex items-center gap-3 mb-4">
