@@ -1,11 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { Pencil, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { NewsletterSignup } from "@/components/newsletter-signup"
+import { ArrowUpRight } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 
 export function ArticlesSection() {
   const [articles, setArticles] = useState<any[]>([])
@@ -25,107 +24,134 @@ export function ArticlesSection() {
   }, [])
 
   if (loading) {
-    return (
-      <section className="container mx-auto px-4 py-16 md:py-24">
-        <div className="max-w-7xl mx-auto text-center py-20">
-          <p className="text-xl text-gray-400" style={{ fontFamily: "var(--font-neue-montreal)" }}>Loading Articles...</p>
-        </div>
-      </section>
-    )
+    return null // or a minimal skeleton
   }
 
-  const featuredArticle = articles[0]
-  const sideArticles = articles.slice(1, 3)
+  // Display top 3 articles
+  const displayArticles = articles.slice(0, 3)
 
   return (
-    <section className="container mx-auto px-4 py-16 md:py-24">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold" style={{ fontFamily: "var(--font-sfpro)" }}>Articles & News</h2>
-          <Button
-            asChild
-            variant="outline"
-            className="border-[3px] border-black rounded-xl px-4 md:px-6 py-4 md:py-6 hover:bg-gray-50 bg-white font-semibold text-sm md:text-base w-full sm:w-auto"
-          >
-            <Link href="/blog">
-              <Pencil className="w-4 h-4 mr-2" />
-              Browse all articles
-            </Link>
-          </Button>
+    <section className="bg-[#fffff3] py-32 relative overflow-hidden">
+      {/* Atmosphere: Technical Grid Background */}
+      <div className="absolute inset-0 z-0 opacity-[0.03]"
+        style={{
+          backgroundImage: 'linear-gradient(#414042 1px, transparent 1px), linear-gradient(90deg, #414042 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }}
+      />
+
+      {/* Atmosphere: Radial Gradient for Depth */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-b from-[#8B5DFF]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+      <div className="container mx-auto px-4 md:px-8 relative z-10">
+
+        {/* Header - Editorial Style */}
+        <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-24">
+          <div className="max-w-2xl">
+            <span
+              className="block font-mono text-xs text-[#8B5DFF] mb-6 tracking-[0.2em] uppercase"
+              style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
+            >
+                    /// Insights & Intelligence
+            </span>
+            <h2
+              className="text-6xl md:text-8xl font-bold text-[#414042] tracking-tighter leading-[0.85]"
+              style={{ fontFamily: "var(--font-ibm-plex-sans-medium)" }}
+            >
+              LATEST<br />THINKING
+            </h2>
+          </div>
+
+          <Link href="/blog" className="group hidden md:flex items-center gap-2 border-b border-[#414042] pb-1">
+            <span className="text-sm font-bold uppercase tracking-widest text-[#414042]" style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}>
+              View Archive
+            </span>
+            <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+          </Link>
         </div>
 
-        <div className="grid md:grid-cols-[0.9fr_1.1fr] gap-6 mb-16">
-          {/* Large featured article card */}
-          {featuredArticle && (
-            <Link href={`/blog/${featuredArticle.slug}`} className="group bg-white border-[3px] border-black rounded-3xl overflow-hidden hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 block">
-              <div className="bg-[#EDEDED] relative min-h-[220px] md:min-h-[320px] m-3 md:m-4 rounded-2xl overflow-hidden">
-                <span className="absolute top-3 right-3 md:top-4 md:right-4 inline-block bg-black text-white text-xs md:text-sm font-semibold px-3 py-1.5 md:px-4 md:py-2 rounded-lg z-10">
-                  Featured
-                </span>
-                {featuredArticle.coverImage && (
+        {/* Dynamic Editorial Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+
+          {/* Main Feature - Spans 7 columns */}
+          {displayArticles[0] && (
+            <Link href={`/blog/${displayArticles[0].slug}`} className="lg:col-span-7 group cursor-pointer">
+              <div className="relative aspect-[1200/630] w-full overflow-hidden rounded-sm bg-[#e5e5e5] mb-8">
+                {displayArticles[0].coverImage && (
                   <Image
-                    src={featuredArticle.coverImage}
-                    alt={featuredArticle.title}
+                    src={displayArticles[0].coverImage}
+                    alt={displayArticles[0].title}
                     fill
-                    className="object-cover rounded-2xl transition-transform duration-500 ease-out group-hover:scale-110"
+                    className="object-cover transition-all duration-700 ease-[0.22,1,0.36,1] group-hover:scale-105"
                   />
                 )}
-              </div>
-              <div className="p-6 md:p-8">
-                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 line-clamp-2" style={{ fontFamily: "var(--font-sfpro)" }}>
-                  {featuredArticle.title}
-                </h3>
-                <div className="flex items-center gap-3 md:gap-4">
-                  <div className="w-12 h-12 md:w-16 md:h-16 bg-[#FDB927] border-2 border-black rounded-full overflow-hidden flex-shrink-0 relative">
-                    {/* Placeholder Avatar or Author Image if available */}
-                    <span className="absolute inset-0 flex items-center justify-center font-bold text-xl">FS</span>
-                  </div>
-                  <div>
-                    <div className="font-bold text-base md:text-lg text-[#0B0B0B]">Foxmen Studio</div>
-                    <div className="text-sm md:text-base text-gray-600">
-                      {new Date(featuredArticle.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </div>
-                  </div>
+                <div className="absolute top-4 left-4 bg-[#fffff3] px-3 py-1 border border-[#414042]/10 text-[10px] font-bold uppercase tracking-widest text-[#414042] z-10">
+                  Featured
                 </div>
+              </div>
+
+              <div className="space-y-4 pr-12">
+                <div className="flex items-center gap-4 text-xs font-mono text-[#8B5DFF] uppercase tracking-wider">
+                  <span>{new Date(displayArticles[0].date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                  <span className="w-2 h-px bg-[#8B5DFF]" />
+                  <span>Editorial</span>
+                </div>
+                <h3
+                  className="text-3xl md:text-5xl font-bold text-[#414042] leading-[1.1] group-hover:text-[#8B5DFF] transition-colors duration-300"
+                  style={{ fontFamily: "var(--font-ibm-plex-sans-medium)" }}
+                >
+                  {displayArticles[0].title}
+                </h3>
               </div>
             </Link>
           )}
 
-          {/* Right side - Two smaller article cards */}
-          <div className="space-y-6 md:space-y-8">
-            {sideArticles.map((article, index) => (
-              <Link href={`/blog/${article.slug}`} key={article._id || index} className="group bg-white border-[3px] border-black rounded-3xl overflow-hidden hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 block">
-                <div className="flex flex-col sm:flex-row h-full">
-                  {/* Image area */}
-                  <div className="bg-[#EDEDED] min-w-full sm:min-w-[200px] md:min-w-[280px] min-h-[180px] sm:min-h-[200px] relative m-0 sm:m-3 md:m-4 rounded-none sm:rounded-2xl overflow-hidden flex-shrink-0">
-                    <span className="absolute top-3 right-3 md:top-4 md:right-4 inline-block bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-lg z-10">
-                      Article
+          {/* Side Column - Stacked List - Spans 5 columns */}
+          <div className="lg:col-span-5 flex flex-col gap-12 lg:pl-8 lg:border-l border-[#414042]/10">
+            {displayArticles.slice(1, 4).map((article, index) => (
+              <Link href={`/blog/${article.slug}`} key={index} className="group grid grid-cols-[1fr_2fr] gap-6 items-start">
+                {/* Thumbnail */}
+                <div className="aspect-square w-full relative overflow-hidden rounded-sm bg-[#f0f0f0]">
+                  {article.coverImage && (
+                    <Image
+                      src={article.coverImage}
+                      alt={article.title}
+                      fill
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col h-full justify-between py-1">
+                  <div>
+                    <span className="block text-[10px] font-mono text-[#414042]/50 uppercase tracking-widest mb-3">
+                      0{index + 2} / {new Date(article.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                     </span>
-                    {article.coverImage && (
-                      <Image
-                        src={article.coverImage}
-                        alt={article.title}
-                        fill
-                        className="object-cover sm:object-contain p-0 sm:p-3 md:p-4 rounded-none sm:rounded-2xl transition-transform duration-500 ease-out group-hover:scale-110"
-                      />
-                    )}
-                  </div>
-                  {/* Content area */}
-                  <div className="p-6 md:p-8 flex flex-col justify-center">
-                    <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 line-clamp-3" style={{ fontFamily: "var(--font-sfpro)" }}>
+                    <h4
+                      className="text-xl md:text-2xl font-bold text-[#414042] leading-tight group-hover:text-[#8B5DFF] transition-colors"
+                      style={{ fontFamily: "var(--font-ibm-plex-sans-medium)" }}
+                    >
                       {article.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm md:text-base leading-relaxed line-clamp-2" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                      {article.content ? article.content.replace(/<[^>]*>?/gm, '') : "Read more..."}
-                    </p>
+                    </h4>
+                  </div>
+                  <div className="mt-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#414042] opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-[-10px] group-hover:translate-x-0">
+                    Read Article <ArrowUpRight className="w-3 h-3" />
                   </div>
                 </div>
               </Link>
             ))}
+
+            {/* Mobile View Archive Link */}
+            <Link href="/blog" className="md:hidden flex items-center gap-2 pt-8 border-t border-[#414042]/10 mt-auto">
+              <span className="text-sm font-bold uppercase tracking-widest text-[#414042]" style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}>
+                View Archive
+              </span>
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
 
-        <NewsletterSignup />
       </div>
     </section>
   )

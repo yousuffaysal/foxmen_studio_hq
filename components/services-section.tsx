@@ -2,6 +2,7 @@
 
 import { ArrowRight, Mail } from 'lucide-react'
 import Link from "next/link"
+import Image from "next/image"
 
 export function ServicesSection() {
   const services = [
@@ -9,31 +10,36 @@ export function ServicesSection() {
       id: "01",
       title: "Website Development",
       description: "Custom, high-performance websites built with modern technologies (Next.js, React) to capture your brand's essence and convert visitors.",
-      capabilities: ["Next.js / React", "Performance Optimization", "SEO Architecture", "CMS Integration"]
+      capabilities: ["Next.js / React", "Performance Optimization", "SEO Architecture", "CMS Integration"],
+      image: "https://ik.imagekit.io/2lax2ytm2/Website%20Developemt.svg"
     },
     {
       id: "02",
       title: "UI/UX Design",
       description: "User-centric design that blends aesthetics with functionality, creating intuitive and engaging digital experiences.",
-      capabilities: ["User Research", "Wireframing & Prototyping", "Design Systems", "Interaction Design"]
+      capabilities: ["User Research", "Wireframing & Prototyping", "Design Systems", "Interaction Design"],
+      image: "https://ik.imagekit.io/2lax2ytm2/thursday.social%20(1).svg"
     },
     {
       id: "03",
       title: "Mobile App Development",
       description: "Scalable, native and cross-platform mobile applications engineered for seamless performance and user retention.",
-      capabilities: ["React Native", "iOS & Android", "App Store Optimization", "Offline-First Architecture"]
+      capabilities: ["React Native", "iOS & Android", "App Store Optimization", "Offline-First Architecture"],
+      image: "https://ik.imagekit.io/2lax2ytm2/Mobile%20Deve%20(1).svg"
     },
     {
       id: "04",
       title: "AI Agent & Automation",
       description: "Custom AI solutions and intelligent automation to streamline operations, optimize workflows, and scale your business efficiency.",
-      capabilities: ["LLM Integration", "Workflow Automation", "Chatbot Development", "Data Analysis"]
+      capabilities: ["LLM Integration", "Workflow Automation", "Chatbot Development", "Data Analysis"],
+      image: "https://ik.imagekit.io/2lax2ytm2/agent%20(1).svg"
     },
     {
       id: "05",
       title: "Branding & Strategy",
       description: "Strategic brand identity design that communicates your core values, resonates with your audience, and creates lasting market impact.",
-      capabilities: ["Brand Identity", "Visual Language", "Market Positioning", "Content Strategy"]
+      capabilities: ["Brand Identity", "Visual Language", "Market Positioning", "Content Strategy"],
+      image: "https://ik.imagekit.io/2lax2ytm2/Frame%20427319390.png"
     },
   ]
 
@@ -71,7 +77,7 @@ export function ServicesSection() {
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
           {services.map((service, index) => (
-            <div key={index} className="group flex flex-col items-start">
+            <div key={index} className="group flex flex-col items-start bg-transparent">
               {/* Number */}
               <span
                 className="text-sm font-mono text-[#8B5DFF] mb-6 border-b border-[#8B5DFF]/30 pb-2 w-full"
@@ -79,6 +85,18 @@ export function ServicesSection() {
               >
                 {service.id}
               </span>
+
+              {/* Service Identity Image - Creative/Minimal */}
+              <div className="w-full aspect-[1728/1117] mb-6 overflow-hidden rounded-sm bg-[#e5e5e5] relative border border-[#414042]/5">
+                <Image
+                  src={service.image}
+                  alt={service.title}
+                  fill
+                  className="object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
+                />
+                {/* Overlay Grid Line */}
+                <div className="absolute inset-0 z-10 opacity-10 pointer-events-none bg-[linear-gradient(rgba(0,0,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.1)_1px,transparent_1px)] bg-[size:20px_20px]" />
+              </div>
 
               {/* Title */}
               <h3
