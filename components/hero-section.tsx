@@ -54,10 +54,10 @@ export function HeroSection() {
   }, [])
 
   const pillars = [
-    { title: "Design &\nBranding", icon: Globe, desc: "UI/UX, Identity & Systems", detail: "Figma / Framer / Motion" },
     { title: "Web\nDevelopments", icon: Rocket, desc: "Fintech, EdTech & Medical", detail: "Next.js / React / Node" },
-    { title: "AI Agents &\nSaaS Products", icon: Cpu, desc: "LLMs, Automations & Scale", detail: "Python / OpenAI / RAG" },
     { title: "Mobile App\nDevelopments", icon: Smartphone, desc: "iOS, Android & Native", detail: "React Native / Swift" },
+    { title: "AI Agents &\nSaaS Products", icon: Cpu, desc: "LLMs, Automations & Scale", detail: "Python / OpenAI / RAG" },
+    { title: "Design&\nBranding", icon: Globe, desc: "UI/UX, Identity & Systems", detail: "Figma / Framer / Motion" },
   ]
 
   return (
@@ -108,10 +108,43 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 + (index * 0.15) }}
-              className="group relative bg-white border border-[#414042]/10 p-5 md:p-8 flex flex-col justify-between h-[240px] md:h-[400px] hover:border-[#414042] hover:shadow-[8px_8px_0px_0px_rgba(65,64,66,1)] transition-all duration-300"
+              className="group relative bg-white border border-[#414042]/10 p-5 md:p-8 flex flex-col justify-between h-[240px] md:h-[400px] hover:border-[#414042] hover:shadow-[8px_8px_0px_0px_rgba(65,64,66,1)] transition-all duration-300 overflow-hidden"
             >
+              {/* Decorative Geometric Lines - Different for each card */}
+              <div className="absolute inset-0 pointer-events-none opacity-[0.08] group-hover:opacity-20 transition-opacity duration-300">
+                {index === 0 && (
+                  <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <line x1="0" y1="100" x2="100" y2="0" stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 4" />
+                    <circle cx="80" cy="20" r="10" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                  </svg>
+                )}
+                {index === 1 && (
+                  <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <line x1="20" y1="0" x2="20" y2="100" stroke="currentColor" strokeWidth="0.5" />
+                    <line x1="0" y1="80" x2="100" y2="80" stroke="currentColor" strokeWidth="0.5" />
+                    <rect x="15" y="75" width="10" height="10" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                  </svg>
+                )}
+                {index === 2 && (
+                  <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <defs>
+                      <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                      </pattern>
+                    </defs>
+                    <rect width="100" height="100" fill="url(#grid)" />
+                  </svg>
+                )}
+                {index === 3 && (
+                  <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path d="M0 50 Q 50 0 100 50 T 200 50" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                    <line x1="50" y1="0" x2="50" y2="100" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
+                  </svg>
+                )}
+              </div>
+
               {/* Top: Icon & Detail */}
-              <div className="flex justify-between items-start">
+              <div className="flex justify-between items-start relative z-10">
                 <div className="p-2 md:p-3 bg-[#fffff3] rounded-lg border border-[#414042]/5 group-hover:bg-[#8B5DFF] group-hover:text-white transition-colors duration-300">
                   <item.icon className="w-5 h-5 md:w-6 md:h-6" />
                 </div>

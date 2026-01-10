@@ -4,6 +4,10 @@ import { ArrowRight, Mail } from 'lucide-react'
 import Link from "next/link"
 import Image from "next/image"
 
+import { useRef } from "react"
+import { useInView } from "framer-motion"
+import { cn } from "@/lib/utils"
+
 export function ServicesSection() {
   const services = [
     {
@@ -77,57 +81,7 @@ export function ServicesSection() {
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12 md:gap-y-24">
           {services.map((service, index) => (
-            <div key={index} className="group flex flex-col items-start bg-transparent">
-              {/* Number */}
-              <span
-                className="text-sm font-mono text-[#8B5DFF] mb-6 border-b border-[#8B5DFF]/30 pb-2 w-full"
-                style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
-              >
-                {service.id}
-              </span>
-
-              {/* Service Identity Image - Creative/Minimal */}
-              <div className="w-full aspect-[1728/1117] mb-6 overflow-hidden rounded-sm bg-[#e5e5e5] relative border border-[#414042]/5">
-                <Image
-                  src={service.image}
-                  alt={service.title}
-                  fill
-                  className="object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
-                />
-                {/* Overlay Grid Line */}
-                <div className="absolute inset-0 z-10 opacity-10 pointer-events-none bg-[linear-gradient(rgba(0,0,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.1)_1px,transparent_1px)] bg-[size:20px_20px]" />
-              </div>
-
-              {/* Title */}
-              <h3
-                className="text-3xl font-bold text-[#414042] mb-4 leading-tight group-hover:text-[#8B5DFF] transition-colors duration-300"
-                style={{ fontFamily: "var(--font-ibm-plex-sans-medium)" }}
-              >
-                {service.title}
-              </h3>
-
-              {/* Description */}
-              <p
-                className="text-[#414042]/70 text-sm leading-relaxed mb-8"
-                style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
-              >
-                {service.description}
-              </p>
-
-              {/* Capabilities List */}
-              <ul className="mt-auto space-y-2">
-                {service.capabilities.map((cap, i) => (
-                  <li
-                    key={i}
-                    className="text-xs text-[#414042]/50 font-mono uppercase tracking-wide flex items-center gap-2"
-                    style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
-                  >
-                    <span className="w-1 h-1 bg-[#8B5DFF] rounded-full" />
-                    {cap}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ServiceItem key={index} service={service} />
           ))}
 
           {/* Minimal "Get in Touch" Card */}
@@ -167,5 +121,73 @@ export function ServicesSection() {
         </div>
       </div>
     </section>
+  )
+}
+
+function ServiceItem({ service }: { service: any }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Mobile InView Detection (Center of Screen)
+  const isInView = useInView(containerRef, { margin: "-45% 0px -45% 0px" })
+
+  return (
+    <div ref={containerRef} className="group flex flex-col items-start bg-transparent">
+      {/* Number */}
+      <span
+        className="text-sm font-mono text-[#8B5DFF] mb-6 border-b border-[#8B5DFF]/30 pb-2 w-full"
+        style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
+      >
+        {service.id}
+      </span>
+
+      {/* Service Identity Image - Creative/Minimal */}
+      <div className="w-full aspect-[1728/1117] mb-6 overflow-hidden rounded-sm bg-[#e5e5e5] relative border border-[#414042]/5">
+        <Image
+          src={service.image}
+          alt={service.title}
+          fill
+          className={cn(
+            "object-cover transition-all duration-700 ease-out group-hover:scale-105",
+            // Mobile: Color when in center (isInView). Desktop: Color on hover.
+            // Default: grayscale opacity-80
+            // Active/Hover: grayscale-0 opacity-100
+            isInView ? "grayscale-0 opacity-100" : "grayscale opacity-80",
+            "md:grayscale md:opacity-80 md:group-hover:grayscale-0 md:group-hover:opacity-100"
+          )}
+        />
+        {/* Overlay Grid Line */}
+        <div className="absolute inset-0 z-10 opacity-10 pointer-events-none bg-[linear-gradient(rgba(0,0,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.1)_1px,transparent_1px)] bg-[size:20px_20px]" />
+      </div>
+
+      {/* Title */}
+      <h3
+        className="text-3xl font-bold text-[#414042] mb-4 leading-tight group-hover:text-[#8B5DFF] transition-colors duration-300"
+        style={{ fontFamily: "var(--font-ibm-plex-sans-medium)" }}
+      >
+        {service.title}
+      </h3>
+
+      {/* Description */}
+      <p
+        className="text-[#414042]/70 text-sm leading-relaxed mb-8"
+        style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
+      >
+        {service.description}
+      </p>
+
+      {/* Capabilities List */}
+      <ul className="mt-auto space-y-2">
+        {service.capabilities.map((cap: string, i: number) => (
+          <li
+            key={i}
+            className="text-xs text-[#414042]/50 font-mono uppercase tracking-wide flex items-center gap-2"
+            style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}
+          >
+            <span className="w-1 h-1 bg-[#8B5DFF] rounded-full" />
+            {cap}
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }

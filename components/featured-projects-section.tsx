@@ -3,7 +3,7 @@
 import { ArrowUpRight } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useRef } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useTransform, useInView } from "framer-motion"
 
 export function FeaturedProjectsSection() {
     const projects = [
@@ -99,9 +99,16 @@ export function FeaturedProjectsSection() {
     )
 }
 
+import { cn } from "@/lib/utils"
+
 function ProjectItem({ project, index }: { project: any, index: number }) {
     const videoRef = useRef<HTMLVideoElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
+
+    // Mobile InView Detection (Center of Screen)
+    // margin: "-45% 0px -45% 0px" triggers when the element is in the middle 10% of the viewport
+    const isInView = useInView(containerRef, { margin: "-45% 0px -45% 0px" })
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end start"]
@@ -174,14 +181,24 @@ function ProjectItem({ project, index }: { project: any, index: number }) {
                             loop
                             muted
                             playsInline
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                            className={cn(
+                                "w-full h-full object-cover transition-all duration-700",
+                                // Mobile: Color when in center view (isInView). Desktop: Color on hover.
+                                isInView ? "grayscale-0" : "grayscale",
+                                "md:grayscale md:group-hover:grayscale-0"
+                            )}
                         />
                     ) : (
                         <Image
                             src={project.illustration || "/placeholder.svg"}
                             alt={project.title}
                             fill
-                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                            className={cn(
+                                "object-cover transition-all duration-700",
+                                // Mobile: Color when in center view (isInView). Desktop: Color on hover.
+                                isInView ? "grayscale-0" : "grayscale",
+                                "md:grayscale md:group-hover:grayscale-0"
+                            )}
                         />
                     )}
 
