@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { ArrowRight, Clock, Calendar, Share2, Facebook, Twitter, Linkedin, MessageSquare, Send, Link as LinkIcon } from "lucide-react"
+import { ArrowRight, Calendar, Share2, Facebook, Twitter, Linkedin, MessageSquare, Send, Link as LinkIcon, User, Tag, FileText, Layers, Hash } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -13,29 +13,47 @@ import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 export function PostHeader({ post }: { post: any }) {
     return (
-        <section className="pt-32 pb-16 px-6 md:px-12 bg-[#F8F8F8]">
-            <div className="max-w-[1000px] mx-auto relative z-10 w-full text-left">
-                <div className="inline-block bg-[#6E35FF] px-4 py-1.5 rounded-full text-white font-medium text-sm tracking-wide mb-8">
-                    {post.tags?.[0] || "Blog"}
+        <section className="pt-32 pb-12 px-6 md:px-12 bg-[#fffff3] relative border-b border-[#414042]/10">
+            {/* Decorative Grid */}
+            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(#414042 1px, transparent 1px), linear-gradient(90deg, #414042 1px, transparent 1px)", backgroundSize: "40px 40px" }}></div>
+
+            <div className="max-w-[1200px] mx-auto relative z-10 w-full text-left">
+                <div className="flex items-center gap-4 mb-8 text-xs font-bold uppercase tracking-widest text-[#414042]/60">
+                    <span className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-[#6E35FF] rounded-full animate-pulse" />
+                        System_Log_Entry
+                    </span>
+                    <span className="w-px h-3 bg-[#414042]/20" />
+                    <span>{post.tags?.[0] || "Update"}</span>
                 </div>
 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-[1.1] capitalize" style={{ fontFamily: "var(--font-owners-regular)" }}>
+                <h1 className="text-4xl md:text-6xl lg:text-[5rem] font-bold mb-10 leading-[0.9] text-[#414042] tracking-tight" style={{ fontFamily: "var(--font-owners-medium)" }}>
                     {post.title}
                 </h1>
 
-                <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-8 max-w-3xl" style={{ fontFamily: "var(--font-neue-montreal)" }}>
+                <p className="text-lg md:text-xl text-[#414042]/70 leading-relaxed mb-10 max-w-3xl font-mono border-l-2 border-[#6E35FF] pl-6">
                     {post.excerpt}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-6">
-                    <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                        <Calendar className="w-4 h-4" />
-                        {new Date(post.date).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+                <div className="flex flex-wrap items-center gap-8 pt-8 border-t border-[#414042]/10">
+                    <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-[#414042]">
+                        <div className="p-2 border border-[#414042]/20 rounded-full">
+                            <Calendar className="w-4 h-4" />
+                        </div>
+                        <div>
+                            <span className="block text-[#414042]/40 text-[10px]">Date_Stamp</span>
+                            {new Date(post.date).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+                        </div>
                     </div>
                     {post.author && (
-                        <div className="flex items-center gap-2 text-sm font-medium text-gray-900">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#6E35FF]"></span>
-                            By {post.author}
+                        <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-[#414042]">
+                            <div className="p-2 border border-[#414042]/20 rounded-full">
+                                <User className="w-4 h-4" />
+                            </div>
+                            <div>
+                                <span className="block text-[#414042]/40 text-[10px]">Authored_By</span>
+                                {post.author}
+                            </div>
                         </div>
                     )}
                 </div>
@@ -46,13 +64,23 @@ export function PostHeader({ post }: { post: any }) {
 
 export function PostHero({ image }: { image: string }) {
     return (
-        <div className="mb-12">
-            <div className="aspect-video w-full bg-gray-100 rounded-2xl overflow-hidden relative shadow-sm">
+        <div className="mb-16 relative group">
+            <div className="absolute -inset-2 border border-[#414042]/10 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+            <div className="absolute top-4 right-4 z-10 bg-[#fffff3] border border-[#414042] px-3 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm">
+                Fig. 01 — Visual_Data
+            </div>
+
+            <div className="aspect-video w-full bg-[#e5e5e5] overflow-hidden relative border border-[#414042]/10">
                 {image ? (
-                    <Image src={image} alt="Hero" fill className="object-cover" />
+                    <Image
+                        src={image}
+                        alt="Hero"
+                        fill
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
                 ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-lg font-medium uppercase">
-                        No Hero Image
+                    <div className="absolute inset-0 flex items-center justify-center text-[#414042]/20 text-sm font-bold uppercase tracking-widest bg-[url('/grid-pattern.svg')]">
+                        [ No_Visual_Signal_Detected ]
                     </div>
                 )}
             </div>
@@ -62,33 +90,37 @@ export function PostHero({ image }: { image: string }) {
 
 export function PostBody({ content }: { content: string }) {
     return (
-        <div className="prose prose-lg md:prose-xl prose-headings:font-bold prose-headings:text-black prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-[#6E35FF] prose-img:rounded-2xl max-w-none">
+        <div className="prose prose-lg md:prose-xl max-w-none 
+            prose-headings:text-[#414042] prose-headings:font-bold prose-headings:font-owners 
+            prose-p:text-[#414042]/80 prose-p:leading-loose prose-p:font-mono prose-p:text-base md:prose-p:text-lg
+            prose-a:text-[#6E35FF] prose-a:font-bold prose-a:no-underline hover:prose-a:underline
+            prose-blockquote:border-l-4 prose-blockquote:border-[#6E35FF] prose-blockquote:bg-[#414042]/5 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:not-italic prose-blockquote:text-[#414042]
+            prose-code:text-[#6E35FF] prose-code:bg-[#414042]/5 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
+            prose-ul:list-square prose-li:marker:text-[#6E35FF]
+            prose-img:border prose-img:border-[#414042]/10 prose-img:p-2 prose-img:bg-white">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                    h1: ({ node, ...props }) => <h1 className="text-3xl md:text-4xl font-bold mb-6 mt-12 capitalize leading-tight" style={{ fontFamily: "var(--font-owners-regular)" }} {...props} />,
-                    h2: ({ node, ...props }) => <h2 className="text-2xl md:text-3xl font-bold mb-4 mt-10 leading-snug" style={{ fontFamily: "var(--font-owners-regular)" }} {...props} />,
-                    h3: ({ node, ...props }) => <h3 className="text-xl md:text-2xl font-bold mb-4 mt-8" style={{ fontFamily: "var(--font-owners-regular)" }} {...props} />,
-                    p: ({ node, ...props }) => <p className="mb-6 text-lg leading-relaxed text-gray-700" style={{ fontFamily: "var(--font-neue-montreal)" }} {...props} />,
-                    blockquote: ({ node, ...props }) => (
-                        <blockquote className="border-l-4 border-[#6E35FF] pl-6 py-1 my-8 italic text-xl text-gray-800 bg-gray-50/50 rounded-r-lg" {...props} />
-                    ),
-                    ul: ({ node, ...props }) => <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-700" style={{ fontFamily: "var(--font-neue-montreal)" }} {...props} />,
-                    ol: ({ node, ...props }) => <ol className="list-decimal pl-6 mb-6 space-y-2 text-gray-700" style={{ fontFamily: "var(--font-neue-montreal)" }} {...props} />,
-                    li: ({ node, ...props }) => <li className="pl-2" {...props} />,
-                    a: ({ node, ...props }) => <a className="text-[#6E35FF] hover:text-[#5a2bd9] font-medium transition-colors underline decoration-1 underline-offset-4" {...props} />,
-                    code({ node, inline, className, children, ...props }: any) {
+                    h1: ({ ...props }) => <h1 className="text-3xl md:text-5xl border-b border-[#414042]/10 pb-4 mb-8 mt-16" style={{ fontFamily: "var(--font-owners-medium)" }} {...props} />,
+                    h2: ({ ...props }) => <h2 className="text-2xl md:text-4xl mb-6 mt-12 flex items-center gap-3" style={{ fontFamily: "var(--font-owners-medium)" }} {...props}><span className="text-[#6E35FF]/50 text-xl">#</span> {props.children}</h2>,
+                    h3: ({ ...props }) => <h3 className="text-xl md:text-2xl mb-4 mt-8 font-bold text-[#414042]" style={{ fontFamily: "var(--font-owners-medium)" }} {...props} />,
+                    code({ inline, className, children, ...props }: any) {
                         const match = /language-(\w+)/.exec(className || '')
                         return !inline && match ? (
-                            <SyntaxHighlighter
-                                {...props}
-                                style={dracula}
-                                language={match[1]}
-                                PreTag="div"
-                                className="rounded-xl !bg-[#1E1E1E] shadow-sm my-8 text-sm md:text-base border border-gray-800"
-                            >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
+                            <div className="relative my-8 group">
+                                <div className="absolute -top-3 left-4 bg-[#1E1E1E] text-[#6E35FF] text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-[#6E35FF]/20">
+                                    {match[1]}
+                                </div>
+                                <SyntaxHighlighter
+                                    {...props}
+                                    style={dracula}
+                                    language={match[1]}
+                                    PreTag="div"
+                                    className="!bg-[#1E1E1E] !p-6 !rounded-lg !border !border-[#414042]/20 shadow-xl !m-0 text-sm font-mono overflow-x-auto"
+                                >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
+                            </div>
                         ) : (
-                            <code {...props} className={`${className} bg-gray-100 px-1.5 py-0.5 rounded text-[#6E35FF] font-medium text-sm`}>
+                            <code {...props} className="bg-[#414042]/5 text-[#6E35FF] px-1.5 py-0.5 rounded text-sm font-bold font-mono border border-[#414042]/10">
                                 {children}
                             </code>
                         )
@@ -103,37 +135,39 @@ export function PostBody({ content }: { content: string }) {
 
 export function SidebarAuthorBio({ post }: { post: any }) {
     return (
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <div className="flex justify-between items-start gap-4 mb-6">
-                <div className="text-left">
-                    <h3 className="text-xl font-bold mb-2" style={{ fontFamily: "var(--font-owners-regular)" }}>{post.author || "Admin"}</h3>
-                    <p className="inline-block bg-[#6E35FF]/10 text-[#6E35FF] px-3 py-1 rounded-full font-medium text-xs">
-                        {post.authorRole || "Editor"}
-                    </p>
-                </div>
-                <div className="w-20 h-20 bg-gray-100 rounded-2xl overflow-hidden relative shrink-0">
+        <div className="bg-white p-8 border border-[#414042]/10 relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-full h-1 bg-[#8B5DFF]" />
+
+            <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-[#f0f0f0] border border-[#414042]/10 relative overflow-hidden">
                     {post.authorImage ? (
-                        <Image src={post.authorImage} alt={post.author} width={80} height={80} className="w-full h-full object-cover" />
+                        <Image src={post.authorImage} alt={post.author} width={80} height={80} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-100 font-bold text-2xl text-gray-400">
+                        <div className="w-full h-full flex items-center justify-center bg-[#f0f0f0] font-bold text-xl text-[#414042]/30">
                             {post.author?.[0]?.toUpperCase()}
                         </div>
                     )}
                 </div>
+                <div>
+                    <h3 className="text-lg font-bold text-[#414042] leading-none mb-1 uppercase tracking-wide">{post.author || "Admin"}</h3>
+                    <p className="text-[#6E35FF] text-xs font-bold uppercase tracking-widest">
+                        {post.authorRole || "Operator"}
+                    </p>
+                </div>
             </div>
 
-            <p className="text-gray-600 text-sm leading-relaxed mb-6 text-left" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                {post.authorBio || "Passionate about technology and design."}
+            <p className="text-[#414042]/70 text-sm leading-relaxed mb-6 font-mono border-t border-[#414042]/10 pt-4">
+                {post.authorBio || "System operator and technical documentation specialist."}
             </p>
 
-            <div className="flex gap-3 justify-start">
+            <div className="flex gap-2">
                 {post.authorTwitter && (
-                    <a href={post.authorTwitter} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-50 text-gray-600 hover:bg-[#6E35FF] hover:text-white transition-all">
+                    <a href={post.authorTwitter} target="_blank" rel="noopener noreferrer" className="w-8 h-8 flex items-center justify-center border border-[#414042]/20 text-[#414042] hover:bg-[#414042] hover:text-[#fffff3] transition-all">
                         <Twitter className="w-4 h-4" />
                     </a>
                 )}
                 {post.authorLinkedin && (
-                    <a href={post.authorLinkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-50 text-gray-600 hover:bg-[#6E35FF] hover:text-white transition-all">
+                    <a href={post.authorLinkedin} target="_blank" rel="noopener noreferrer" className="w-8 h-8 flex items-center justify-center border border-[#414042]/20 text-[#414042] hover:bg-[#414042] hover:text-[#fffff3] transition-all">
                         <Linkedin className="w-4 h-4" />
                     </a>
                 )}
@@ -145,11 +179,13 @@ export function SidebarAuthorBio({ post }: { post: any }) {
 export function SidebarTags({ tags }: { tags: string[] }) {
     if (!tags || tags.length === 0) return null;
     return (
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h4 className="font-bold text-lg mb-4" style={{ fontFamily: "var(--font-owners-regular)" }}>Tags</h4>
+        <div className="bg-white p-6 border border-[#414042]/10">
+            <h4 className="font-bold text-xs uppercase tracking-[0.2em] mb-6 text-[#414042]/40 flex items-center gap-2">
+                <Tag className="w-3 h-3" /> Keywords
+            </h4>
             <div className="flex flex-wrap gap-2">
                 {tags.map((tag, i) => (
-                    <span key={i} className="px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 font-medium hover:bg-[#6E35FF] hover:text-white transition-all cursor-pointer text-xs" style={{ fontFamily: "var(--font-neue-montreal)" }}>
+                    <span key={i} className="px-3 py-1 bg-[#414042]/5 border border-[#414042]/10 text-[#414042] hover:bg-[#6E35FF] hover:text-white hover:border-[#6E35FF] transition-all cursor-pointer text-xs font-mono lowercase">
                         #{tag}
                     </span>
                 ))}
@@ -161,9 +197,9 @@ export function SidebarTags({ tags }: { tags: string[] }) {
 export function SidebarReferences({ references }: { references: string[] }) {
     if (!references || references.length === 0) return null;
     return (
-        <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-            <h4 className="font-bold text-lg mb-4 flex items-center gap-2" style={{ fontFamily: "var(--font-owners-regular)" }}>
-                <LinkIcon className="w-4 h-4" /> References
+        <div className="bg-[#414042] p-6 text-[#fffff3]">
+            <h4 className="font-bold text-xs uppercase tracking-[0.2em] mb-6 text-[#fffff3]/60 flex items-center gap-2">
+                <FileText className="w-3 h-3" /> Resources
             </h4>
             <div className="space-y-3">
                 {references.map((ref, i) => (
@@ -172,10 +208,10 @@ export function SidebarReferences({ references }: { references: string[] }) {
                         href={ref}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-[#6E35FF] transition-colors truncate"
+                        className="flex items-center gap-3 text-xs md:text-sm font-mono text-[#fffff3]/80 hover:text-[#00FF00] transition-colors group"
                     >
-                        <ArrowRight className="w-3 h-3 shrink-0" />
-                        <span className="truncate underline decoration-1 underline-offset-2">{ref}</span>
+                        <span className="text-[#fffff3]/20 group-hover:text-[#00FF00]">0{i + 1}</span>
+                        <span className="truncate border-b border-[#fffff3]/20 pb-0.5">{ref}</span>
                     </a>
                 ))}
             </div>
@@ -187,19 +223,21 @@ export function SidebarRelated({ posts }: { posts?: any[] }) {
     if (!posts || posts.length === 0) return null;
 
     return (
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h4 className="font-bold text-lg mb-6" style={{ fontFamily: "var(--font-owners-regular)" }}>Other Blogs</h4>
+        <div className="bg-white border border-[#414042]/10 p-6">
+            <h4 className="font-bold text-xs uppercase tracking-[0.2em] mb-6 text-[#414042]/40 flex items-center gap-2">
+                <Layers className="w-3 h-3" /> Related_Logs
+            </h4>
             <div className="space-y-6">
                 {posts.map((post) => (
-                    <Link href={`/blog/${post.slug}`} key={post.id} className="block group cursor-pointer">
-                        <div className="aspect-[4/3] bg-gray-100 rounded-2xl mb-3 overflow-hidden relative shadow-sm border border-gray-100">
+                    <Link href={`/blog/${post.slug}`} key={post.id} className="block group">
+                        <div className="aspect-video bg-[#f0f0f0] mb-3 overflow-hidden relative border border-[#414042]/10">
                             {post.coverImage ? (
                                 <Image src={post.coverImage} alt={post.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                             ) : (
-                                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400 font-bold uppercase">No Image</div>
+                                <div className="absolute inset-0 flex items-center justify-center bg-[#f0f0f0] text-[#414042]/20 font-bold uppercase text-xs">No Signal</div>
                             )}
                         </div>
-                        <h4 className="font-semibold text-base leading-snug group-hover:text-[#6E35FF] transition-colors line-clamp-2" style={{ fontFamily: "var(--font-neue-montreal)" }}>
+                        <h4 className="font-bold text-sm leading-snug text-[#414042] group-hover:text-[#6E35FF] transition-colors" style={{ fontFamily: "var(--font-owners-medium)" }}>
                             {post.title}
                         </h4>
                     </Link>
@@ -251,42 +289,42 @@ export function CommentsSection({ postId }: { postId: string }) {
     };
 
     return (
-        <section className="py-16 bg-[#1C1C1C] rounded-3xl p-8 md:p-12 mb-12" id="comments">
-            <div className="flex items-center gap-3 mb-10">
-                <div className="bg-[#6E35FF]/10 p-2.5 rounded-xl text-[#6E35FF] bg-white/5">
-                    <MessageSquare className="w-6 h-6" />
+        <section className="py-12 border-t border-[#414042]/10" id="comments">
+            <div className="flex items-center gap-4 mb-12">
+                <div className="bg-[#414042] text-[#fffff3] px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest">
+                    Transmission_Log
                 </div>
-                <h2 className="text-3xl font-bold text-white" style={{ fontFamily: "var(--font-owners-regular)" }}>Discussion ({comments.length})</h2>
+                <h2 className="text-2xl font-bold text-[#414042]" style={{ fontFamily: "var(--font-owners-medium)" }}>Incoming_Signals ({comments.length})</h2>
             </div>
 
-            <div className="grid lg:grid-cols-[1fr_400px] gap-12">
+            <div className="grid lg:grid-cols-[1fr_400px] gap-16">
                 {/* Comments List */}
-                <div className="space-y-6 order-2 lg:order-1">
+                <div className="space-y-8 order-2 lg:order-1">
                     {loading ? (
-                        <div className="p-8 text-center bg-gray-50 rounded-2xl">
-                            <p className="text-gray-400 animate-pulse">Loading comments...</p>
+                        <div className="p-8 text-center bg-white border border-[#414042]/10">
+                            <p className="text-[#414042]/40 font-mono text-xs animate-pulse">Scanning frequencies...</p>
                         </div>
                     ) : comments.length === 0 ? (
-                        <div className="p-8 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                            <p className="text-gray-500 italic">No comments yet. Be the first to share your thoughts!</p>
+                        <div className="p-12 text-center bg-white border border-dashed border-[#414042]/20">
+                            <p className="text-[#414042]/40 italic font-mono text-sm">No signals detected on this frequency.</p>
                         </div>
                     ) : (
                         comments.map((comment) => (
-                            <div key={comment.id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative">
-                                <div className="flex justify-between items-start mb-3">
+                            <div key={comment.id} className="bg-white p-8 border-l-2 border-[#414042]/10 hover:border-[#6E35FF] transition-colors shadow-sm">
+                                <div className="flex justify-between items-start mb-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-[#6E35FF] rounded-full flex items-center justify-center font-bold text-white text-sm">
+                                        <div className="w-8 h-8 bg-[#414042] flex items-center justify-center font-bold text-[#fffff3] text-xs font-mono">
                                             {comment.name?.[0]?.toUpperCase()}
                                         </div>
                                         <div>
-                                            <div className="font-bold text-gray-900">{comment.name}</div>
-                                            <div className="text-xs text-gray-400">
-                                                {new Date(comment.createdAt).toLocaleDateString()}
+                                            <div className="font-bold text-[#414042] text-sm uppercase tracking-wider">{comment.name}</div>
+                                            <div className="text-[10px] text-[#414042]/40 font-mono uppercase">
+                                                TIMESTAMP: {new Date(comment.createdAt).toLocaleDateString()}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <p className="text-gray-700 leading-relaxed text-sm md:text-base">{comment.content}</p>
+                                <p className="text-[#414042]/80 leading-relaxed font-mono text-sm">{comment.content}</p>
                             </div>
                         ))
                     )}
@@ -294,41 +332,42 @@ export function CommentsSection({ postId }: { postId: string }) {
 
                 {/* Comment Form */}
                 <div className="order-1 lg:order-2">
-                    <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 sticky top-32">
-                        <h3 className="text-xl font-bold mb-6 flex items-center gap-2" style={{ fontFamily: "var(--font-owners-regular)" }}>
-                            Leave a Comment
+                    <div className="bg-[#1C1C1C] p-8 text-[#fffff3] sticky top-32 border-2 border-[#414042]">
+                        <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-[#6E35FF]" style={{ fontFamily: "var(--font-owners-regular)" }}>
+                            <span className="w-2 h-2 bg-[#6E35FF] rounded-full animate-pulse" />
+                            Broadcast Message
                         </h3>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-4">
                                 <Input
-                                    placeholder="Your Name"
+                                    placeholder="IDENTIFIER_NAME"
                                     required
                                     value={newItem.name}
                                     onChange={e => setNewItem({ ...newItem, name: e.target.value })}
-                                    className="h-12 rounded-xl border-gray-200 focus:border-[#6E35FF] focus-visible:ring-[#6E35FF]"
+                                    className="h-12 bg-transparent border-b border-[#fffff3]/20 rounded-none px-0 focus:border-[#6E35FF] focus-visible:ring-0 placeholder:text-[#fffff3]/30 font-mono text-sm"
                                 />
                                 <Input
-                                    placeholder="Your Email"
+                                    placeholder="CONTACT_EMAIL"
                                     type="email"
                                     required
                                     value={newItem.email}
                                     onChange={e => setNewItem({ ...newItem, email: e.target.value })}
-                                    className="h-12 rounded-xl border-gray-200 focus:border-[#6E35FF] focus-visible:ring-[#6E35FF]"
+                                    className="h-12 bg-transparent border-b border-[#fffff3]/20 rounded-none px-0 focus:border-[#6E35FF] focus-visible:ring-0 placeholder:text-[#fffff3]/30 font-mono text-sm"
                                 />
                             </div>
                             <Textarea
-                                placeholder="What's on your mind?"
+                                placeholder="ENTER_MESSAGE_CONTENT..."
                                 required
                                 value={newItem.content}
                                 onChange={e => setNewItem({ ...newItem, content: e.target.value })}
-                                className="min-h-[120px] rounded-xl border-gray-200 focus:border-[#6E35FF] focus-visible:ring-[#6E35FF] p-4 resize-y"
+                                className="min-h-[120px] bg-[#fffff3]/5 border-0 rounded-none focus:ring-1 focus:ring-[#6E35FF] p-4 font-mono text-sm resize-y placeholder:text-[#fffff3]/30"
                             />
                             <Button
                                 type="submit"
                                 disabled={submitting}
-                                className="h-12 w-full rounded-xl bg-black text-white font-bold hover:bg-[#6E35FF] transition-all"
+                                className="h-12 w-full rounded-none bg-[#6E35FF] text-white font-bold uppercase tracking-widest hover:bg-[#ffffff] hover:text-[#6E35FF] transition-all"
                             >
-                                {submitting ? "Posting..." : "Post Comment"} <Send className="ml-2 w-4 h-4" />
+                                {submitting ? "Transmitting..." : "Send_Transmission"}
                             </Button>
                         </form>
                     </div>
@@ -340,12 +379,19 @@ export function CommentsSection({ postId }: { postId: string }) {
 
 export function PostCTA() {
     return (
-        <section className="py-24 px-6 md:px-12 bg-[#F8F8F8] text-center border-t border-gray-200">
+        <section className="py-24 px-6 md:px-12 bg-[#fffff3] text-center border-t border-[#414042]/10">
             <div className="max-w-4xl mx-auto">
-                <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{ fontFamily: "var(--font-owners-regular)" }}>Have an Idea?</h2>
-                <p className="text-xl md:text-2xl text-gray-500 mb-10" style={{ fontFamily: "var(--font-neue-montreal)" }}>Let's create something extraordinary.</p>
-                <Link href="/contact" className="inline-flex items-center justify-center bg-[#6E35FF] text-white rounded-full px-10 py-5 text-lg font-bold hover:bg-[#5a2bd9] transition-all hover:-translate-y-1 shadow-lg shadow-[#6E35FF]/30">
-                    Start Your Project <ArrowRight className="ml-2 w-5 h-5" />
+                <span className="block text-xs font-bold uppercase tracking-[0.3em] text-[#414042]/40 mb-8 animate-pulse">
+                    /// System Ready
+                </span>
+                <h2 className="text-5xl md:text-7xl font-bold mb-12 text-[#414042] leading-[0.85]" style={{ fontFamily: "var(--font-owners-medium)" }}>
+                    INITIATE <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6E35FF] to-[#FF4A60]">COLLABORATION</span>
+                </h2>
+                <Link href="/contact" className="inline-block relative group">
+                    <div className="absolute inset-0 bg-[#414042] transform translate-y-1 translate-x-1 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
+                    <div className="relative border-2 border-[#414042] bg-[#fffff3] px-12 py-6 text-xl font-bold uppercase tracking-widest text-[#414042] group-hover:-translate-y-1 group-hover:-translate-x-1 transition-transform">
+                        Start Project
+                    </div>
                 </Link>
             </div>
         </section>
@@ -387,42 +433,42 @@ export function SidebarShare() {
     };
 
     return (
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h4 className="font-bold text-lg mb-4 flex items-center gap-2" style={{ fontFamily: "var(--font-owners-regular)" }}>
-                <Share2 className="w-5 h-5 text-[#6E35FF]" /> Share this Article
+        <div className="bg-white p-6 border border-[#414042]/10">
+            <h4 className="font-bold text-xs uppercase tracking-[0.2em] mb-6 text-[#414042]/40 flex items-center gap-2">
+                <Hash className="w-3 h-3" /> Share_Protocol
             </h4>
             <div className="grid grid-cols-4 gap-2">
                 <button
                     onClick={handleCopy}
-                    className={`flex flex-col items-center justify-center gap-2 p-3 rounded-xl transition-all group ${copied ? 'bg-[#6E35FF] text-white' : 'bg-gray-50 hover:bg-[#6E35FF] hover:text-white'}`}
+                    className={`flex flex-col items-center justify-center gap-2 p-3 border border-[#414042]/10 transition-all group ${copied ? 'bg-[#6E35FF] text-white border-[#6E35FF]' : 'hover:border-[#414042] hover:bg-[#414042]/5'}`}
                     title="Copy Link"
                 >
-                    <LinkIcon className="w-5 h-5" />
+                    <LinkIcon className="w-4 h-4" />
                     <span className="text-[10px] font-bold uppercase tracking-wide">{copied ? 'Copied' : 'Link'}</span>
                 </button>
                 <button
                     onClick={() => handleShare('twitter')}
-                    className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-[#6E35FF] hover:text-white transition-all group"
+                    className="flex flex-col items-center justify-center gap-2 p-3 border border-[#414042]/10 hover:border-[#414042] hover:bg-[#414042]/5 transition-all group"
                     title="Share on Twitter"
                 >
-                    <Twitter className="w-5 h-5" />
+                    <Twitter className="w-4 h-4" />
                     <span className="text-[10px] font-bold uppercase tracking-wide">X</span>
                 </button>
                 <button
                     onClick={() => handleShare('linkedin')}
-                    className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-[#6E35FF] hover:text-white transition-all group"
+                    className="flex flex-col items-center justify-center gap-2 p-3 border border-[#414042]/10 hover:border-[#414042] hover:bg-[#414042]/5 transition-all group"
                     title="Share on LinkedIn"
                 >
-                    <Linkedin className="w-5 h-5" />
-                    <span className="text-[10px] font-bold uppercase tracking-wide">Linked</span>
+                    <Linkedin className="w-4 h-4" />
+                    <span className="text-[10px] font-bold uppercase tracking-wide">IN</span>
                 </button>
                 <button
                     onClick={() => handleShare('facebook')}
-                    className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-gray-50 hover:bg-[#6E35FF] hover:text-white transition-all group"
+                    className="flex flex-col items-center justify-center gap-2 p-3 border border-[#414042]/10 hover:border-[#414042] hover:bg-[#414042]/5 transition-all group"
                     title="Share on Facebook"
                 >
-                    <Facebook className="w-5 h-5" />
-                    <span className="text-[10px] font-bold uppercase tracking-wide">Facebook</span>
+                    <Facebook className="w-4 h-4" />
+                    <span className="text-[10px] font-bold uppercase tracking-wide">FB</span>
                 </button>
             </div>
         </div>

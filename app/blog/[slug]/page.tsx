@@ -54,7 +54,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
         : [];
 
     return (
-        <div className="min-h-screen bg-white font-sans selection:bg-[#FFC224] selection:text-black">
+        <div className="min-h-screen bg-[#fffff3] font-mono text-[#414042] selection:bg-[#FFC224] selection:text-black" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
             <Navigation />
 
             {/* Full Width Header & Hero */}

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
     return (
-        <div className="min-h-screen bg-white font-sans selection:bg-[#FFC224] selection:text-black">
+        <div className="min-h-screen bg-[#fffff3] font-mono text-[#414042] selection:bg-[#FFC224] selection:text-black" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
             <Navigation />
             <main>
                 <HomePreloader />

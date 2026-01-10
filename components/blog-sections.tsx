@@ -9,16 +9,32 @@ import { Input } from "@/components/ui/input"
 
 export function BlogHero() {
     return (
-        <section className="py-16 md:py-24 bg-[#f8f8f8] px-4 md:px-8">
-            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-start gap-8 md:gap-16">
-                <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-[#6E35FF]"></div>
-                    <span className="text-gray-500 font-medium text-lg md:text-xl" style={{ fontFamily: "var(--font-neue-montreal)" }}>&#123;01&#125; — Our Blogs</span>
-                </div>
+        <section className="pt-32 pb-16 md:pt-48 md:pb-24 px-4 md:px-8 bg-[#fffff3] relative overflow-hidden">
+            {/* Decorative Grid Lines - Creating distinct structure */}
+            <div className="absolute inset-x-0 top-0 h-[1px] bg-[#414042]/10" />
+            <div className="absolute inset-y-0 left-8 md:left-12 w-[1px] bg-[#414042]/10" />
 
-                <p className="text-lg md:text-2xl lg:text-3xl text-[#333333] font-medium leading-relaxed max-w-3xl" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                    We share our thoughts on technology, AI, development, and digital experiences, helping you stay ahead in the digital world.
-                </p>
+            <div className="max-w-[1800px] mx-auto relative z-10 pl-4 md:pl-12">
+                <div className="grid lg:grid-cols-[0.8fr_1fr] gap-12 lg:gap-24 items-end">
+                    <div>
+                        <div className="inline-flex items-center gap-3 mb-6 mix-blend-multiply">
+                            <span className="w-2 h-2 bg-[#FF4A60] rounded-full animate-pulse" />
+                            <span className="uppercase tracking-[0.2em] text-xs font-bold text-[#414042]/60">
+                                Paperfolio / Log / 01
+                            </span>
+                        </div>
+                        <h1 className="text-6xl md:text-8xl lg:text-[7rem] leading-[0.85] font-bold text-[#414042] mb-8 tracking-tight" style={{ fontFamily: "var(--font-owners-medium)" }}>
+                            DESIGN<br />
+                            <span className="italic font-light ml-8 text-[#6E35FF]" style={{ fontFamily: "var(--font-owners-medium)" }}>&</span> CODEX
+                        </h1>
+                    </div>
+
+                    <div className="lg:mb-4 border-l border-[#414042]/20 pl-8 lg:pl-12 max-w-xl">
+                        <p className="text-sm md:text-base leading-relaxed text-[#414042]/80 font-normal">
+                            [ SYSTEM_LOG ]: Traversing the void between aesthetic theory and raw technical implementation. We document the process of building scalable digital ecosystems.
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
     )
@@ -81,78 +97,105 @@ export function ArticleGrid() {
             })
     }, [])
 
-    if (loading) return <div className="py-20 text-center" style={{ fontFamily: "var(--font-neue-montreal)" }}>Loading Articles...</div>
+    if (loading) return (
+        <div className="min-h-[50vh] flex items-center justify-center bg-[#fffff3]">
+            <div className="flex flex-col items-center gap-4 text-[#414042]">
+                <div className="w-4 h-4 border-2 border-[#414042] border-t-transparent rounded-full animate-spin" />
+                <span className="uppercase text-xs tracking-widest">[ LOADING_DATA ]</span>
+            </div>
+        </div>
+    )
 
     return (
-        <section className="pb-12 md:pb-20 px-4 md:px-8 bg-[#f8f8f8]">
-            <div className="max-w-[1600px] mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {articles.map((art, i) => {
-                    const isFeatured = i === 0;
+        <section className="pb-24 px-4 md:px-8 bg-[#fffff3]">
+            <div className="max-w-[1800px] mx-auto pl-4 md:pl-12">
+                <div className="grid gap-y-24">
+                    {articles.map((art, i) => {
+                        const isFeatured = i === 0;
 
-                    if (isFeatured) {
-                        return (
-                            <Link href={`/blog/${art.slug}`} key={art.id} className="block group md:col-span-2 row-span-1 h-full">
-                                <div className="bg-[#6E35FF] text-white rounded-2xl w-full relative overflow-hidden transition-all duration-300 hover:shadow-xl aspect-video">
-                                    {/* Background Image */}
-                                    {art.coverImage && <Image src={art.coverImage} alt={art.title} fill className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-700 mix-blend-multiply" />}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                        if (isFeatured) {
+                            return (
+                                <Link href={`/blog/${art.slug}`} key={art.id} className="group block relative">
+                                    <div className="grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-16 items-start">
+                                        {/* Featured Image - Raw & Bold */}
+                                        <div className="relative aspect-video overflow-hidden bg-[#e5e5e5] border border-[#414042]/10">
+                                            {art.coverImage && (
+                                                <Image
+                                                    src={art.coverImage}
+                                                    alt={art.title}
+                                                    fill
+                                                    className="object-cover transition-all duration-700 ease-[0.22,1,0.36,1] group-hover:scale-105 group-hover:contrast-110 grayscale-[20%] group-hover:grayscale-0"
+                                                />
+                                            )}
+                                            <div className="absolute top-4 left-4 bg-[#fffff3] px-3 py-1 text-xs font-bold uppercase tracking-wider border border-[#414042]">
+                                                Feature_01
+                                            </div>
+                                        </div>
 
-                                    {/* Top Row: Date & Arrow */}
-                                    <div className="absolute top-6 left-6 right-6 flex justify-between items-start z-20">
-                                        <span className="text-white/90 text-sm font-medium uppercase tracking-wide bg-black/20 backdrop-blur-sm px-3 py-1 rounded-full" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                                            {new Date(art.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                        </span>
-                                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:bg-white text-white group-hover:text-black transition-all">
-                                            <ArrowRight className="w-5 h-5" />
+                                        {/* Featured Content - Editorial Style */}
+                                        <div className="flex flex-col h-full pt-4">
+                                            <div className="mb-6 flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-[#414042]/60 border-b border-[#414042]/10 pb-4 w-full">
+                                                <span>{new Date(art.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+                                                <span className="w-px h-3 bg-[#414042]/20" />
+                                                <span>Editorial</span>
+                                            </div>
+
+                                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[0.95] text-[#414042] mb-6 group-hover:text-[#6E35FF] transition-colors duration-300" style={{ fontFamily: "var(--font-owners-medium)" }}>
+                                                {art.title}
+                                            </h2>
+
+                                            <p className="text-sm md:text-base leading-relaxed text-[#414042]/80 max-w-md mb-8">
+                                                {art.content ? art.content.replace(/<[^>]*>?/gm, '').substring(0, 180) + "..." : "System detailed analysis..."}
+                                            </p>
+
+                                            <div className="mt-auto flex items-center gap-2 text-sm font-bold uppercase tracking-wider group/btn">
+                                                <span className="group-hover/btn:underline decoration-2 underline-offset-4">Read Transmission</span>
+                                                <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                                            </div>
                                         </div>
                                     </div>
+                                </Link>
+                            )
+                        }
 
-                                    {/* Bottom Content */}
-                                    <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 flex flex-col justify-end z-10">
-                                        <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-[1.1] mb-3 max-w-2xl drop-shadow-lg" style={{ fontFamily: "var(--font-owners-regular)" }}>
+                        // Standard List Items - Minimalist / Technical
+                        return (
+                            <Link href={`/blog/${art.slug}`} key={art.id} className="group grid md:grid-cols-[300px_1fr] lg:grid-cols-[400px_1fr] gap-8 md:gap-16 border-t border-[#414042]/10 pt-12 items-start">
+                                <div className="aspect-video bg-[#f0f0f0] relative overflow-hidden border border-[#414042]/10">
+                                    {art.coverImage && (
+                                        <Image
+                                            src={art.coverImage}
+                                            alt={art.title}
+                                            fill
+                                            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                                        />
+                                    )}
+                                </div>
+
+                                <div className="flex flex-col justify-between h-full">
+                                    <div>
+                                        <div className="flex items-center gap-4 mb-4 text-xs font-bold uppercase tracking-wider text-[#414042]/50">
+                                            <span>0{i + 1}</span>
+                                            <span>/</span>
+                                            <span>{new Date(art.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                                        </div>
+                                        <h3 className="text-2xl md:text-4xl font-bold leading-[1] text-[#414042] mb-4 group-hover:text-[#6E35FF] transition-colors" style={{ fontFamily: "var(--font-owners-medium)" }}>
                                             {art.title}
                                         </h3>
-                                        <p className="text-white/90 text-sm md:text-base line-clamp-2 max-w-xl font-medium drop-shadow-md" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                                            {art.content ? art.content.replace(/<[^>]*>?/gm, '').substring(0, 120) + "..." : "Explore the latest insights."}
+                                        <p className="text-sm leading-relaxed text-[#414042]/70 max-w-lg line-clamp-2">
+                                            {art.content ? art.content.replace(/<[^>]*>?/gm, '').substring(0, 150) + "..." : ""}
                                         </p>
+                                    </div>
+
+                                    <div className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-[-10px] group-hover:translate-x-0">
+                                        <span className="w-2 h-2 bg-[#6E35FF] rounded-full" />
+                                        <span>Access File</span>
                                     </div>
                                 </div>
                             </Link>
-                        )
-                    }
-
-                    return (
-                        <Link href={`/blog/${art.slug}`} key={art.id} className="block group">
-                            <div className="bg-white rounded-2xl p-5 h-full border border-transparent hover:border-black/5 hover:shadow-lg transition-all duration-300 flex flex-col">
-
-                                {/* Top Row: Image & Plus Icon */}
-                                <div className="flex justify-between items-start mb-8">
-                                    <div className="w-full aspect-video relative rounded-xl overflow-hidden shadow-sm bg-gray-100">
-                                        {art.coverImage && <Image src={art.coverImage} alt={art.title} fill className="object-cover" />}
-                                    </div>
-                                    <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center group-hover:bg-[#6E35FF] transition-colors ml-4 shrink-0">
-                                        <Plus className="w-4 h-4" />
-                                    </div>
-                                </div>
-
-                                {/* Date */}
-                                <div className="mb-2 text-gray-400 text-xs font-medium" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                                    {new Date(art.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                </div>
-
-                                {/* Title */}
-                                <h3 className="text-lg md:text-xl font-bold mb-2 leading-[1.2] text-black group-hover:text-[#6E35FF] transition-colors" style={{ fontFamily: "var(--font-owners-regular)" }}>
-                                    {art.title}
-                                </h3>
-
-                                {/* Description */}
-                                <p className="text-[#666666] text-xs md:text-sm leading-relaxed line-clamp-3 mt-auto" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                                    {art.content ? art.content.replace(/<[^>]*>?/gm, '').substring(0, 100) + "..." : "Explore the latest insights and trends."}
-                                </p>
-                            </div>
-                        </Link>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
         </section>
     )
@@ -160,18 +203,19 @@ export function ArticleGrid() {
 
 export function Pagination() {
     return (
-        <section className="py-12 md:py-16 px-4 md:px-8 bg-white">
-            <div className="max-w-[1600px] mx-auto flex items-center justify-between">
-                <button className="flex items-center font-bold text-lg md:text-xl text-gray-400 hover:text-black transition-colors disabled:opacity-50" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                    <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 mr-2" /> Previous
+        <section className="py-12 md:py-20 px-4 md:px-8 bg-[#fffff3] border-t border-[#414042]/10">
+            <div className="max-w-[1800px] mx-auto flex items-center justify-between">
+                <button className="text-sm font-bold uppercase tracking-widest text-[#414042]/40 hover:text-[#414042] transition-colors flex items-center gap-2">
+                    <ChevronLeft className="w-4 h-4" /> PREV_PAGE
                 </button>
-                <div className="flex gap-2 md:gap-3">
-                    <button className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-[#6E35FF] text-white text-base md:text-lg font-bold flex items-center justify-center shadow-lg shadow-[#6E35FF]/30" style={{ fontFamily: "var(--font-neue-montreal)" }}>1</button>
-                    <button className="w-10 h-10 md:w-14 md:h-14 rounded-full hover:bg-gray-50 text-base md:text-lg font-bold flex items-center justify-center text-gray-500 transition-colors" style={{ fontFamily: "var(--font-neue-montreal)" }}>2</button>
-                    <button className="w-10 h-10 md:w-14 md:h-14 rounded-full hover:bg-gray-50 text-base md:text-lg font-bold flex items-center justify-center text-gray-500 transition-colors" style={{ fontFamily: "var(--font-neue-montreal)" }}>3</button>
+                <div className="flex items-center gap-4 text-xs font-mono">
+                    <span className="w-8 h-8 flex items-center justify-center bg-[#414042] text-[#fffff3] border border-[#414042]">01</span>
+                    <span className="w-8 h-8 flex items-center justify-center text-[#414042] hover:bg-[#414042]/5 cursor-pointer border border-transparent hover:border-[#414042]/20">02</span>
+                    <span className="text-[#414042]/40">...</span>
+                    <span className="w-8 h-8 flex items-center justify-center text-[#414042] hover:bg-[#414042]/5 cursor-pointer border border-transparent hover:border-[#414042]/20">09</span>
                 </div>
-                <button className="flex items-center font-bold text-lg md:text-xl text-black hover:opacity-70 transition-colors" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                    Next <ChevronRight className="w-5 h-5 md:w-6 md:h-6 ml-2" />
+                <button className="text-sm font-bold uppercase tracking-widest text-[#414042] hover:text-[#6E35FF] transition-colors flex items-center gap-2">
+                    NEXT_PAGE <ChevronRight className="w-4 h-4" />
                 </button>
             </div>
         </section>
@@ -182,18 +226,35 @@ export function Pagination() {
 
 export function EmailSubscribe() {
     return (
-        <section className="py-24 md:py-32 px-4 md:px-8 bg-[#F8F8F8]">
-            <div className="max-w-3xl mx-auto text-center">
-                <div className="w-16 h-16 md:w-24 md:h-24 bg-[#6E35FF]/10 rounded-full flex items-center justify-center mx-auto mb-8 md:mb-10 text-[#6E35FF]">
-                    <Mail className="w-8 h-8 md:w-12 md:h-12" />
+        <section className="py-24 px-4 md:px-8 bg-[#414042] text-[#fffff3] relative overflow-hidden">
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)", backgroundSize: "32px 32px" }}></div>
+
+            <div className="max-w-4xl mx-auto relative z-10 grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div className="w-12 h-12 bg-[#fffff3]/10 backdrop-blur-sm border border-[#fffff3]/20 flex items-center justify-center rounded-none mb-8">
+                        <Mail className="w-6 h-6 text-[#fffff3]" />
+                    </div>
+                    <h2 className="text-4xl md:text-6xl font-medium mb-6 leading-[0.9]" style={{ fontFamily: "var(--font-owners-regular)" }}>
+                        JOIN THE <br /> <span className="text-[#6E35FF]">NETWORK</span>
+                    </h2>
+                    <p className="text-sm text-[#fffff3]/60 max-w-sm mb-8">
+                        Receive encrypted transmissions about design theory, code architecture, and digital alchemy.
+                    </p>
                 </div>
-                <h2 className="text-4xl md:text-6xl font-bold mb-4 md:mb-6 text-black" style={{ fontFamily: "var(--font-owners-regular)" }}>Get the Latest Insights</h2>
-                <p className="text-gray-500 text-lg md:text-xl font-medium mb-8 md:mb-12" style={{ fontFamily: "var(--font-neue-montreal)" }}>Updates, stories, and trends from FOXMEN Studio.</p>
-                <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-                    <Input placeholder="Enter your email" className="h-16 md:h-20 rounded-full bg-white border-gray-200 text-black text-lg md:text-xl px-8 md:px-10 focus:border-[#6E35FF] focus-visible:ring-[#6E35FF]" style={{ fontFamily: "var(--font-neue-montreal)" }} />
-                    <Button className="h-16 md:h-20 rounded-full px-8 md:px-12 bg-[#6E35FF] text-white text-lg md:text-xl font-bold hover:bg-[#6E35FF]/90 shadow-lg shadow-[#6E35FF]/20" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                        Subscribe
-                    </Button>
+
+                <div className="space-y-4">
+                    <div className="relative group">
+                        <div className="absolute top-0 right-0 p-1">
+                            <span className="w-2 h-2 bg-[#00FF00] rounded-full animate-pulse block box-content border-2 border-[#414042]" />
+                        </div>
+                        <Input
+                            placeholder="EMAIL_ADDRESS"
+                            className="bg-transparent border-b-2 border-[#fffff3]/20 rounded-none px-0 py-4 h-14 text-xl placeholder:text-[#fffff3]/20 focus-visible:ring-0 focus-visible:border-[#fffff3] transition-colors"
+                        />
+                    </div>
+                    <button className="w-full bg-[#fffff3] text-[#414042] h-14 font-bold uppercase tracking-widest hover:bg-[#6E35FF] hover:text-white transition-colors duration-300">
+                        Initialise
+                    </button>
                 </div>
             </div>
         </section>
@@ -222,12 +283,19 @@ export function RecommendedReads() {
 
 export function BlogCTA() {
     return (
-        <section className="py-24 md:py-40 px-4 md:px-8 bg-white text-center border-t border-gray-100">
-            <div className="max-w-5xl mx-auto">
-                <h2 className="text-4xl md:text-7xl font-bold mb-8 md:mb-10 leading-none" style={{ fontFamily: "var(--font-owners-regular)" }}>Ready to Build Your Website or App?</h2>
-                <p className="text-xl md:text-2xl text-gray-500 font-medium mb-12 md:mb-16" style={{ fontFamily: "var(--font-neue-montreal)" }}>Let's create something meaningful together.</p>
-                <Link href="/contact" className="inline-flex items-center justify-center bg-[#6E35FF] text-white rounded-full px-10 py-6 md:px-12 md:py-6 text-xl md:text-2xl font-bold hover:shadow-[0px_10px_25px_-5px_rgba(110,53,255,0.4)] transition-all hover:-translate-y-1" style={{ fontFamily: "var(--font-neue-montreal)" }}>
-                    Start Your Project <ArrowRight className="ml-3 w-6 h-6 md:w-7 md:h-7" />
+        <section className="py-24 md:py-32 px-4 md:px-8 bg-[#fffff3] text-center border-t border-[#414042]/10">
+            <div className="max-w-4xl mx-auto">
+                <span className="block text-xs font-bold uppercase tracking-[0.3em] text-[#414042]/40 mb-8 animate-pulse">
+                    /// System Ready
+                </span>
+                <h2 className="text-5xl md:text-8xl font-bold mb-12 text-[#414042] leading-[0.8]" style={{ fontFamily: "var(--font-owners-medium)" }}>
+                    LET'S BUILD <br /> THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6E35FF] to-[#FF4A60]">FUTURE</span>
+                </h2>
+                <Link href="/contact" className="inline-block relative group">
+                    <div className="absolute inset-0 bg-[#414042] transform translate-y-1 translate-x-1 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
+                    <div className="relative border-2 border-[#414042] bg-[#fffff3] px-12 py-6 text-xl font-bold uppercase tracking-widest text-[#414042] group-hover:-translate-y-1 group-hover:-translate-x-1 transition-transform">
+                        Start Project
+                    </div>
                 </Link>
             </div>
         </section>
