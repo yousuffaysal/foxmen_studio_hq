@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 
 export function BlogHero() {
     return (
-        <section className="pt-32 pb-16 md:pt-48 md:pb-24 px-4 md:px-8 bg-[#fffff3] relative overflow-hidden">
+        <section className="pt-10 pb-16 md:pt-14 md:pb-24 px-4 md:px-8 bg-[#fffff3] relative overflow-hidden">
             {/* Decorative Grid Lines - Creating distinct structure */}
             <div className="absolute inset-x-0 top-0 h-[1px] bg-[#414042]/10" />
             <div className="absolute inset-y-0 left-8 md:left-12 w-[1px] bg-[#414042]/10" />
@@ -18,9 +18,9 @@ export function BlogHero() {
                 <div className="grid lg:grid-cols-[0.8fr_1fr] gap-12 lg:gap-24 items-end">
                     <div>
                         <div className="inline-flex items-center gap-3 mb-6 mix-blend-multiply">
-                            <span className="w-2 h-2 bg-[#FF4A60] rounded-full animate-pulse" />
+                            <span className="w-2 h-2 bg-[#8B5DFF] rounded-full animate-pulse" />
                             <span className="uppercase tracking-[0.2em] text-xs font-bold text-[#414042]/60">
-                                Paperfolio / Log / 01
+                                Foxmen Studio / Log / 01
                             </span>
                         </div>
                         <h1 className="text-6xl md:text-8xl lg:text-[7rem] leading-[0.85] font-bold text-[#414042] mb-8 tracking-tight" style={{ fontFamily: "var(--font-owners-medium)" }}>
@@ -225,6 +225,29 @@ export function Pagination() {
 
 
 export function EmailSubscribe() {
+    const [email, setEmail] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+
+    const handleSubscribe = async () => {
+        if (!email) return;
+        setLoading(true);
+        try {
+            const res = await fetch('/api/newsletter', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await res.json();
+            setMessage(data.message || data.error);
+            if (res.ok) setEmail("");
+        } catch (error) {
+            setMessage("Connection failed. Try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <section className="py-24 px-4 md:px-8 bg-[#414042] text-[#fffff3] relative overflow-hidden">
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)", backgroundSize: "32px 32px" }}></div>
@@ -245,16 +268,28 @@ export function EmailSubscribe() {
                 <div className="space-y-4">
                     <div className="relative group">
                         <div className="absolute top-0 right-0 p-1">
-                            <span className="w-2 h-2 bg-[#00FF00] rounded-full animate-pulse block box-content border-2 border-[#414042]" />
+                            <span className={`w-2 h-2 rounded-full block box-content border-2 border-[#414042] ${loading ? 'bg-yellow-400 animate-spin' : 'bg-[#6E35FF] animate-pulse'}`} />
                         </div>
                         <Input
                             placeholder="EMAIL_ADDRESS"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            disabled={loading}
                             className="bg-transparent border-b-2 border-[#fffff3]/20 rounded-none px-0 py-4 h-14 text-xl placeholder:text-[#fffff3]/20 focus-visible:ring-0 focus-visible:border-[#fffff3] transition-colors"
                         />
                     </div>
-                    <button className="w-full bg-[#fffff3] text-[#414042] h-14 font-bold uppercase tracking-widest hover:bg-[#6E35FF] hover:text-white transition-colors duration-300">
-                        Initialise
+                    <button
+                        onClick={handleSubscribe}
+                        disabled={loading}
+                        className="w-full bg-[#fffff3] text-[#414042] h-14 font-bold uppercase tracking-widest hover:bg-[#6E35FF] hover:text-white transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {loading ? "INITIALIZING..." : "INITIALISE"}
                     </button>
+                    {message && (
+                        <p className="text-xs font-mono text-[#6E35FF] mt-2 uppercase tracking-wider animate-in fade-in slide-in-from-top-1">
+                            [ SERVER_RESPONSE ]: {message}
+                        </p>
+                    )}
                 </div>
             </div>
         </section>

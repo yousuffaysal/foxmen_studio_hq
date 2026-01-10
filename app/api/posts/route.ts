@@ -15,6 +15,9 @@ export async function GET() {
     }
 }
 
+import { sendNewsletter } from '@/lib/email';
+// ... (start of file)
+
 export async function POST(request: Request) {
     try {
         const body = await request.json();
@@ -36,6 +39,19 @@ export async function POST(request: Request) {
                 date: body.date ? new Date(body.date) : new Date(),
             },
         });
+
+        // Broadcast to subscribers
+        try {
+            const subscribers = await prisma.subscriber.findMany({ where: { isActive: true } });
+            const emails = subscribers.map(s => s.email);
+            if (emails.length > 0) {
+                await sendNewsletter(post, emails);
+            }
+        } catch (emailError) {
+            console.error("Broadcast failed:", emailError);
+            // We do not fail the request if email fails, but we log it
+        }
+
         return NextResponse.json(post, { status: 201 });
     } catch (error) {
         console.error('Failed to create post:', error);
