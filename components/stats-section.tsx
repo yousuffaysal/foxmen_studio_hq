@@ -54,7 +54,7 @@ function Counter({ value }: { value: string }) {
 
 export function StatsSection() {
     return (
-        <section className="bg-[#414042] pt-32 pb-16 border-b border-white/10">
+        <section className="bg-[#414042] pt-16 md:pt-32 pb-16 border-b border-white/10">
             <div className="container mx-auto px-4 md:px-8">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/20">

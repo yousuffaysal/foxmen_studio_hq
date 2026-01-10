@@ -10,7 +10,7 @@ export function HeroBookingButton() {
 
     return (
         <motion.button
-            className="group relative flex items-center justify-between overflow-hidden rounded-full bg-[#1F1F1F] p-[6px] transition-all w-auto cursor-pointer min-w-[280px] sm:min-w-[300px] h-[60px] sm:h-[72px]"
+            className="group relative flex items-center justify-between overflow-hidden rounded-full bg-[#1F1F1F] p-[6px] transition-all cursor-pointer h-[60px] sm:h-[72px] w-full sm:w-auto min-w-[280px] sm:min-w-[300px]"
             data-cal-link="yousuf-faysal/discussion-call"
             data-cal-namespace="discussion-call"
             data-cal-config='{"layout":"month_view"}'

@@ -60,10 +60,10 @@ export function FeaturedProjectsSection() {
     ]
 
     return (
-        <section className="bg-[#fffff3] py-32 relative border-t border-[#414042]/10">
+        <section className="bg-[#fffff3] py-16 md:py-32 relative border-t border-[#414042]/10">
             <div className="container mx-auto px-4 md:px-8">
                 {/* Section Header - Technical/Brutalist */}
-                <div className="mb-24 border-b border-[#414042] pb-6 flex flex-col md:flex-row justify-between items-end gap-6">
+                <div className="mb-12 md:mb-24 border-b border-[#414042] pb-6 flex flex-col md:flex-row justify-between items-end gap-6">
                     <div>
                         <span
                             className="block font-mono text-xs text-[#8B5DFF] mb-2 tracking-widest uppercase"

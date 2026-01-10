@@ -6,7 +6,7 @@ export function TestimonialsSection() {
   return (
     <section className="container mx-auto px-4 py-16 md:py-24">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 pt-4 md:pt-12">
+        <div className="text-center mb-8 md:mb-12 pt-4 md:pt-12">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-[1.3]" style={{ fontFamily: "var(--font-sfpro)" }}>
             What our clients say
             <br />

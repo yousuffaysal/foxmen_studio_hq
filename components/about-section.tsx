@@ -30,7 +30,7 @@ export function AboutSection() {
 
   return (
     <motion.section
-      className="bg-[#414042] py-16 md:py-32"
+      className="bg-[#414042] py-12 md:py-32"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}

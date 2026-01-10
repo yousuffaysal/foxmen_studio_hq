@@ -44,10 +44,10 @@ export function ServicesSection() {
   ]
 
   return (
-    <section className="bg-[#fffff3] py-24 md:py-32 border-t border-[#414042]/10">
+    <section className="bg-[#fffff3] py-12 md:py-32 border-t border-[#414042]/10">
       <div className="container mx-auto px-4 md:px-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-24 gap-8">
           <div>
             <span
               className="block font-mono text-xs text-[#8B5DFF] mb-4 tracking-widest uppercase"
@@ -75,7 +75,7 @@ export function ServicesSection() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12 md:gap-y-24">
           {services.map((service, index) => (
             <div key={index} className="group flex flex-col items-start bg-transparent">
               {/* Number */}

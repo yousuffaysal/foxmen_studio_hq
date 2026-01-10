@@ -7,11 +7,11 @@ import { FooterEmail } from "@/components/footer-email"
 
 export function Footer() {
   return (
-    <footer className="bg-[#050505] text-white pt-24 relative overflow-hidden flex flex-col h-full">
+    <footer className="bg-[#050505] text-white pt-12 md:pt-24 relative overflow-hidden flex flex-col h-full">
       <div className="w-full px-4 md:px-12 relative z-10 flex-1 flex flex-col">
 
         {/* Top Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start mb-16 md:mb-24 gap-12">
+        <div className="flex flex-col md:flex-row justify-between items-start mb-12 md:mb-24 gap-12">
           {/* Left: Email */}
           <div className="flex flex-col gap-4 w-full">
             <span className="text-gray-400 text-sm" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>

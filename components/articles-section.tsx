@@ -31,7 +31,7 @@ export function ArticlesSection() {
   const displayArticles = articles.slice(0, 3)
 
   return (
-    <section className="bg-[#fffff3] py-32 relative overflow-hidden">
+    <section className="bg-[#fffff3] py-16 md:py-32 relative overflow-hidden">
       {/* Atmosphere: Technical Grid Background */}
       <div className="absolute inset-0 z-0 opacity-[0.03]"
         style={{
@@ -46,7 +46,7 @@ export function ArticlesSection() {
       <div className="container mx-auto px-4 md:px-8 relative z-10">
 
         {/* Header - Editorial Style */}
-        <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-24">
+        <div className="flex flex-col md:flex-row items-end justify-between gap-12 mb-12 md:mb-24">
           <div className="max-w-2xl">
             <span
               className="block font-mono text-xs text-[#8B5DFF] mb-6 tracking-[0.2em] uppercase"

@@ -9,20 +9,15 @@ export function ViewProjectsButton() {
     return (
         <Link href="/projects">
             <motion.button
-                className="group relative flex items-center gap-3 overflow-hidden border-[3px] border-black bg-white px-8 py-4 text-lg font-bold uppercase tracking-wider text-black transition-colors"
+                className="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full border border-[#414042] bg-transparent px-8 h-[60px] sm:h-[72px] text-lg font-medium text-[#414042] transition-all w-full sm:w-auto min-w-[280px] sm:min-w-[300px]"
                 whileHover={{
-                    x: -4,
-                    y: -4,
-                    boxShadow: "8px 8px 0px 0px #000000",
+                    scale: 1.02,
+                    backgroundColor: "rgba(65, 64, 66, 0.05)"
                 }}
-                transition={{
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 15
-                }}
+                whileTap={{ scale: 0.98 }}
             >
                 View Projects
-                <ArrowRight className="h-6 w-6 transition-colors duration-300 group-hover:text-red-500" />
+                <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 transition-transform duration-300 group-hover:translate-x-1" />
             </motion.button>
         </Link>
     )
