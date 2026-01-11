@@ -37,7 +37,7 @@ const teamMembers = [
 
 export function AboutTeam() {
     return (
-        <section className="py-32 px-4 bg-[#050505] border-t border-white/5 relative overflow-hidden">
+        <section className="py-16 md:py-32 px-4 bg-[#050505] border-t border-white/5 relative overflow-hidden">
             {/* Ambient Background Noise/Glow */}
             <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
                 <div className="absolute top-[-20%] right-[-10%] w-[50vw] h-[50vw] bg-[#8B5DFF] opacity-30 blur-[120px] rounded-full mix-blend-screen animate-pulse duration-[15s]" />
@@ -45,7 +45,7 @@ export function AboutTeam() {
             </div>
 
             <div className="max-w-[1600px] mx-auto relative z-10">
-                <div className="mb-20 md:mb-32 flex flex-col md:flex-row justify-between items-end gap-8">
+                <div className="mb-12 md:mb-32 flex flex-col md:flex-row justify-between items-end gap-6 md:gap-8">
                     <div>
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
@@ -55,7 +55,7 @@ export function AboutTeam() {
                             className="flex items-center gap-4 mb-4"
                         >
                             <div className="h-[1px] w-12 bg-[#8B5DFF]" />
-                            <span className="text-[#8B5DFF] font-medium tracking-widest uppercase text-sm" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
+                            <span className="text-[#8B5DFF] font-medium tracking-widest uppercase text-xs md:text-sm" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
                                 The Minds Behind
                             </span>
                         </motion.div>
@@ -64,7 +64,7 @@ export function AboutTeam() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="text-5xl md:text-7xl font-bold text-white leading-none"
+                            className="text-4xl md:text-7xl font-bold text-white leading-none"
                             style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}
                         >
                             DIGITAL <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8B5DFF] to-white">ALCHEMISTS</span>
@@ -75,7 +75,7 @@ export function AboutTeam() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.4 }}
-                        className="text-gray-400 max-w-md text-lg leading-relaxed text-right md:text-left"
+                        className="text-gray-400 max-w-md text-base md:text-lg leading-relaxed md:text-right md:text-left"
                         style={{ fontFamily: "var(--font-ibm-plex-sans)" }}
                     >
                         A collective of engineers, designers, and visionaries obsessed with pushing the boundaries of what is possible on the web.
@@ -99,7 +99,7 @@ function TeamCard({ member, index }: { member: typeof teamMembers[number], index
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: index * 0.1, ease: [0.215, 0.61, 0.355, 1] }}
-            className="group relative h-[500px] w-full overflow-hidden bg-[#111] border border-white/5 cursor-pointer"
+            className="group relative h-[400px] md:h-[500px] w-full overflow-hidden bg-[#111] border border-white/5 cursor-pointer"
         >
             {/* Image Container with Zoom Effect */}
             <div className="absolute inset-0 w-full h-full overflow-hidden">

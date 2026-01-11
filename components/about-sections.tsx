@@ -18,7 +18,7 @@ export function AboutHero() {
             </div>
 
             {/* Rotating Cutoff Logo - Top Right */}
-            <div className="absolute top-0 right-0 z-20 overflow-hidden pointer-events-none w-[60vh] h-[60vh] opacity-60 xl:opacity-100">
+            <div className="absolute top-0 right-0 z-20 overflow-hidden pointer-events-none w-[40vh] h-[40vh] md:w-[60vh] md:h-[60vh] opacity-30 md:opacity-60 xl:opacity-100">
                 <motion.div
                     className="absolute -top-[30%] -right-[30%] w-full h-full"
                     animate={{ rotate: 360 }}
@@ -39,8 +39,8 @@ export function AboutHero() {
                 </motion.div>
             </div>
 
-            <div className="max-w-[1800px] mx-auto w-full relative z-10 pt-20">
-                <div className="flex flex-col gap-8">
+            <div className="max-w-[1800px] mx-auto w-full relative z-10 pt-16 md:pt-20">
+                <div className="flex flex-col gap-6 md:gap-8">
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -48,7 +48,7 @@ export function AboutHero() {
                         className="flex items-center gap-4"
                     >
                         <div className="h-[1px] w-12 bg-[#8B5DFF]" />
-                        <span className="text-[#8B5DFF] font-medium tracking-widest uppercase text-sm" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
+                        <span className="text-[#8B5DFF] font-medium tracking-widest uppercase text-xs md:text-sm" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
                             Who We Are
                         </span>
                     </motion.div>
@@ -61,7 +61,7 @@ export function AboutHero() {
                                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                                 className="block"
                             >
-                                DIGITAL
+                                FOXMEN
                             </motion.span>
                         </div>
                         <div className="overflow-hidden text-[#8B5DFF]">
@@ -71,7 +71,7 @@ export function AboutHero() {
                                 transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                                 className="block"
                             >
-                                ALCHEMY
+                                STUDIO
                             </motion.span>
                         </div>
                         <div className="overflow-hidden ml-[2vw]">
@@ -81,7 +81,7 @@ export function AboutHero() {
                                 transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                                 className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50"
                             >
-                                STUDIO.
+                                BUILDS.
                             </motion.span>
                         </div>
                     </h1>
@@ -93,7 +93,7 @@ export function AboutHero() {
                         className="max-w-2xl mt-8 ml-auto mr-[5vw]"
                     >
                         <p className="text-xl md:text-2xl text-gray-400 leading-relaxed font-light" style={{ fontFamily: "var(--font-sans)" }}>
-                            We fuse creative chaos with engineering precision. Not just another agency, but your partner in crafting digital experiences that <span className="text-white font-medium">defy expectations</span>.
+                            At <span className="text-white font-medium">Foxmen Studio</span>, we turn ideas into reality. We create stunning websites, powerful mobile apps, and smart AI agents. <span className="text-[#8B5DFF]">Complex technology made simple for you.</span>
                         </p>
                     </motion.div>
                 </div>
@@ -113,19 +113,19 @@ export function AboutServices() {
     ]
 
     return (
-        <section className="py-24 md:py-32 bg-white px-4 md:px-8 text-[#0a0a0a]">
+        <section className="py-16 md:py-32 bg-white px-4 md:px-8 text-[#0a0a0a]">
             <div className="max-w-[1600px] mx-auto">
-                <div className="mb-16 md:mb-24">
-                    <h2 className="text-5xl md:text-7xl font-bold mb-8 leading-none" style={{ fontFamily: "var(--font-heading)" }}>
+                <div className="mb-12 md:mb-24">
+                    <h2 className="text-4xl md:text-7xl font-bold mb-6 md:mb-8 leading-none" style={{ fontFamily: "var(--font-heading)" }}>
                         OUR <br /><span className="text-[#8B5DFF]">CRAFT</span>
                     </h2>
-                    <p className="text-xl text-gray-500 max-w-sm mb-12" style={{ fontFamily: "var(--font-sans)" }}>
+                    <p className="text-lg md:text-xl text-gray-500 max-w-sm mb-8 md:mb-12" style={{ fontFamily: "var(--font-sans)" }}>
                         Comprehensive digital solutions tailored to elevate your brand above the noise.
                     </p>
                     <div className="w-16 h-1 bg-[#8B5DFF]" />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-auto md:auto-rows-[300px]">
                     {services.map((service, index) => (
                         <motion.div
                             key={index}
@@ -133,19 +133,19 @@ export function AboutServices() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
-                            className={`group relative bg-[#f4f4f4] hover:bg-[#0a0a0a] hover:text-white p-8 md:p-10 rounded-[2rem] transition-all duration-500 overflow-hidden flex flex-col justify-between ${service.className}`}
+                            className={`group relative bg-[#f4f4f4] hover:bg-[#0a0a0a] hover:text-white p-6 md:p-10 rounded-[1.5rem] md:rounded-[2rem] transition-all duration-500 overflow-hidden flex flex-col justify-between ${service.className} min-h-[200px] md:min-h-0`}
                         >
-                            <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <div className="absolute top-0 right-0 p-6 md:p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 hidden md:block">
                                 <MoveRight className="w-6 h-6 -rotate-45 group-hover:rotate-0 transition-transform duration-500" />
                             </div>
 
-                            <div className="w-12 h-12 bg-white text-black group-hover:bg-[#8B5DFF] group-hover:text-white rounded-full flex items-center justify-center transition-colors duration-500">
-                                <service.icon className="w-6 h-6" />
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-white text-black group-hover:bg-[#8B5DFF] group-hover:text-white rounded-full flex items-center justify-center transition-colors duration-500 mb-4 md:mb-0">
+                                <service.icon className="w-5 h-5 md:w-6 md:h-6" />
                             </div>
 
                             <div>
-                                <h3 className="text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "var(--font-heading)" }}>{service.title}</h3>
-                                <p className="text-gray-500 group-hover:text-gray-300 font-medium transition-colors text-lg" style={{ fontFamily: "var(--font-sans)" }}>{service.desc}</p>
+                                <h3 className="text-xl md:text-3xl font-bold mb-2 md:mb-3" style={{ fontFamily: "var(--font-heading)" }}>{service.title}</h3>
+                                <p className="text-gray-500 group-hover:text-gray-300 font-medium transition-colors text-base md:text-lg" style={{ fontFamily: "var(--font-sans)" }}>{service.desc}</p>
                             </div>
                         </motion.div>
                     ))}
@@ -165,7 +165,7 @@ export function AboutApproach() {
     ]
 
     return (
-        <section className="py-32 bg-[#050505] text-white overflow-hidden relative">
+        <section className="py-20 md:py-32 bg-[#050505] text-white overflow-hidden relative">
             {/* Background Logo Watermark */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-[0.03] pointer-events-none select-none">
                 <Image
@@ -177,8 +177,8 @@ export function AboutApproach() {
             </div>
 
             <div className="container mx-auto px-4 md:px-8 relative z-10">
-                <div className="flex flex-col items-center text-center mb-24">
-                    <div className="w-16 h-16 mb-8 relative">
+                <div className="flex flex-col items-center text-center mb-16 md:mb-24">
+                    <div className="w-12 h-12 md:w-16 md:h-16 mb-6 md:mb-8 relative">
                         <Image
                             src="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png"
                             alt="Foxmen Logo"
@@ -186,13 +186,13 @@ export function AboutApproach() {
                             className="object-contain"
                         />
                     </div>
-                    <span className="text-[#8B5DFF] font-mono mb-4 text-sm tracking-widest uppercase">The Process</span>
-                    <h2 className="text-4xl md:text-6xl font-bold max-w-3xl leading-tight" style={{ fontFamily: "var(--font-heading)" }}>
+                    <span className="text-[#8B5DFF] font-mono mb-4 text-xs md:text-sm tracking-widest uppercase">The Process</span>
+                    <h2 className="text-3xl md:text-6xl font-bold max-w-3xl leading-tight" style={{ fontFamily: "var(--font-heading)" }}>
                         From Chaos to <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8B5DFF] to-white">Clarity</span>
                     </h2>
                 </div>
 
-                <div className="grid md:grid-cols-5 gap-6 max-w-[1600px] mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6 max-w-[1600px] mx-auto">
                     {steps.map((item, i) => (
                         <motion.div
                             key={i}
@@ -200,15 +200,15 @@ export function AboutApproach() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-50px" }}
                             transition={{ duration: 0.6, delay: i * 0.15 }}
-                            className="relative p-6 pt-12 border border-white/10 rounded-3xl hover:border-[#8B5DFF]/50 hover:bg-white/5 transition-all duration-500 group flex flex-col items-center text-center"
+                            className="relative p-6 pt-10 md:pt-12 border border-white/10 rounded-2xl md:rounded-3xl hover:border-[#8B5DFF]/50 hover:bg-white/5 transition-all duration-500 group flex flex-col items-center text-center"
                         >
-                            <div className="text-6xl font-bold text-white/20 absolute top-4 left-4 group-hover:text-[#8B5DFF]/30 transition-colors" style={{ fontFamily: "var(--font-heading)" }}>
+                            <div className="text-4xl md:text-6xl font-bold text-white/20 absolute top-4 left-4 group-hover:text-[#8B5DFF]/30 transition-colors" style={{ fontFamily: "var(--font-heading)" }}>
                                 0{i + 1}
                             </div>
 
-                            <div className="w-3 h-3 rounded-full bg-[#8B5DFF] mb-6 shadow-[0_0_15px_#8B5DFF]" />
+                            <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#8B5DFF] mb-4 md:mb-6 shadow-[0_0_15px_#8B5DFF]" />
 
-                            <h3 className="text-xl font-bold mb-4 relative z-10" style={{ fontFamily: "var(--font-heading)" }}>{item.title}</h3>
+                            <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 relative z-10" style={{ fontFamily: "var(--font-heading)" }}>{item.title}</h3>
                             <p className="text-gray-400 font-light text-sm relative z-10 leading-relaxed" style={{ fontFamily: "var(--font-sans)" }}>{item.desc}</p>
                         </motion.div>
                     ))}
@@ -232,13 +232,13 @@ export function AboutTech() {
         { name: "Mistral", icon: Bot }
     ]
     return (
-        <section className="py-24 bg-white">
+        <section className="py-16 md:py-24 bg-white">
             <div className="container mx-auto px-4 text-center">
-                <p className="text-[#8B5DFF] font-mono mb-6 text-sm">Powered By</p>
+                <p className="text-[#8B5DFF] font-mono mb-6 text-xs md:text-sm">Powered By</p>
                 <div className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-4xl mx-auto">
                     {techs.map((tech, i) => (
-                        <span key={i} className="px-6 py-3 rounded-full border border-black/10 text-lg md:text-xl font-medium hover:bg-[#8B5DFF] hover:text-white hover:border-[#8B5DFF] transition-all duration-300 cursor-default flex items-center gap-2" style={{ fontFamily: "var(--font-heading)" }}>
-                            <tech.icon className="w-5 h-5 md:w-6 md:h-6" />
+                        <span key={i} className="px-4 py-2 md:px-6 md:py-3 rounded-full border border-black/10 text-base md:text-xl font-medium hover:bg-[#8B5DFF] hover:text-white hover:border-[#8B5DFF] transition-all duration-300 cursor-default flex items-center gap-2" style={{ fontFamily: "var(--font-heading)" }}>
+                            <tech.icon className="w-4 h-4 md:w-6 md:h-6" />
                             {tech.name}
                         </span>
                     ))}
@@ -258,13 +258,13 @@ export function AboutStatsMarquee() {
     ]
 
     return (
-        <section className="py-8 bg-[#050505] overflow-hidden whitespace-nowrap border-y border-white/10">
-            <div className="flex items-center gap-16 animate-marquee">
+        <section className="py-6 md:py-8 bg-[#050505] overflow-hidden whitespace-nowrap border-y border-white/10">
+            <div className="flex items-center gap-8 md:gap-16 animate-marquee">
                 {[...stats, ...stats, ...stats, ...stats].map((stat, i) => (
                     <div key={i} className="flex items-center gap-4 transition-opacity duration-300 hover:opacity-80">
-                        <span className="text-5xl md:text-7xl font-bold text-white" style={{ fontFamily: "var(--font-heading)" }}>{stat.value}</span>
-                        <span className="text-sm md:text-base text-[#8B5DFF] font-mono uppercase tracking-wider">{stat.label}</span>
-                        <div className="relative w-16 h-16 ml-8">
+                        <span className="text-4xl md:text-7xl font-bold text-white" style={{ fontFamily: "var(--font-heading)" }}>{stat.value}</span>
+                        <span className="text-xs md:text-base text-[#8B5DFF] font-mono uppercase tracking-wider">{stat.label}</span>
+                        <div className="relative w-12 h-12 md:w-16 md:h-16 ml-4 md:ml-8">
                             <Image
                                 src="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png"
                                 alt="Separator"
