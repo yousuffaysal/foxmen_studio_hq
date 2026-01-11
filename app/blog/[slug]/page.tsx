@@ -37,6 +37,31 @@ async function getRecentPosts() {
     }
 }
 
+
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+    const params = await props.params;
+    const post = await getPost(params.slug);
+
+    if (!post) {
+        return {
+            title: 'Post Not Found',
+        }
+    }
+
+    return {
+        title: `${post.title} | Foxmen Studio Blog`,
+        description: post.excerpt,
+        openGraph: {
+            title: post.title,
+            description: post.excerpt,
+            images: [post.coverImage],
+            type: 'article',
+            authors: [post.author],
+            publishedTime: post.date,
+        }
+    }
+}
+
 export default async function BlogPostPage(props: { params: Promise<{ slug: string }> }) {
     const params = await props.params;
     const postData = getPost(params.slug);

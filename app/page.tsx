@@ -12,6 +12,16 @@ import { Footer } from "@/components/footer"
 import { ScrollAnimation } from "@/components/scroll-animation"
 
 import { HomePreloader } from "@/components/home-preloader"
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Foxmen Studio | Web, Mobile & AI Agents Development Agency",
+  description: "Foxmen Studio is a premier digital agency building high-performance websites, mobile apps, and AI agents. We turn complex ideas into elegant digital solutions.",
+  openGraph: {
+    title: "Foxmen Studio | Web, Mobile & AI Agents Development Agency",
+    description: "Foxmen Studio is a premier digital agency building high-performance websites, mobile apps, and AI agents. We turn complex ideas into elegant digital solutions.",
+  }
+}
 
 export default function Home() {
   return (

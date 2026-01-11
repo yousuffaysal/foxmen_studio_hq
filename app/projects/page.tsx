@@ -23,6 +23,16 @@ import {
     ProjectReel,
     ClosingCTA
 } from "@/components/project-premium-sections"
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: "Our Work | Foxmen Studio Case Studies",
+    description: "Explore our portfolio of delivered projects. From fintech platforms to e-commerce, see how we build scalable digital products.",
+    openGraph: {
+        title: "Our Work | Foxmen Studio Case Studies",
+        description: "Explore our portfolio of delivered projects. From fintech platforms to e-commerce, see how we build scalable digital products.",
+    }
+}
 
 export default function ProjectsPage() {
     return (

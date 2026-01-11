@@ -9,6 +9,16 @@ import {
     AboutCTA
 } from "@/components/about-sections"
 import { AboutTeam } from "@/components/about-team-section"
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: "About Us | Foxmen Studio",
+    description: "Learn about Foxmen Studio, a collective of digital alchemists transforming ideas into reality through code, design, and innovation.",
+    openGraph: {
+        title: "About Us | Foxmen Studio",
+        description: "Learn about Foxmen Studio, a collective of digital alchemists transforming ideas into reality through code, design, and innovation.",
+    }
+}
 
 export default function AboutPage() {
     return (
