@@ -131,11 +131,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://foxmen.studio",
   },
-  icons: {
-    icon: "/icon.png",
-    shortcut: "/icon.png",
-    apple: "/apple-icon.png",
-  },
 }
 
 import type { Viewport } from "next"
