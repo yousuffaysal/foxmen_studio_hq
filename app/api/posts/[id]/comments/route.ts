@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import prisma from "@/lib/prisma";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const comments = await prisma.comment.findMany({
-            where: { postId: params.id },
+            where: { postId: id },
             orderBy: { createdAt: 'desc' }
         });
         return NextResponse.json(comments);
@@ -13,8 +14,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const body = await request.json();
         const { name, email, content } = body;
 
@@ -27,7 +29,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
                 name,
                 email,
                 content,
-                postId: params.id
+                postId: id
             }
         });
         return NextResponse.json(comment);

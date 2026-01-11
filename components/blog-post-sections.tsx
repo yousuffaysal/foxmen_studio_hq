@@ -90,9 +90,9 @@ export function PostHero({ image }: { image: string }) {
 
 export function PostBody({ content }: { content: string }) {
     return (
-        <div className="prose prose-lg md:prose-xl max-w-none 
+        <div className="prose prose-lg md:prose-xl max-w-none tracking-wide
             prose-headings:text-[#414042] prose-headings:font-bold prose-headings:font-owners 
-            prose-p:text-[#414042]/80 prose-p:leading-loose prose-p:font-mono prose-p:text-base md:prose-p:text-lg
+            prose-p:text-[#414042] prose-p:leading-loose prose-p:font-mono prose-p:text-base md:prose-p:text-lg
             prose-a:text-[#6E35FF] prose-a:font-bold prose-a:no-underline hover:prose-a:underline
             prose-blockquote:border-l-4 prose-blockquote:border-[#6E35FF] prose-blockquote:bg-[#414042]/5 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:not-italic prose-blockquote:text-[#414042]
             prose-code:text-[#6E35FF] prose-code:bg-[#414042]/5 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
@@ -124,7 +124,13 @@ export function PostBody({ content }: { content: string }) {
                                 {children}
                             </code>
                         )
-                    }
+                    },
+                    table: ({ ...props }) => <div className="overflow-x-auto my-8"><table className="w-full border-collapse border border-[#414042]/10 text-sm font-mono" {...props} /></div>,
+                    thead: ({ ...props }) => <thead className="bg-[#414042]/5" {...props} />,
+                    tbody: ({ ...props }) => <tbody className="divide-y divide-[#414042]/10" {...props} />,
+                    tr: ({ ...props }) => <tr className="hover:bg-[#414042]/5 transition-colors" {...props} />,
+                    th: ({ ...props }) => <th className="px-4 py-3 text-left font-bold uppercase tracking-wider text-[#414042] border border-[#414042]/10" {...props} />,
+                    td: ({ ...props }) => <td className="px-4 py-3 text-[#414042]/80 border border-[#414042]/10" {...props} />,
                 }}
             >
                 {content}
@@ -292,9 +298,9 @@ export function CommentsSection({ postId }: { postId: string }) {
         <section className="py-12 border-t border-[#414042]/10" id="comments">
             <div className="flex items-center gap-4 mb-12">
                 <div className="bg-[#414042] text-[#fffff3] px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest">
-                    Transmission_Log
+                    Discussion_Thread
                 </div>
-                <h2 className="text-2xl font-bold text-[#414042]" style={{ fontFamily: "var(--font-owners-medium)" }}>Incoming_Signals ({comments.length})</h2>
+                <h2 className="text-2xl font-bold text-[#414042]" style={{ fontFamily: "var(--font-owners-medium)" }}>Community_Thoughts ({comments.length})</h2>
             </div>
 
             <div className="grid lg:grid-cols-[1fr_400px] gap-16">
@@ -302,11 +308,11 @@ export function CommentsSection({ postId }: { postId: string }) {
                 <div className="space-y-8 order-2 lg:order-1">
                     {loading ? (
                         <div className="p-8 text-center bg-white border border-[#414042]/10">
-                            <p className="text-[#414042]/40 font-mono text-xs animate-pulse">Scanning frequencies...</p>
+                            <p className="text-[#414042]/40 font-mono text-xs animate-pulse">Loading discussion...</p>
                         </div>
                     ) : comments.length === 0 ? (
                         <div className="p-12 text-center bg-white border border-dashed border-[#414042]/20">
-                            <p className="text-[#414042]/40 italic font-mono text-sm">No signals detected on this frequency.</p>
+                            <p className="text-[#414042]/40 italic font-mono text-sm">No thoughts shared yet. Start the conversation.</p>
                         </div>
                     ) : (
                         comments.map((comment) => (
@@ -335,12 +341,12 @@ export function CommentsSection({ postId }: { postId: string }) {
                     <div className="bg-[#1C1C1C] p-8 text-[#fffff3] sticky top-32 border-2 border-[#414042]">
                         <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-[#6E35FF]" style={{ fontFamily: "var(--font-owners-regular)" }}>
                             <span className="w-2 h-2 bg-[#6E35FF] rounded-full animate-pulse" />
-                            Broadcast Message
+                            Share Your Thoughts
                         </h3>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-4">
                                 <Input
-                                    placeholder="IDENTIFIER_NAME"
+                                    placeholder="YOUR_NAME"
                                     required
                                     value={newItem.name}
                                     onChange={e => setNewItem({ ...newItem, name: e.target.value })}
@@ -356,7 +362,7 @@ export function CommentsSection({ postId }: { postId: string }) {
                                 />
                             </div>
                             <Textarea
-                                placeholder="ENTER_MESSAGE_CONTENT..."
+                                placeholder="YOUR_PERSPECTIVE..."
                                 required
                                 value={newItem.content}
                                 onChange={e => setNewItem({ ...newItem, content: e.target.value })}
@@ -367,7 +373,7 @@ export function CommentsSection({ postId }: { postId: string }) {
                                 disabled={submitting}
                                 className="h-12 w-full rounded-none bg-[#6E35FF] text-white font-bold uppercase tracking-widest hover:bg-[#ffffff] hover:text-[#6E35FF] transition-all"
                             >
-                                {submitting ? "Transmitting..." : "Send_Transmission"}
+                                {submitting ? "Posting..." : "Post_Comment"}
                             </Button>
                         </form>
                     </div>
