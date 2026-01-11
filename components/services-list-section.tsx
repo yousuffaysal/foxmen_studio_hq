@@ -86,23 +86,23 @@ export function ServicesListSection() {
                     </motion.div>
                 </div>
 
-                <div className="space-y-16 md:space-y-24">
+                <div className="space-y-12 md:space-y-24">
                     {services.map((service, index) => (
                         <ServiceRow key={index} service={service} index={index} />
                     ))}
                 </div>
 
                 {/* CPA Section */}
-                <div className="mt-20 md:mt-32 border-t border-gray-100 pt-16 md:pt-24 text-center">
-                    <div className="max-w-3xl mx-auto bg-gray-50 rounded-[24px] md:rounded-[32px] p-8 md:p-16">
-                        <h2 className="text-2xl md:text-5xl font-bold mb-4 md:mb-6 text-black" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
+                <div className="mt-16 md:mt-32 border-t border-gray-100 pt-16 md:pt-24 text-center">
+                    <div className="max-w-3xl mx-auto bg-gray-50 rounded-[2rem] md:rounded-[32px] p-8 md:p-16">
+                        <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 text-black" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
                             Need something specific?
                         </h2>
                         <p className="text-base md:text-xl text-gray-600 mb-8 md:mb-10 leading-relaxed" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
                             If you don't see exactly what you're looking for, let's talk. We love solving unique challenges.
                         </p>
-                        <Link href="/contact">
-                            <Button className="bg-black text-white hover:bg-gray-800 rounded-full px-8 py-4 md:px-10 md:py-6 text-base md:text-lg font-medium transition-all duration-300 h-auto" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
+                        <Link href="/contact" className="inline-block w-full sm:w-auto">
+                            <Button className="w-full sm:w-auto bg-black text-white hover:bg-gray-800 rounded-full px-8 py-4 md:px-10 md:py-6 text-base md:text-lg font-medium transition-all duration-300 h-auto" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
                                 <Mail className="w-5 h-5 mr-2" />
                                 Contact Us
                             </Button>
@@ -141,7 +141,7 @@ function ServiceRow({ service, index }: { service: any, index: number }) {
                     <span className="text-xs md:text-sm font-bold tracking-widest text-[#8B5DFF] uppercase" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
                         0{index + 1}
                     </span>
-                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-black leading-tight" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
                         {service.title}
                     </h2>
                 </div>

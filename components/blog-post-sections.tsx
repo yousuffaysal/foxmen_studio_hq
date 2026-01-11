@@ -70,7 +70,7 @@ export function PostHero({ image }: { image: string }) {
                 Fig. 01 — Visual_Data
             </div>
 
-            <div className="aspect-video w-full bg-[#e5e5e5] overflow-hidden relative border border-[#414042]/10">
+            <div className="aspect-[1073/663] w-full bg-[#e5e5e5] overflow-hidden relative border border-[#414042]/10">
                 {image ? (
                     <Image
                         src={image}
@@ -230,7 +230,7 @@ export function SidebarRelated({ posts }: { posts?: any[] }) {
             <div className="space-y-6">
                 {posts.map((post) => (
                     <Link href={`/blog/${post.slug}`} key={post.id} className="block group">
-                        <div className="aspect-video bg-[#f0f0f0] mb-3 overflow-hidden relative border border-[#414042]/10">
+                        <div className="aspect-[1073/663] bg-[#f0f0f0] mb-3 overflow-hidden relative border border-[#414042]/10">
                             {post.coverImage ? (
                                 <Image src={post.coverImage} alt={post.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                             ) : (

@@ -7,6 +7,30 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
+function stripMarkdown(text: string) {
+    if (!text) return "";
+    return text
+        // Remove headers
+        .replace(/^#+\s+/gm, '')
+        // Remove bold/italic
+        .replace(/(\*\*|__|\*|_)/g, '')
+        // Remove images
+        .replace(/!\[([^\]]*)\]\([^\)]+\)/g, '')
+        // Remove links (keep text)
+        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+        // Remove blockquotes
+        .replace(/^>\s+/gm, '')
+        // Remove code blocks
+        .replace(/```[\s\S]*?```/g, '')
+        // Remove inline code
+        .replace(/`([^`]+)`/g, '$1')
+        // Remove HTML tags
+        .replace(/<[^>]*>?/gm, '')
+        // Remove extra newlines
+        .replace(/\n\s*\n/g, '\n')
+        .trim();
+}
+
 export function BlogHero() {
     return (
         <section className="pt-10 pb-16 md:pt-14 md:pb-24 px-4 md:px-8 bg-[#fffff3] relative overflow-hidden">
@@ -61,7 +85,7 @@ export function FeaturedArticle() {
     return (
         <section className="py-12 md:py-20 px-4 md:px-8 bg-white">
             <div className="max-w-[1600px] mx-auto grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                <div className="bg-gray-200 aspect-video lg:aspect-auto lg:h-[450px] rounded-[32px] md:rounded-[48px] border-4 border-black relative overflow-hidden group cursor-pointer shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                <div className="bg-gray-200 aspect-[1073/663] lg:aspect-auto lg:h-[450px] rounded-[32px] md:rounded-[48px] border-4 border-black relative overflow-hidden group cursor-pointer shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                     <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
                     <div className="absolute top-4 left-4 md:top-8 md:left-8 bg-[#FFC224] px-4 py-2 md:px-6 md:py-3 rounded-full border-2 border-black font-bold uppercase text-xs md:text-base">AI Systems</div>
                 </div>
@@ -118,7 +142,7 @@ export function ArticleGrid() {
                                 <Link href={`/blog/${art.slug}`} key={art.id} className="group block relative">
                                     <div className="grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-16 items-start">
                                         {/* Featured Image - Raw & Bold */}
-                                        <div className="relative aspect-video overflow-hidden bg-[#e5e5e5] border border-[#414042]/10">
+                                        <div className="relative aspect-[1073/663] overflow-hidden bg-[#e5e5e5] border border-[#414042]/10">
                                             {art.coverImage && (
                                                 <Image
                                                     src={art.coverImage}
@@ -145,7 +169,7 @@ export function ArticleGrid() {
                                             </h2>
 
                                             <p className="text-sm md:text-base leading-relaxed text-[#414042]/80 max-w-md mb-8">
-                                                {art.content ? art.content.replace(/<[^>]*>?/gm, '').substring(0, 180) + "..." : "System detailed analysis..."}
+                                                {art.content ? stripMarkdown(art.content).substring(0, 180) + "..." : "System detailed analysis..."}
                                             </p>
 
                                             <div className="mt-auto flex items-center gap-2 text-sm font-bold uppercase tracking-wider group/btn">
@@ -161,7 +185,7 @@ export function ArticleGrid() {
                         // Standard List Items - Minimalist / Technical
                         return (
                             <Link href={`/blog/${art.slug}`} key={art.id} className="group grid md:grid-cols-[300px_1fr] lg:grid-cols-[400px_1fr] gap-8 md:gap-16 border-t border-[#414042]/10 pt-12 items-start">
-                                <div className="aspect-video bg-[#f0f0f0] relative overflow-hidden border border-[#414042]/10">
+                                <div className="aspect-[1073/663] bg-[#f0f0f0] relative overflow-hidden border border-[#414042]/10">
                                     {art.coverImage && (
                                         <Image
                                             src={art.coverImage}
@@ -183,7 +207,7 @@ export function ArticleGrid() {
                                             {art.title}
                                         </h3>
                                         <p className="text-sm leading-relaxed text-[#414042]/70 max-w-lg line-clamp-2">
-                                            {art.content ? art.content.replace(/<[^>]*>?/gm, '').substring(0, 150) + "..." : ""}
+                                            {art.content ? stripMarkdown(art.content).substring(0, 150) + "..." : ""}
                                         </p>
                                     </div>
 
