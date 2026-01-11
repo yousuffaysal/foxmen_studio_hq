@@ -23,7 +23,7 @@ const teamMembers = [
         name: "Aziz Ashfak",
         role: "Technology & Solutions Architect",
         bio: "High trust role for clients—AI, SaaS, scalable systems",
-        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop",
+        image: "/images/aziz.jpeg",
         socials: { twitter: "https://x.com/AzizAshfak80449", linkedin: "https://www.linkedin.com/in/aziz-ashfak-", facebook: "https://www.facebook.com/profile.php?id=100076654500103" }
     },
     {
