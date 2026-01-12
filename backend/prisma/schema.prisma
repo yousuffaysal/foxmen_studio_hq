@@ -25,10 +25,10 @@ model Project {
   techStack   String[]
   features    String[]
   link        String?
-  github      String?
+  // github field removed
 
   // Meta
-  client      String?
+  goal        String?
   role        String?
   duration    String?
 

@@ -4,10 +4,11 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const project = await prisma.project.findUnique({
-            where: { id: params.id },
+            where: { id: id },
         });
         if (!project) {
             return NextResponse.json({ error: 'Project not found' }, { status: 404 });
@@ -18,11 +19,12 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const body = await request.json();
         const updatedProject = await prisma.project.update({
-            where: { id: params.id },
+            where: { id: id },
             data: {
                 title: body.title,
                 slug: body.slug,
@@ -34,8 +36,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
                 techStack: body.techStack,
                 features: body.features,
                 link: body.link,
-                github: body.github,
-                client: body.client,
+                // github removed
+                goal: body.goal,
                 role: body.role,
                 duration: body.duration,
                 challenge: body.challenge,
@@ -53,10 +55,11 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         await prisma.project.delete({
-            where: { id: params.id },
+            where: { id: id },
         });
         return NextResponse.json({ message: 'Project deleted' });
     } catch (error) {

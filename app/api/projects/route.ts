@@ -33,8 +33,8 @@ export async function POST(request: Request) {
                 techStack: body.techStack,
                 features: body.features,
                 link: body.link,
-                github: body.github,
-                client: body.client,
+                // github removed
+                goal: body.goal,
                 role: body.role,
                 duration: body.duration,
                 challenge: body.challenge,

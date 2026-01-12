@@ -28,8 +28,8 @@ type Project = {
     techStack?: string[]; // Dynamic Tech Stack
     features?: string[];
     link: string;
-    github: string;
-    client?: string;
+    // github removed
+    goal?: string;
     role?: string;
     duration?: string;
     challenge?: string;
@@ -450,8 +450,8 @@ export default function ProjectsAdmin() {
 
                                 <div className="grid md:grid-cols-3 gap-4">
                                     <div className="space-y-2">
-                                        <Label className="font-bold uppercase text-xs text-gray-500">Client</Label>
-                                        <Input value={currentProject.client || ""} onChange={(e) => setCurrentProject({ ...currentProject, client: e.target.value })} className="border-2" placeholder="Client Name" />
+                                        <Label className="font-bold uppercase text-xs text-gray-500">Goal</Label>
+                                        <Input value={currentProject.goal || ""} onChange={(e) => setCurrentProject({ ...currentProject, goal: e.target.value })} className="border-2" placeholder="Project Goal" />
                                     </div>
                                     <div className="space-y-2">
                                         <Label className="font-bold uppercase text-xs text-gray-500">Role</Label>
@@ -473,13 +473,7 @@ export default function ProjectsAdmin() {
                                             <Input value={currentProject.link || ""} onChange={(e) => setCurrentProject({ ...currentProject, link: e.target.value })} className="pl-10 border-2" placeholder="https://example.com" />
                                         </div>
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label className="font-bold uppercase text-xs text-gray-500">GitHub URL</Label>
-                                        <div className="relative">
-                                            <Github className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                                            <Input value={currentProject.github || ""} onChange={(e) => setCurrentProject({ ...currentProject, github: e.target.value })} className="pl-10 border-2" placeholder="https://github.com/user/repo" />
-                                        </div>
-                                    </div>
+                                    {/* GitHub URL section removed */}
                                 </div>
 
                                 <div className="space-y-2">
