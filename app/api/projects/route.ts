@@ -35,6 +35,7 @@ export async function POST(request: Request) {
                 link: body.link,
                 // github removed
                 goal: body.goal,
+                category: body.category,
                 role: body.role,
                 duration: body.duration,
                 challenge: body.challenge,

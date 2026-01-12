@@ -30,6 +30,7 @@ type Project = {
     link: string;
     // github removed
     goal?: string;
+    category?: string;
     role?: string;
     duration?: string;
     challenge?: string;
@@ -40,6 +41,40 @@ type Project = {
     testimonial?: any; // JSON
 };
 
+const CATEGORIES = [
+    "SaaS (Software as a Service)",
+    "AI & Machine Learning",
+    "Generative AI & LLMs",
+    "FinTech (Financial Technology)",
+    "EdTech (Educational Technology)",
+    "HealthTech & MedTech",
+    "E-commerce & Retail",
+    "Real Estate & PropTech",
+    "Web3, Blockchain & Crypto",
+    "Cybersecurity & Privacy",
+    "Marketing, AdTech & MarTech",
+    "UI/UX Design & Research",
+    "Brand Identity & Strategy",
+    "Mobile App Development (iOS/Android)",
+    "Enterprise Software & B2B",
+    "Social Media & Community Platforms",
+    "Travel, Hospitality & Tourism",
+    "Logistics, Supply Chain & Delivery",
+    "GreenTech, CleanTech & Sustainability",
+    "Non-Profit, NGO & Social Impact",
+    "Entertainment, Media & Streaming",
+    "Gaming & Esports",
+    "AR / VR / XR (Immersive Tech)",
+    "IoT (Internet of Things)",
+    "Cloud Computing & DevOps",
+    "Data Science & Analytics",
+    "LegalTech",
+    "HRTech (Human Resources)",
+    "AgriTech (Agriculture)",
+    "Automotive & Mobility",
+    "Other"
+];
+
 export default function ProjectsAdmin() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
@@ -49,6 +84,9 @@ export default function ProjectsAdmin() {
     const [uploading, setUploading] = useState(false);
     const [tagInput, setTagInput] = useState("");
     const [techStackInput, setTechStackInput] = useState(""); // For tech stack input
+    // Category state
+    const [selectedCategory, setSelectedCategory] = useState<string>("");
+    const [customCategory, setCustomCategory] = useState<string>("");
 
     // Admin helper state (text areas for lists)
     const [featuresText, setFeaturesText] = useState("");
@@ -76,12 +114,26 @@ export default function ProjectsAdmin() {
         fetchProjects();
     }, []);
 
-    // Sync complex fields to local state when editing
+    // Sync fields to local state when editing
     useEffect(() => {
         if (currentProject.features && Array.isArray(currentProject.features)) {
             setFeaturesText(currentProject.features.join("\n"));
         } else {
             setFeaturesText("");
+        }
+
+        // Init Category
+        if (currentProject.category) {
+            if (CATEGORIES.includes(currentProject.category)) {
+                setSelectedCategory(currentProject.category);
+                setCustomCategory("");
+            } else {
+                setSelectedCategory("Other");
+                setCustomCategory(currentProject.category);
+            }
+        } else {
+            setSelectedCategory("");
+            setCustomCategory("");
         }
     }, [currentProject]);
 
@@ -212,10 +264,17 @@ export default function ProjectsAdmin() {
         // Process Features (split by line)
         const featuresArray = featuresText.split("\n").map(f => f.trim()).filter(f => f !== "");
 
+        // Determine final category
+        let finalCategory = selectedCategory;
+        if (selectedCategory === "Other") {
+            finalCategory = customCategory;
+        }
+
         const payload = {
             ...currentProject,
             tags: Array.isArray(currentProject.tags) ? currentProject.tags : [],
-            features: featuresArray
+            features: featuresArray,
+            category: finalCategory
         };
 
         try {
@@ -310,6 +369,8 @@ export default function ProjectsAdmin() {
                 techStack: []
             });
             setFeaturesText("");
+            setSelectedCategory("");
+            setCustomCategory("");
             setIsEditing(false);
         }
         setIsDialogOpen(true);
@@ -392,6 +453,28 @@ export default function ProjectsAdmin() {
                             </div>
 
                             <TabsContent value="overview" className="p-8 space-y-6 pt-4">
+                                <div className="space-y-2">
+                                    <Label className="font-bold uppercase text-xs text-gray-500">Category</Label>
+                                    <select
+                                        className="flex h-10 w-full rounded-md border-2 border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        value={selectedCategory}
+                                        onChange={(e) => setSelectedCategory(e.target.value)}
+                                    >
+                                        <option value="" disabled>Select a Category</option>
+                                        {CATEGORIES.map(cat => (
+                                            <option key={cat} value={cat}>{cat}</option>
+                                        ))}
+                                    </select>
+                                    {selectedCategory === "Other" && (
+                                        <Input
+                                            placeholder="Type custom category..."
+                                            value={customCategory}
+                                            onChange={(e) => setCustomCategory(e.target.value)}
+                                            className="mt-2 border-2"
+                                        />
+                                    )}
+                                </div>
+
                                 <div className="space-y-2">
                                     <Label>Tech Stack</Label>
                                     <div className="flex gap-2 flex-wrap mb-2">
