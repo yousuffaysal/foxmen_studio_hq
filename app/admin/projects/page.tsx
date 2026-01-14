@@ -347,35 +347,64 @@ export default function ProjectsAdmin() {
 
                             <TabsContent value="content" className="mt-0 space-y-8">
                                 <div className="space-y-4">
-                                    <Label className="text-xs font-black uppercase tracking-widest text-[#8B5DFF] flex justify-between items-center">
-                                        Technical Narrative (Markdown)
-                                        <div className="relative">
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={async (e) => {
-                                                    const file = e.target.files?.[0];
-                                                    if (!file) return;
-                                                    try {
-                                                        const url = await uploadToImgBB(file);
-                                                        const imageMarkdown = `\n![Project Image](${url})\n`;
-                                                        setCurrentProject(prev => ({ ...prev, content: (prev.content || "") + imageMarkdown }));
-                                                    } catch (err) {
-                                                        alert("Failed to upload content image");
-                                                    }
-                                                }}
-                                                className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                                            />
-                                            <Button size="sm" variant="outline" className="text-[10px] h-7 bg-white border-2 border-black hover:bg-black hover:text-white uppercase font-bold">
-                                                <ImageIcon className="w-3 h-3 mr-2" /> Insert Image
-                                            </Button>
+                                    <div className="flex justify-between items-end">
+                                        <Label className="text-xs font-black uppercase tracking-widest text-[#8B5DFF]">
+                                            Technical Narrative (Markdown)
+                                        </Label>
+
+                                        {/* Quick Insert from Gallery */}
+                                        <div className="flex gap-2">
+                                            <div className="relative">
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={async (e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (!file) return;
+                                                        try {
+                                                            const url = await uploadToImgBB(file);
+                                                            const imageMarkdown = `\n![Project Image](${url})\n`;
+                                                            setCurrentProject(prev => ({ ...prev, content: (prev.content || "") + imageMarkdown }));
+                                                        } catch (err) {
+                                                            alert("Failed to upload content image");
+                                                        }
+                                                    }}
+                                                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                                />
+                                                <Button size="sm" variant="outline" className="text-[10px] h-7 bg-white border-2 border-black hover:bg-black hover:text-white uppercase font-bold">
+                                                    <ImageIcon className="w-3 h-3 mr-2" /> Upload New
+                                                </Button>
+                                            </div>
                                         </div>
-                                    </Label>
+                                    </div>
+
+                                    {/* Gallery Picker Strip */}
+                                    {currentProject.gallery && currentProject.gallery.length > 0 && (
+                                        <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-3 flex gap-3 overflow-x-auto">
+                                            {currentProject.gallery.map((img, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border border-gray-200 group cursor-pointer hover:border-[#8B5DFF] hover:ring-2 ring-[#8B5DFF]/20"
+                                                    onClick={() => setCurrentProject(prev => ({ ...prev, content: (prev.content || "") + `\n![Gallery ${idx + 1}](${img})\n` }))}
+                                                    title="Click to insert into text"
+                                                >
+                                                    <img src={img} className="w-full h-full object-cover" />
+                                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                                        <Plus className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all" />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            <div className="flex items-center justify-center w-20 h-20 text-[10px] text-gray-400 font-mono text-center leading-tight">
+                                                Click to<br />Inject
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <Textarea
                                         value={currentProject.content || ""}
                                         onChange={(e) => setCurrentProject({ ...currentProject, content: e.target.value })}
                                         className="h-[500px] border-4 border-black rounded-3xl p-8 font-mono text-sm leading-relaxed bg-white focus:bg-gray-50 transition-colors placeholder:text-gray-300"
-                                        placeholder="## Architecture\nDescribe the technical layout...\n\n(Click 'Insert Image' to add visuals between text)"
+                                        placeholder="## Architecture\nDescribe the technical layout...\n\n(Click gallery images above to insert them into the story)"
                                     />
                                 </div>
                                 <div className="grid grid-cols-2 gap-8">

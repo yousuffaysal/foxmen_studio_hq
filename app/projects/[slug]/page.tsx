@@ -10,6 +10,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { ArrowUpRight, Github, X } from "lucide-react"
+import { HeroImageWrapper } from "./hero-image-wrapper";
 
 export default function ProjectPage() {
     const { slug } = useParams();
@@ -49,15 +50,50 @@ export default function ProjectPage() {
     if (!project) notFound();
 
     return (
-        <div className="min-h-screen bg-[#F9F9F8] text-[#1a1a1a] selection:bg-[#EAEAEA] selection:text-[#000]">
+        <div className="min-h-screen bg-[#fffff0] text-[#1a1a1a] selection:bg-[#EAEAEA] selection:text-[#000]">
             <style dangerouslySetInnerHTML={{
                 __html: `
-                .bg-noise {
+                /* Geometric Layout Background */
+                .bg-geometric-layout {
                     position: fixed;
-                    top: 0; left: 0; width: 100%; height: 100%;
-                    pointer-events: none; z-index: 50; opacity: 0.03;
-                    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    z-index: 0;
+                    pointer-events: none;
                 }
+                
+                /* 1. Dotted Pattern */
+                .bg-dots {
+                    position: absolute;
+                    inset: 0;
+                    background-image: radial-gradient(#e5e5e5 1.5px, transparent 1.5px);
+                    background-size: 24px 24px;
+                    opacity: 0.6;
+                }
+
+                /* 2. Geometric Shapes */
+                .bg-shape-1 {
+                    position: absolute;
+                    top: -10%;
+                    right: -5%;
+                    width: 60vw;
+                    height: auto;
+                    opacity: 0.15;
+                    mix-blend-mode: multiply;
+                }
+                .bg-shape-2 {
+                    position: absolute;
+                    bottom: 0%;
+                    left: -10%;
+                    width: 50vw;
+                    height: auto;
+                    opacity: 0.08;
+                    mix-blend-mode: multiply;
+                }
+                
+                /* Keep Header Font */
                 .font-header { font-family: var(--font-owners-medium), serif; }
                 .font-title-bold { font-family: var(--font-ibm-plex-sans-bold), sans-serif; }
                 .font-mono { font-family: var(--font-ibm-plex-mono), monospace; }
@@ -153,10 +189,16 @@ export default function ProjectPage() {
                     .prose img { width: 115%; margin-left: -7.5%; }
                 }
             `}} />
-            <div className="bg-noise" />
+            {/* Geometric Background Layer (Dots + Shapes) */}
+            <div className="bg-geometric-layout">
+                <div className="bg-dots" />
+                <img src="/images/Frame.svg" className="bg-shape-1" alt="" />
+                <img src="/images/Group 1 (1).svg" className="bg-shape-2" alt="" />
+            </div>
 
             {/* Minimal Nav Overlay */}
-            <div className="fixed top-0 left-0 w-full z-40 bg-gradient-to-b from-[#F9F9F8] to-transparent h-24 pointer-events-none" />
+            {/* Minimal Nav Overlay - Removed per request */}
+            {/* <div className="fixed top-0 left-0 w-full z-40 bg-gradient-to-b from-[#fffff0] to-transparent h-24 pointer-events-none" /> */}
             <Navigation />
 
             <main className="relative z-10 pt-32 md:pt-48 pb-24">
@@ -175,7 +217,43 @@ export default function ProjectPage() {
                     </motion.h1>
 
                     {/* Bottom: Abstract Offset */}
-                    <div className="flex flex-col md:flex-row md:justify-end">
+                    <div className="flex flex-col md:flex-row md:justify-between items-start gap-12">
+                        {/* New Metadata Header Block (Left Side) */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5 }}
+                            className="hidden md:grid grid-cols-2 gap-x-12 gap-y-8 w-full md:w-1/2"
+                        >
+                            <div>
+                                <span className="font-mono text-xs text-black/60 uppercase tracking-widest block mb-2 font-medium">Our Role</span>
+                                <div className="font-header text-2xl leading-none">{project.role || "Lead Designer"}</div>
+                            </div>
+                            <div>
+                                <span className="font-mono text-xs text-black/60 uppercase tracking-widest block mb-2 font-medium">Duration</span>
+                                <div className="font-header text-2xl leading-none">{project.duration || "Ongoing"}</div>
+                            </div>
+                            <div>
+                                <span className="font-mono text-xs text-black/60 uppercase tracking-widest block mb-2 font-medium">Sector</span>
+                                <div className="font-header text-2xl leading-none">{project.category || "Selected Work"}</div>
+                            </div>
+                            <div>
+                                <span className="font-mono text-xs text-black/60 uppercase tracking-widest block mb-2 font-medium">Tech Stack</span>
+                                <div className="flex flex-wrap gap-1.5">
+                                    {project.techStack?.slice(0, 3).map((t: string, i: number) => (
+                                        <span key={i} className="font-mono text-xs border border-black/20 px-2.5 py-1 rounded-full uppercase bg-white/50">{t}</span>
+                                    ))}
+                                    {project.techStack?.length > 3 && <span className="font-mono text-xs text-gray-500 self-center">+{project.techStack.length - 3}</span>}
+                                </div>
+                            </div>
+                            {project.link && (
+                                <div className="col-span-2 pt-2 border-t border-black/10">
+                                    <Link href={project.link} target="_blank" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider hover:text-[#8B5DFF] transition-colors group font-semibold">
+                                        Live Project <ArrowUpRight className="w-3.5 h-3.5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                                    </Link>
+                                </div>
+                            )}
+                        </motion.div>
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -197,25 +275,14 @@ export default function ProjectPage() {
                 </section>
 
                 {/* 2. HERO IMAGE (Now Second) */}
-                {project.image && (
-                    <div className="relative w-full h-[50vh] md:h-[90vh] overflow-hidden mb-24 md:mb-32">
-                        <motion.div style={{ y }} className="absolute inset-0 w-full h-[120%]">
-                            <Image
-                                src={project.image}
-                                alt={project.title}
-                                fill
-                                className="object-cover grayscale-[0.1]"
-                                priority
-                            />
-                        </motion.div>
-                    </div>
-                )}
+                {/* Scroll-triggered Animation Wrapper */}
+                <HeroImageWrapper project={project} />
 
                 <div className="max-w-[1600px] mx-auto px-4 md:px-12">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
 
                         {/* 3. SIDEBAR - "Blueprint" Metadata (Sticky) */}
-                        <aside className="lg:col-span-3 lg:sticky lg:top-32 h-fit max-h-[calc(100vh-10rem)] overflow-y-auto order-2 lg:order-1 scrollbar-hide">
+                        <aside className="lg:col-span-3 lg:sticky lg:top-32 h-fit max-h-[calc(100vh-10rem)] overflow-y-auto overflow-x-hidden order-2 lg:order-1 scrollbar-hide p-1">
 
                             {/* Role - Renamed to "Our Role" */}
                             <div className="border-t border-black/20 pt-6">
@@ -243,10 +310,10 @@ export default function ProjectPage() {
 
                             {/* Tech Stack */}
                             <div className="border-t border-black/20 pt-6">
-                                <span className="font-mono text-xs text-[#8B5DFF] block mb-3 uppercase tracking-widest font-semibold">Tech Stack</span>
-                                <div className="flex flex-wrap gap-2 mt-2">
+                                <span className="font-mono text-xs text-[#8B5DFF] block mb-4 uppercase tracking-widest font-semibold">Tech Stack</span>
+                                <div className="flex flex-wrap gap-2">
                                     {project.techStack?.map((t: string, i: number) => (
-                                        <span key={i} className="font-mono text-xs border border-black/20 px-3 py-1.5 rounded-sm uppercase bg-white/50">
+                                        <span key={i} className="font-mono text-[10px] md:text-xs border border-black px-4 py-2 rounded-full uppercase bg-white text-black hover:bg-black hover:text-white transition-all cursor-default tracking-wider font-medium">
                                             {t}
                                         </span>
                                     ))}
@@ -258,10 +325,12 @@ export default function ProjectPage() {
 
                             {project.tags && project.tags.length > 0 && (
                                 <div className="border-t border-black/20 pt-6">
-                                    <span className="font-mono text-xs text-[#8B5DFF] block mb-3 uppercase tracking-widest font-semibold">Tags</span>
-                                    <div className="flex flex-wrap gap-2 mt-2">
+                                    <span className="font-mono text-xs text-[#8B5DFF] block mb-4 uppercase tracking-widest font-semibold">Tags</span>
+                                    <div className="flex flex-wrap gap-2">
                                         {project.tags.map((t: string, i: number) => (
-                                            <span key={i} className="font-mono text-xs text-gray-500">#{t}</span>
+                                            <span key={i} className="font-mono text-[10px] md:text-xs text-gray-500 bg-gray-100/50 border border-transparent px-3 py-1.5 rounded-md hover:border-gray-300 hover:text-black transition-all cursor-default">
+                                                #{t}
+                                            </span>
                                         ))}
                                     </div>
                                 </div>
@@ -288,6 +357,18 @@ export default function ProjectPage() {
                             {/* Markdown render (Abstract removed from here) */}
                             <div className="prose prose-lg prose-neutral max-w-3xl mx-auto lg:ml-24">
                                 <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                                    p: ({ node, children }: any) => {
+                                        // Check if any child is an image tag
+                                        const hasImage = node?.children?.some((child: any) =>
+                                            child.type === 'element' && child.tagName === 'img'
+                                        );
+
+                                        if (hasImage) {
+                                            // Render as div (valid parent for figure) but keep spacing
+                                            return <div className="mb-8">{children}</div>;
+                                        }
+                                        return <p>{children}</p>;
+                                    },
                                     img: (props) => (
                                         <figure className="my-16 md:-ml-24 md:w-[130%]">
                                             <img {...props} className="w-full h-auto shadow-2xl shadow-black/5" />
