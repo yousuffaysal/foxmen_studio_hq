@@ -394,7 +394,7 @@ export default function ProjectPage() {
                                 {project.gallery.map((img: string, i: number) => (
                                     <motion.div
                                         key={i}
-                                        className="relative aspect-[4/3] group cursor-zoom-in overflow-hidden bg-gray-100"
+                                        className="relative aspect-video group cursor-zoom-in overflow-hidden bg-gray-100"
                                         whileHover={{ scale: 0.98 }}
                                         onClick={() => setSelectedImage(img)}
                                     >
