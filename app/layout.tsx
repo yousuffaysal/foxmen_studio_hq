@@ -8,6 +8,7 @@ import localFont from "next/font/local"
 import TargetCursor from "@/components/target-cursor"
 import { FoxoChatWidget } from "@/components/foxo-chat-widget"
 import { LoadingProvider } from "@/components/loading-context"
+import { SmoothScroller } from "@/components/smooth-scroller"
 
 // Initialize fonts
 const _geistMono = Geist_Mono_Font({
@@ -184,14 +185,16 @@ export default function RootLayout({
           }}
         />
         <LoadingProvider>
-          <TargetCursor
-            spinDuration={2}
-            hideDefaultCursor={true}
-            parallaxOn={true}
-            targetSelector="a, button, input, textarea, .cursor-pointer, .cursor-target, [role='button'], [data-cal-link]"
-          />
-          <FoxoChatWidget />
-          {children}
+          <SmoothScroller>
+            <TargetCursor
+              spinDuration={2}
+              hideDefaultCursor={true}
+              parallaxOn={true}
+              targetSelector="a, button, input, textarea, .cursor-pointer, .cursor-target, [role='button'], [data-cal-link]"
+            />
+            <FoxoChatWidget />
+            {children}
+          </SmoothScroller>
         </LoadingProvider>
       </body>
     </html>

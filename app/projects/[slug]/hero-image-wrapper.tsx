@@ -31,7 +31,7 @@ export function HeroImageWrapper({ project }: { project: any }) {
         <div ref={containerRef} className="relative w-full h-[50vh] md:h-[90vh] overflow-hidden mb-24 md:mb-32">
             <motion.div
                 style={{ scale, opacity }}
-                className="w-full h-full origin-center"
+                className="w-full h-full origin-center will-change-transform"
             >
                 <div className="relative w-full h-full">
                     <Image

@@ -23,15 +23,17 @@ export default function ProjectPage() {
     useEffect(() => {
         const fetchProject = async () => {
             try {
-                const res = await fetch(`/api/projects`);
-                const data = await res.json();
-                if (Array.isArray(data)) {
-                    const found = data.find((p: any) => p.slug === slug);
-                    if (found) setProject(found);
-                    else setProject(null);
+                // Fetch ONLY the specific project, not the entire database
+                const res = await fetch(`/api/projects/by-slug/${slug}`);
+                if (!res.ok) {
+                    if (res.status === 404) setProject(null);
+                    throw new Error("Project not found");
                 }
+                const data = await res.json();
+                setProject(data);
             } catch (e) {
                 console.error("Fetch failed:", e);
+                // Optionally handle distinct error states here
             } finally {
                 setLoading(false);
             }
@@ -190,7 +192,7 @@ export default function ProjectPage() {
                 }
             `}} />
             {/* Geometric Background Layer (Dots + Shapes) */}
-            <div className="bg-geometric-layout">
+            <div className="bg-geometric-layout will-change-transform">
                 <div className="bg-dots" />
                 <img src="/images/Frame.svg" className="bg-shape-1" alt="" />
                 <img src="/images/Group 1 (1).svg" className="bg-shape-2" alt="" />
@@ -398,7 +400,13 @@ export default function ProjectPage() {
                                         whileHover={{ scale: 0.98 }}
                                         onClick={() => setSelectedImage(img)}
                                     >
-                                        <Image src={img} alt={`Gallery ${i}`} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                                        <Image
+                                            src={img}
+                                            alt={`Gallery ${i}`}
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                        />
                                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                                     </motion.div>
                                 ))}

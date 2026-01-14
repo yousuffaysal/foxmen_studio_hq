@@ -50,7 +50,8 @@ export function ProjectsHero() {
 }
 
 export function ProjectGrid() {
-    const categories = ["All", "Mobile Apps", "Web Apps", "AI Projects", "Digital Products", "UI/UX Design"]
+    // Dynamic categories state
+    const [categories, setCategories] = useState<string[]>(["All"])
     const [activeCategory, setActiveCategory] = useState("All")
     const [projects, setProjects] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
@@ -61,6 +62,9 @@ export function ProjectGrid() {
             .then(data => {
                 if (Array.isArray(data)) {
                     setProjects(data)
+                    // Extract unique categories from projects
+                    const uniqueCats = Array.from(new Set(data.map((p: any) => p.category).filter(Boolean))) as string[];
+                    setCategories(["All", ...uniqueCats.sort()])
                 } else {
                     console.error("API Error:", data)
                     setProjects([])
@@ -75,82 +79,88 @@ export function ProjectGrid() {
 
     const filteredProjects = activeCategory === "All"
         ? projects
-        : projects.filter(p => p.tags && p.tags.some((tag: string) => tag.toLowerCase() === activeCategory.toLowerCase() || tag.includes(activeCategory)))
+        : projects.filter(p => p.category === activeCategory)
 
     if (loading) return (
-        <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
-            <span className="animate-pulse">Loading Experience...</span>
+        <div className="min-h-screen bg-[#fffff0] flex items-center justify-center text-black" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
+            <span className="animate-pulse tracking-widest uppercase text-xs">Loading Archive...</span>
         </div>
     )
 
     return (
-        <section className="bg-[#050505] min-h-screen py-20 px-4 md:px-8 relative z-20">
-            {/* Filter */}
-            <div className="container mx-auto mb-20 overflow-x-auto">
-                <div className="flex justify-center min-w-max gap-2 md:gap-4 px-4">
+        <section className="bg-[#fffff0] min-h-screen py-32 px-4 md:px-12 relative z-20">
+            {/* Header & Filter */}
+            <div className="container mx-auto mb-24">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+                    <h2 className="text-6xl md:text-8xl font-bold tracking-tighter text-black" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
+                        Projects
+                    </h2>
+                    <p className="max-w-md text-sm md:text-base text-gray-500 leading-relaxed" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
+                        Every project we deliver is a reflection of our commitment to quality, designed to inspire and drive success.
+                    </p>
+                </div>
+
+                <div className="flex flex-wrap gap-6 md:gap-8 border-b border-black/10 pb-4">
                     {categories.map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
-                            className={`px-5 py-2.5 rounded-full text-sm md:text-base font-medium transition-all duration-300 relative ${activeCategory === cat ? "text-black" : "text-gray-400 hover:text-white"}`}
+                            className={`text-sm md:text-base font-medium transition-colors duration-300 relative ${activeCategory === cat ? "text-black" : "text-gray-400 hover:text-black"}`}
                             style={{ fontFamily: "var(--font-ibm-plex-mono)" }}
                         >
-                            {activeCategory === cat && (
-                                <motion.div
-                                    layoutId="activePill"
-                                    className="absolute inset-0 bg-white rounded-full"
-                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                />
-                            )}
-                            <span className="relative z-10">{cat}</span>
+                            {cat}
                         </button>
                     ))}
                 </div>
             </div>
 
             {/* Grid */}
-            <div className="container mx-auto grid md:grid-cols-2 lg:grid-cols-2 gap-8 md:gap-12">
+            <div className="container mx-auto grid md:grid-cols-2 gap-x-8 gap-y-20">
                 {filteredProjects.map((project, index) => (
                     <motion.div
                         key={project.id}
-                        initial={{ opacity: 0, y: 50 }}
+                        initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 0.6, delay: index * 0.1 }}
-                        className={`group relative ${index % 3 === 0 ? "lg:col-span-2 aspect-[2/1]" : "aspect-[4/3]"} rounded-[20px] overflow-hidden`}
+                        className="group block"
                     >
-                        <Link href={`/projects/${project.slug}`} className="block w-full h-full relative cursor-none-target">
-                            {/* Image */}
-                            {project.image ? (
-                                <Image
-                                    src={project.image}
-                                    alt={project.title}
-                                    fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                />
-                            ) : (
-                                <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
-                                    <span className="text-4xl font-bold text-gray-800">{project.title.substring(0, 2)}</span>
-                                </div>
-                            )}
-
-                            {/* Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-
-                            {/* Content */}
-                            <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 flex flex-col justify-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                <div className="flex items-center gap-3 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                                    <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-medium text-white border border-white/20" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
-                                        {project.tags?.[0] || 'Showcase'}
-                                    </span>
-                                </div>
-                                <div className="flex items-end justify-between">
-                                    <h3 className="text-3xl md:text-5xl font-bold text-white relative z-10 leading-tight" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
-                                        {project.title}
-                                    </h3>
-                                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                                        <ArrowUpRight className="w-6 h-6 text-black" />
+                        <Link href={`/projects/${project.slug}`} className="block w-full cursor-pointer">
+                            {/* Image Container */}
+                            <div className="relative aspect-video w-full overflow-hidden bg-gray-100 mb-6">
+                                {project.image ? (
+                                    <Image
+                                        src={project.image}
+                                        alt={project.title}
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+                                        <span className="text-4xl font-bold text-gray-300">{project.title.substring(0, 2)}</span>
                                     </div>
+                                )}
+                            </div>
+
+                            {/* Content Below Image */}
+                            <div className="flex flex-col items-start">
+                                <h3 className="text-xl md:text-2xl font-bold text-black mb-2 group-hover:underline decoration-2 underline-offset-4" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
+                                    {project.title}
+                                </h3>
+                                <p className="text-sm text-gray-500 line-clamp-2 max-w-md mb-4 leading-relaxed" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
+                                    {project.description}
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {(project.category) && (
+                                        <span className="px-3 py-1 border border-black/10 rounded-full text-[10px] uppercase tracking-wider font-medium text-gray-600 bg-white">
+                                            {project.category}
+                                        </span>
+                                    )}
+                                    {project.tags?.slice(0, 2).map((tag: string) => (
+                                        <span key={tag} className="px-3 py-1 border border-black/10 rounded-full text-[10px] uppercase tracking-wider font-medium text-gray-400">
+                                            {tag}
+                                        </span>
+                                    ))}
                                 </div>
                             </div>
                         </Link>

@@ -287,7 +287,7 @@ export default function ProjectsAdmin() {
                                 <div className="grid grid-cols-2 gap-8">
                                     <div className="space-y-3">
                                         <Label className="text-xs font-black uppercase tracking-widest text-[#8B5DFF]">Project Title</Label>
-                                        <Input value={currentProject.title || ""} onChange={(e) => setCurrentProject({ ...currentProject, title: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, "-") })} className="h-16 border-4 border-black rounded-2xl text-xl font-black bg-white" placeholder="BOUTIQ..." />
+                                        <Input value={currentProject.title || ""} onChange={(e) => setCurrentProject({ ...currentProject, title: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') })} className="h-16 border-4 border-black rounded-2xl text-xl font-black bg-white" placeholder="BOUTIQ..." />
                                     </div>
                                     <div className="space-y-3">
                                         <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Unique Slug</Label>
