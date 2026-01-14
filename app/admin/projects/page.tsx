@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Edit, Upload, X, Link as LinkIcon, Github, Image as ImageIcon, Video, Layers, List, User } from "lucide-react";
+import { Plus, Trash2, Edit, Upload, X, Link as LinkIcon, Image as ImageIcon, Video, User, Check, Layout, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,11 +13,10 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-    DialogFooter
 } from "@/components/ui/dialog";
 
 type Project = {
-    _id: string;
+    id: string;
     title: string;
     slug: string;
     description: string;
@@ -25,10 +24,9 @@ type Project = {
     video?: string;
     gallery?: string[];
     tags: string[];
-    techStack?: string[]; // Dynamic Tech Stack
+    techStack?: string[];
     features?: string[];
     link: string;
-    // github removed
     goal?: string;
     category?: string;
     role?: string;
@@ -36,9 +34,12 @@ type Project = {
     challenge?: string;
     solution?: string;
     outcome?: string;
-    process?: any; // JSON
-    results?: any; // JSON
-    testimonial?: any; // JSON
+    testimonial?: {
+        text: string;
+        author: string;
+        role: string;
+    };
+    content?: string; // Markdown
 };
 
 const CATEGORIES = [
@@ -67,42 +68,33 @@ const CATEGORIES = [
     "AR / VR / XR (Immersive Tech)",
     "IoT (Internet of Things)",
     "Cloud Computing & DevOps",
-    "Data Science & Analytics",
-    "LegalTech",
-    "HRTech (Human Resources)",
-    "AgriTech (Agriculture)",
-    "Automotive & Mobility",
-    "Other"
+    "Data Science & Analytics"
 ];
+
+const BRAND_COLOR = "#8B5DFF";
 
 export default function ProjectsAdmin() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [currentProject, setCurrentProject] = useState<Partial<Project>>({});
+    const [currentProject, setCurrentProject] = useState<Partial<Project>>({
+        tags: [],
+        gallery: [],
+        techStack: [],
+        features: []
+    });
     const [isEditing, setIsEditing] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [tagInput, setTagInput] = useState("");
-    const [techStackInput, setTechStackInput] = useState(""); // For tech stack input
-    // Category state
+    const [techStackInput, setTechStackInput] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<string>("");
-    const [customCategory, setCustomCategory] = useState<string>("");
-
-    // Admin helper state (text areas for lists)
-    const [featuresText, setFeaturesText] = useState("");
-
     const router = useRouter();
 
     const fetchProjects = async () => {
         try {
             const res = await fetch(`/api/projects`);
             const data = await res.json();
-            if (Array.isArray(data)) {
-                setProjects(data);
-            } else {
-                console.error("Failed to load projects:", data);
-                setProjects([]);
-            }
+            if (Array.isArray(data)) setProjects(data);
         } catch (error) {
             console.error("Failed to fetch projects", error);
         } finally {
@@ -114,319 +106,158 @@ export default function ProjectsAdmin() {
         fetchProjects();
     }, []);
 
-    // Sync fields to local state when editing
-    useEffect(() => {
-        if (currentProject.features && Array.isArray(currentProject.features)) {
-            setFeaturesText(currentProject.features.join("\n"));
-        } else {
-            setFeaturesText("");
-        }
-
-        // Init Category
-        if (currentProject.category) {
-            if (CATEGORIES.includes(currentProject.category)) {
-                setSelectedCategory(currentProject.category);
-                setCustomCategory("");
-            } else {
-                setSelectedCategory("Other");
-                setCustomCategory(currentProject.category);
-            }
-        } else {
-            setSelectedCategory("");
-            setCustomCategory("");
-        }
-    }, [currentProject]);
-
     const uploadToImgBB = async (file: File) => {
         const formData = new FormData();
         formData.append("image", file);
-        const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
+        const apiKey = "7eab2a6a17e2b25079c27dc0b2a0f6ef";
         const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
             method: "POST",
             body: formData,
         });
         const data = await res.json();
+        if (!data.data || !data.data.url) throw new Error(data.error?.message || "Upload failed");
         return data.data.url;
-    };
-
-    const handleGalleryUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        setUploading(true);
-        try {
-            const imageUrl = await uploadToImgBB(file);
-            const newGallery = currentProject.gallery ? [...currentProject.gallery] : [];
-            newGallery[index] = imageUrl;
-            setCurrentProject(prev => ({ ...prev, gallery: newGallery }));
-        } catch (error) {
-            console.error("Upload failed", error);
-        } finally {
-            setUploading(false);
-        }
     };
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-
         setUploading(true);
         try {
             const imageUrl = await uploadToImgBB(file);
             setCurrentProject(prev => ({ ...prev, image: imageUrl }));
         } catch (error) {
-            console.error("Upload failed", error);
+            alert("Upload failed: " + error);
         } finally {
             setUploading(false);
         }
     };
 
-    // ... (helper functions)
-
-    // In Render, Media Tab:
-    /*
-                            <TabsContent value="media" className="p-8 space-y-6 pt-4">
-                                <div className="space-y-4">
-                                    <Label className="font-bold uppercase text-xs text-gray-500">Project Cover Image (Main)</Label>
-                                    <div className="border-4 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:bg-gray-50 hover:border-black transition-all group relative cursor-pointer">
-                                        <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                                        {currentProject.image ? (
-                                            <div className="relative h-48 rounded-lg overflow-hidden border-2 border-black">
-                                                <img src={currentProject.image} alt="Preview" className="w-full h-full object-cover" />
-                                            </div>
-                                        ) : (
-                                            <div className="py-8"><Upload className="w-12 h-12 mx-auto text-gray-300 mb-2"/><p className="font-bold text-gray-400">Upload Cover</p></div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="space-y-4 pt-4 border-t-2 border-dashed border-gray-200">
-                                    <Label className="font-bold uppercase text-xs text-gray-500">Bento Grid Images</Label>
-                                    <div className="grid grid-cols-3 gap-4">
-                                        {[0, 1, 2].map((idx) => (
-                                            <div key={idx} className="space-y-2">
-                                                <div className="text-[10px] font-bold uppercase text-gray-400">
-                                                    {idx === 0 ? "Main (Large)" : idx === 1 ? "Top (Mobile)" : "Bottom (System)"}
-                                                </div>
-                                                <div className="aspect-square border-4 border-dashed border-gray-200 rounded-xl flex items-center justify-center relative hover:border-black transition-all group overflow-hidden bg-gray-50">
-                                                    <input type="file" accept="image/*" onChange={(e) => handleGalleryUpload(idx, e)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                                                    {currentProject.gallery && currentProject.gallery[idx] ? (
-                                                        <img src={currentProject.gallery[idx]} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <Plus className="text-gray-300 group-hover:text-black" />
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2 pt-4">
-                                    <Label className="font-bold uppercase text-xs text-gray-500">Video URL</Label>
-                                    <Input value={currentProject.video || ""} onChange={(e) => setCurrentProject({ ...currentProject, video: e.target.value })} className="border-2" placeholder="e.g. YouTube or mp4 link" />
-                                </div>
-                            </TabsContent>
-    */
-
-    // Tech Stack Handlers
-    const handleAddTech = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter" && techStackInput.trim()) {
-            e.preventDefault();
-            const newStack = currentProject.techStack ? [...currentProject.techStack, techStackInput.trim()] : [techStackInput.trim()];
-            setCurrentProject({ ...currentProject, techStack: newStack });
-            setTechStackInput("");
+    const handleGalleryUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setUploading(true);
+        try {
+            const imageUrl = await uploadToImgBB(file);
+            const newGallery = [...(currentProject.gallery || [])];
+            newGallery[index] = imageUrl;
+            setCurrentProject(prev => ({ ...prev, gallery: newGallery }));
+        } catch (error) {
+            alert("Upload failed: " + error);
+        } finally {
+            setUploading(false);
         }
-    };
-
-    const handleRemoveTech = (index: number) => {
-        const newStack = currentProject.techStack?.filter((_, i) => i !== index);
-        setCurrentProject({ ...currentProject, techStack: newStack });
-    };
-
-    const handleAddTag = () => {
-        if (!tagInput.trim()) return;
-        const currentTags = Array.isArray(currentProject.tags) ? currentProject.tags : [];
-        if (!currentTags.includes(tagInput.trim())) {
-            setCurrentProject({ ...currentProject, tags: [...currentTags, tagInput.trim()] });
-        }
-        setTagInput("");
-    };
-
-    const removeTag = (tagToRemove: string) => {
-        const currentTags = Array.isArray(currentProject.tags) ? currentProject.tags : [];
-        setCurrentProject({ ...currentProject, tags: currentTags.filter(t => t !== tagToRemove) });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const token = localStorage.getItem("adminToken");
-
-        // Process Features (split by line)
-        const featuresArray = featuresText.split("\n").map(f => f.trim()).filter(f => f !== "");
-
-        // Determine final category
-        let finalCategory = selectedCategory;
-        if (selectedCategory === "Other") {
-            finalCategory = customCategory;
-        }
-
         const payload = {
             ...currentProject,
-            tags: Array.isArray(currentProject.tags) ? currentProject.tags : [],
-            features: featuresArray,
-            category: finalCategory
+            gallery: currentProject.gallery?.filter(Boolean) || [],
+            category: selectedCategory
         };
 
         try {
-            const url = isEditing
-                ? `/api/projects/${currentProject._id}`
-                : `/api/projects`;
-
+            const url = isEditing ? `/api/projects/${currentProject.id}` : `/api/projects`;
             const method = isEditing ? "PUT" : "POST";
-
             const res = await fetch(url, {
                 method,
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                 body: JSON.stringify(payload),
             });
 
-            if (res.status === 401) {
-                alert("Session expired. Please login again.");
-                localStorage.removeItem("adminToken");
-                router.push("/admin/login");
-                return;
-            }
-
-            const data = await res.json();
-
             if (res.ok) {
                 setIsDialogOpen(false);
-                setCurrentProject({});
-                setIsEditing(false);
                 fetchProjects();
+                setCurrentProject({ tags: [], gallery: [], techStack: [], features: [] });
             } else {
-                alert(`Failed to save project: ${data.message}`);
+                const err = await res.json();
+                alert(`Error: ${err.error || "Failed to save"}`);
             }
         } catch (error) {
-            console.error("Failed to save project", error);
+            console.error("Save failed", error);
         }
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm("Are you sure?")) return;
+        if (!confirm("Delete this project?")) return;
         const token = localStorage.getItem("adminToken");
-
         try {
             const res = await fetch(`/api/projects/${id}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
             });
-
-            if (res.status === 401) {
-                alert("Session expired. Please login again.");
-                localStorage.removeItem("adminToken");
-                router.push("/admin/login");
-                return;
-            }
-
-            if (!res.ok) {
-                const data = await res.text(); // Parse text in case JSON fails or is empty
-                try {
-                    const json = JSON.parse(data);
-                    alert(`Failed to delete: ${json.message}`);
-                } catch {
-                    alert(`Failed to delete: ${res.statusText}`);
-                }
-                return;
-            }
-
-            // Success
-            fetchProjects();
+            if (res.ok) fetchProjects();
         } catch (error) {
-            console.error("Failed to delete project", error);
-            alert("An error occurred while deleting the project");
+            console.error("Delete failed", error);
         }
-    };
-
-    const openEdit = (project: Project) => {
-        setCurrentProject(project);
-        setIsEditing(true);
-        setIsDialogOpen(true);
     };
 
     const openDialog = (project?: Project) => {
         if (project) {
             setCurrentProject(project);
+            setSelectedCategory(project.category || "");
             setIsEditing(true);
         } else {
             setCurrentProject({
                 tags: [],
                 gallery: [],
+                techStack: [],
                 features: [],
-                techStack: []
+                testimonial: { text: "", author: "", role: "" }
             });
-            setFeaturesText("");
             setSelectedCategory("");
-            setCustomCategory("");
             setIsEditing(false);
         }
         setIsDialogOpen(true);
     };
 
     return (
-        <div className="space-y-8 min-h-screen">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="p-8 max-w-7xl mx-auto space-y-12 min-h-screen bg-[#F5F5F7]">
+            <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-5xl font-black uppercase tracking-tight mb-2">Projects</h1>
-                    <p className="text-gray-500 font-bold text-lg">Manage your creative portfolio.</p>
+                    <h1 className="text-6xl font-black uppercase tracking-tighter text-black flex items-center gap-4">
+                        Studio <Sparkles className="w-12 h-12 text-[#8B5DFF]" />
+                    </h1>
+                    <p className="text-xl font-bold text-gray-400 mt-2">PROJECT MANAGEMENT INTERFACE v2.0</p>
                 </div>
                 <Button
-                    onClick={() => { openDialog(); }}
-                    className="bg-[#FF4A60] text-white border-4 border-black hover:bg-black font-bold text-xl px-8 py-6 rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all"
+                    onClick={() => openDialog()}
+                    className="bg-[#8B5DFF] text-white border-4 border-black font-black text-xl px-10 py-8 rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all uppercase"
                 >
-                    <Plus className="mr-2 h-6 w-6" /> Add Project
+                    <Plus className="mr-2 h-8 w-8" strokeWidth={3} /> New Case Study
                 </Button>
             </div>
 
             {loading ? (
-                <div className="text-xl font-bold text-gray-400">Loading projects...</div>
+                <div className="flex items-center gap-4 text-2xl font-black text-gray-300 animate-pulse">
+                    <div className="w-8 h-8 rounded-full bg-gray-200" /> LOADING_VAULT...
+                </div>
             ) : (
-                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                     {projects.map((project) => (
-                        <div key={project._id} className="bg-white border-4 border-black rounded-[32px] overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all group flex flex-col">
-                            {/* Image Area */}
-                            <div className="relative h-48 bg-gray-100 border-b-4 border-black overflow-hidden">
+                        <div key={project.id} className="bg-white border-4 border-black rounded-[40px] overflow-hidden shadow-[12px_12px_0px_0px_rgba(139,93,255,0.1)] hover:shadow-[12px_12px_0px_0px_rgba(139,93,255,0.3)] transition-all group">
+                            <div className="relative h-64 bg-gray-100 border-b-4 border-black overflow-hidden">
                                 {project.image ? (
-                                    <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                    <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                                 ) : (
-                                    <div className="flex items-center justify-center h-full text-gray-300">
-                                        <ImageIcon className="w-12 h-12" />
-                                    </div>
+                                    <div className="flex items-center justify-center h-full"><ImageIcon className="w-16 h-16 text-gray-200" /></div>
                                 )}
-                                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button onClick={() => openEdit(project)} className="p-2 bg-white border-2 border-black rounded-lg hover:bg-[#FFC224] transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                                        <Edit className="w-4 h-4" />
-                                    </button>
-                                    <button onClick={() => handleDelete(project._id)} className="p-2 bg-white border-2 border-black rounded-lg hover:bg-[#FF4A60] hover:text-white transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
+                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                                    <button onClick={() => openDialog(project)} className="p-4 bg-white border-4 border-black rounded-2xl hover:bg-[#8B5DFF] hover:text-white transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Edit className="w-6 h-6" /></button>
+                                    <button onClick={() => handleDelete(project.id)} className="p-4 bg-white border-4 border-black rounded-2xl hover:bg-red-500 hover:text-white transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"><Trash2 className="w-6 h-6" /></button>
                                 </div>
                             </div>
-
-                            {/* Content */}
-                            <div className="p-6 flex-1 flex flex-col">
-                                <h3 className="text-2xl font-black mb-2 leading-tight">{project.title}</h3>
-                                <div className="flex flex-wrap gap-2 mb-4">
-                                    {project.tags?.map((tag, i) => (
-                                        <span key={i} className="text-[10px] font-bold uppercase tracking-wider bg-gray-100 px-2 py-1 rounded border border-black">
-                                            {tag}
-                                        </span>
+                            <div className="p-8">
+                                <span className="text-xs font-black uppercase tracking-widest text-[#8B5DFF] mb-2 block">{project.category || "Uncategorized"}</span>
+                                <h3 className="text-3xl font-black mb-4 leading-none uppercase">{project.title}</h3>
+                                <p className="text-gray-500 font-bold line-clamp-2 mb-6 text-sm leading-relaxed">{project.description}</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {project.tags?.slice(0, 3).map((tag, i) => (
+                                        <span key={i} className="text-[10px] font-black uppercase bg-gray-50 border-2 border-black px-2 py-1 rounded-lg">{tag}</span>
                                     ))}
                                 </div>
-                                <p className="text-gray-600 font-medium line-clamp-2 mb-6 flex-1 text-sm">{project.description}</p>
                             </div>
                         </div>
                     ))}
@@ -434,267 +265,158 @@ export default function ProjectsAdmin() {
             )}
 
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="sm:max-w-[800px] bg-white border-4 border-black rounded-[32px] shadow-[16px_16px_0px_0px_rgba(0,0,0,0.2)] p-0 overflow-hidden max-h-[90vh]">
-                    <DialogHeader className="p-8 pb-4 border-b-2 border-gray-100">
-                        <DialogTitle className="text-3xl font-black uppercase tracking-tight">
-                            {isEditing ? "Edit Project" : "New Project"}
-                        </DialogTitle>
+                <DialogContent className="w-full max-w-[95vw] sm:max-w-[90vw] md:max-w-[1400px] h-[90vh] bg-white border-8 border-black rounded-[40px] p-0 overflow-hidden shadow-[32px_32px_0px_0px_rgba(0,0,0,0.1)]">
+                    <DialogHeader className="sr-only">
+                        <DialogTitle>Project Editor</DialogTitle>
                     </DialogHeader>
-
-                    <div className="overflow-y-auto max-h-[70vh]">
-                        <Tabs defaultValue="overview" className="w-full">
-                            <div className="px-8 pt-4">
-                                <TabsList className="bg-gray-100 p-1 rounded-xl w-full grid grid-cols-4">
-                                    <TabsTrigger value="overview" className="rounded-lg font-bold data-[state=active]:bg-black data-[state=active]:text-white">Overview</TabsTrigger>
-                                    <TabsTrigger value="story" className="rounded-lg font-bold data-[state=active]:bg-black data-[state=active]:text-white">Story</TabsTrigger>
-                                    <TabsTrigger value="media" className="rounded-lg font-bold data-[state=active]:bg-black data-[state=active]:text-white">Media</TabsTrigger>
-                                    <TabsTrigger value="details" className="rounded-lg font-bold data-[state=active]:bg-black data-[state=active]:text-white">Details</TabsTrigger>
-                                </TabsList>
+                    <Tabs defaultValue="meta" className="flex-row h-[85vh]">
+                        <div className="w-64 bg-black p-8 flex flex-col gap-4 border-r-4 border-black">
+                            <h2 className="text-2xl font-black text-white uppercase mb-8 tracking-tighter">Editor</h2>
+                            <TabsList className="flex flex-col bg-transparent h-auto gap-2 p-0">
+                                <TabsTrigger value="meta" className="w-full justify-start gap-3 py-4 text-white/40 data-[state=active]:text-white data-[state=active]:bg-[#8B5DFF] rounded-2xl font-black uppercase text-xs border-2 border-transparent data-[state=active]:border-black transition-all"><Layout className="w-4 h-4" /> Identity</TabsTrigger>
+                                <TabsTrigger value="media" className="w-full justify-start gap-3 py-4 text-white/40 data-[state=active]:text-white data-[state=active]:bg-[#8B5DFF] rounded-2xl font-black uppercase text-xs border-2 border-transparent data-[state=active]:border-black transition-all"><ImageIcon className="w-4 h-4" /> Assets</TabsTrigger>
+                                <TabsTrigger value="content" className="w-full justify-start gap-3 py-4 text-white/40 data-[state=active]:text-white data-[state=active]:bg-[#8B5DFF] rounded-2xl font-black uppercase text-xs border-2 border-transparent data-[state=active]:border-black transition-all"><Plus className="w-4 h-4" /> Case Study</TabsTrigger>
+                            </TabsList>
+                            <div className="mt-auto pt-8">
+                                <Button onClick={handleSubmit} className="w-full bg-[#8B5DFF] text-white border-4 border-white font-black py-8 rounded-2xl shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] hover:shadow-none transition-all uppercase">Save Sync</Button>
                             </div>
+                        </div>
 
-                            <TabsContent value="overview" className="p-8 space-y-6 pt-4">
-                                <div className="space-y-2">
-                                    <Label className="font-bold uppercase text-xs text-gray-500">Category</Label>
-                                    <select
-                                        className="flex h-10 w-full rounded-md border-2 border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                        value={selectedCategory}
-                                        onChange={(e) => setSelectedCategory(e.target.value)}
-                                    >
-                                        <option value="" disabled>Select a Category</option>
-                                        {CATEGORIES.map(cat => (
-                                            <option key={cat} value={cat}>{cat}</option>
-                                        ))}
+                        <div className="flex-1 overflow-y-auto bg-[#FFFFF5] p-12">
+                            <TabsContent value="meta" className="mt-0 space-y-8">
+                                <div className="grid grid-cols-2 gap-8">
+                                    <div className="space-y-3">
+                                        <Label className="text-xs font-black uppercase tracking-widest text-[#8B5DFF]">Project Title</Label>
+                                        <Input value={currentProject.title || ""} onChange={(e) => setCurrentProject({ ...currentProject, title: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, "-") })} className="h-16 border-4 border-black rounded-2xl text-xl font-black bg-white" placeholder="BOUTIQ..." />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Unique Slug</Label>
+                                        <Input value={currentProject.slug || ""} onChange={(e) => setCurrentProject({ ...currentProject, slug: e.target.value })} className="h-16 border-4 border-black rounded-2xl font-bold bg-gray-50 text-gray-400" />
+                                    </div>
+                                </div>
+                                <div className="space-y-3">
+                                    <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Industry Sector</Label>
+                                    <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="w-full h-16 border-4 border-black rounded-2xl px-4 font-black uppercase text-sm bg-white">
+                                        <option value="">Select Category</option>
+                                        {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                                     </select>
-                                    {selectedCategory === "Other" && (
-                                        <Input
-                                            placeholder="Type custom category..."
-                                            value={customCategory}
-                                            onChange={(e) => setCustomCategory(e.target.value)}
-                                            className="mt-2 border-2"
-                                        />
-                                    )}
                                 </div>
-
-                                <div className="space-y-2">
-                                    <Label>Tech Stack</Label>
-                                    <div className="flex gap-2 flex-wrap mb-2">
-                                        {currentProject.techStack?.map((tech, index) => (
-                                            <div key={index} className="bg-gray-100 px-3 py-1 rounded-full text-sm font-bold flex items-center border border-black">
-                                                {tech}
-                                                <button onClick={() => handleRemoveTech(index)} className="ml-2 hover:text-red-500">
-                                                    <X className="w-3 h-3" />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <Input
-                                        placeholder="Type tech (e.g. React) and press Enter"
-                                        value={techStackInput}
-                                        onChange={(e) => setTechStackInput(e.target.value)}
-                                        onKeyDown={handleAddTech}
-                                        className="border-2 border-black rounded-xl"
-                                    />
+                                <div className="space-y-3">
+                                    <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Short Pitch</Label>
+                                    <Textarea value={currentProject.description || ""} onChange={(e) => setCurrentProject({ ...currentProject, description: e.target.value })} className="h-32 border-4 border-black rounded-2xl p-4 font-bold bg-white" placeholder="Brief summary of the work..." />
                                 </div>
-
-                                <div className="grid md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <Label className="font-bold uppercase text-xs text-gray-500">Title</Label>
-                                        <Input
-                                            value={currentProject.title || ""}
-                                            onChange={(e) => {
-                                                const title = e.target.value;
-                                                const slug = title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-                                                setCurrentProject({ ...currentProject, title, slug: currentProject.slug ? currentProject.slug : slug });
-                                            }}
-                                            className="font-bold border-2"
-                                            placeholder="Project Title"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label className="font-bold uppercase text-xs text-gray-500">Slug</Label>
-                                        <Input
-                                            value={currentProject.slug || ""}
-                                            onChange={(e) => setCurrentProject({ ...currentProject, slug: e.target.value })}
-                                            className="font-mono text-sm border-2"
-                                            placeholder="project-slug"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label className="font-bold uppercase text-xs text-gray-500">Description</Label>
-                                    <Textarea
-                                        value={currentProject.description || ""}
-                                        onChange={(e) => setCurrentProject({ ...currentProject, description: e.target.value })}
-                                        className="h-24 border-2"
-                                        placeholder="Brief description..."
-                                    />
-                                </div>
-
-                                <div className="grid md:grid-cols-3 gap-4">
-                                    <div className="space-y-2">
-                                        <Label className="font-bold uppercase text-xs text-gray-500">Goal</Label>
-                                        <Input value={currentProject.goal || ""} onChange={(e) => setCurrentProject({ ...currentProject, goal: e.target.value })} className="border-2" placeholder="Project Goal" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label className="font-bold uppercase text-xs text-gray-500">Role</Label>
-                                        <Input value={currentProject.role || ""} onChange={(e) => setCurrentProject({ ...currentProject, role: e.target.value })} className="border-2" placeholder="e.g. Lead Dev" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label className="font-bold uppercase text-xs text-gray-500">Duration</Label>
-                                        <Input value={currentProject.duration || ""} onChange={(e) => setCurrentProject({ ...currentProject, duration: e.target.value })} className="border-2" placeholder="e.g. 3 Months" />
-                                    </div>
-                                </div>
-
-
-
-                                <div className="grid md:grid-cols-2 gap-6 pb-2">
-                                    <div className="space-y-2">
-                                        <Label className="font-bold uppercase text-xs text-gray-500">Live Site URL</Label>
-                                        <div className="relative">
-                                            <LinkIcon className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                                            <Input value={currentProject.link || ""} onChange={(e) => setCurrentProject({ ...currentProject, link: e.target.value })} className="pl-10 border-2" placeholder="https://example.com" />
-                                        </div>
-                                    </div>
-                                    {/* GitHub URL section removed */}
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label className="font-bold uppercase text-xs text-gray-500">Tags (Tech Stack)</Label>
-                                    <div className="flex gap-2">
-                                        <Input
-                                            value={tagInput}
-                                            onChange={(e) => setTagInput(e.target.value)}
-                                            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                                            className="border-2"
-                                            placeholder="Type tag & Enter"
-                                        />
-                                        <Button type="button" onClick={handleAddTag} className="bg-[#FFC224] text-black hover:bg-black hover:text-[#FFC224] border-2 border-black"><Plus className="w-5 h-5" /></Button>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2 mt-2">
-                                        {currentProject.tags?.map((tag, i) => (
-                                            <span key={i} className="bg-black text-white text-xs font-bold px-2 py-1 rounded flex items-center gap-1">{tag} <button onClick={() => removeTag(tag)}><X className="w-3 h-3" /></button></span>
-                                        ))}
-                                    </div>
+                                <div className="grid grid-cols-3 gap-6">
+                                    <div className="space-y-2"><Label className="text-[10px] font-black uppercase text-gray-400">Duration</Label><Input value={currentProject.duration || ""} onChange={(e) => setCurrentProject({ ...currentProject, duration: e.target.value })} className="border-4 border-black rounded-xl h-12 font-bold" /></div>
+                                    <div className="space-y-2"><Label className="text-[10px] font-black uppercase text-gray-400">Our Role</Label><Input value={currentProject.role || ""} onChange={(e) => setCurrentProject({ ...currentProject, role: e.target.value })} className="border-4 border-black rounded-xl h-12 font-bold" /></div>
+                                    <div className="space-y-2"><Label className="text-[10px] font-black uppercase text-gray-400">Live Link</Label><Input value={currentProject.link || ""} onChange={(e) => setCurrentProject({ ...currentProject, link: e.target.value })} className="border-4 border-black rounded-xl h-12 font-bold" /></div>
                                 </div>
                             </TabsContent>
 
 
 
-                            <TabsContent value="story" className="p-8 space-y-6 pt-4">
-                                <div className="space-y-2">
-                                    <Label className="font-bold uppercase text-xs text-gray-500 text-[#FF4A60]">The Challenge</Label>
-                                    <Textarea value={currentProject.challenge || ""} onChange={(e) => setCurrentProject({ ...currentProject, challenge: e.target.value })} className="min-h-[100px] border-2" placeholder="What was the problem?" />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label className="font-bold uppercase text-xs text-gray-500 text-[#FFC224]">The Solution</Label>
-                                    <Textarea value={currentProject.solution || ""} onChange={(e) => setCurrentProject({ ...currentProject, solution: e.target.value })} className="min-h-[100px] border-2" placeholder="How did you solve it?" />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label className="font-bold uppercase text-xs text-gray-500 text-[#4AFF93]">The Outcome</Label>
-                                    <Textarea value={currentProject.outcome || ""} onChange={(e) => setCurrentProject({ ...currentProject, outcome: e.target.value })} className="min-h-[100px] border-2" placeholder="What were the results?" />
-                                </div>
-                                <div className="p-6 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl space-y-4">
-                                    <Label className="font-bold uppercase text-xs text-gray-500 flex items-center gap-2"><User className="w-4 h-4" /> Client Testimonial</Label>
-                                    <Textarea
-                                        value={currentProject.testimonial?.text || ""}
-                                        onChange={(e) => setCurrentProject({
-                                            ...currentProject,
-                                            testimonial: { ...currentProject.testimonial, text: e.target.value }
-                                        })}
-                                        className="h-24 border-2 bg-white"
-                                        placeholder="Quote..."
-                                    />
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <Input
-                                            value={currentProject.testimonial?.author || ""}
-                                            onChange={(e) => setCurrentProject({
-                                                ...currentProject,
-                                                testimonial: { ...currentProject.testimonial, author: e.target.value }
-                                            })}
-                                            className="border-2 bg-white"
-                                            placeholder="Author Name"
-                                        />
-                                        <Input
-                                            value={currentProject.testimonial?.role || ""}
-                                            onChange={(e) => setCurrentProject({
-                                                ...currentProject,
-                                                testimonial: { ...currentProject.testimonial, role: e.target.value }
-                                            })}
-                                            className="border-2 bg-white"
-                                            placeholder="Author Role"
-                                        />
-                                    </div>
-                                </div>
-                            </TabsContent>
-
-                            <TabsContent value="media" className="p-8 space-y-6 pt-4">
+                            <TabsContent value="media" className="mt-0 space-y-12">
                                 <div className="space-y-4">
-                                    <Label className="font-bold uppercase text-xs text-gray-500">Project Cover Image (Main)</Label>
-                                    <div className="border-4 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:bg-gray-50 hover:border-black transition-all group relative cursor-pointer">
-                                        <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                                    <Label className="text-xs font-black uppercase tracking-widest text-[#8B5DFF]">Master Cover</Label>
+                                    <div className="relative h-64 border-4 border-black border-dashed rounded-3xl overflow-hidden flex items-center justify-center bg-white group transition-all hover:bg-gray-50">
+                                        <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 opacity-0 cursor-pointer z-20" />
                                         {currentProject.image ? (
-                                            <div className="relative h-48 rounded-lg overflow-hidden border-2 border-black">
-                                                <img src={currentProject.image} alt="Preview" className="w-full h-full object-cover" />
-                                            </div>
+                                            <img src={currentProject.image} className="w-full h-full object-cover" />
                                         ) : (
-                                            <div className="py-8"><Upload className="w-12 h-12 mx-auto text-gray-300 mb-2" /><p className="font-bold text-gray-400">Upload Cover</p></div>
+                                            <div className="text-center"><Upload className="w-12 h-12 mx-auto text-gray-200 mb-2" /><span className="font-black text-gray-300 uppercase">Drop Key Visual</span></div>
                                         )}
                                     </div>
                                 </div>
-
-                                <div className="space-y-4 pt-4 border-t-2 border-dashed border-gray-200">
-                                    <Label className="font-bold uppercase text-xs text-gray-500">Bento Grid Images</Label>
-                                    <div className="grid grid-cols-3 gap-4">
-                                        {[0, 1, 2].map((idx) => (
-                                            <div key={idx} className="space-y-2">
-                                                <div className="text-[10px] font-bold uppercase text-gray-400">
-                                                    {idx === 0 ? "Main (Large)" : idx === 1 ? "Top (Mobile)" : "Bottom (System)"}
-                                                </div>
-                                                <div className="aspect-square border-4 border-dashed border-gray-200 rounded-xl flex items-center justify-center relative hover:border-black transition-all group overflow-hidden bg-gray-50">
-                                                    <input type="file" accept="image/*" onChange={(e) => handleGalleryUpload(idx, e)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                                                    {currentProject.gallery && currentProject.gallery[idx] ? (
-                                                        <img src={currentProject.gallery[idx]} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <Plus className="text-gray-300 group-hover:text-black" />
-                                                    )}
-                                                </div>
+                                <div className="space-y-6">
+                                    <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Gallery Stream (Max 8)</Label>
+                                    <div className="grid grid-cols-4 gap-4">
+                                        {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
+                                            <div key={i} className="aspect-square border-4 border-black border-dashed rounded-2xl relative bg-white overflow-hidden group">
+                                                <input type="file" onChange={(e) => handleGalleryUpload(i, e)} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                                                {currentProject.gallery?.[i] ? (
+                                                    <img src={currentProject.gallery[i]} className="w-full h-full object-cover" />
+                                                ) : <Plus className="w-8 h-8 text-gray-100 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 group-hover:text-black transition-colors" />}
                                             </div>
                                         ))}
                                     </div>
                                 </div>
-
-                                <div className="space-y-2 pt-4">
-                                    <Label className="font-bold uppercase text-xs text-gray-500">Video URL</Label>
-                                    <Input value={currentProject.video || ""} onChange={(e) => setCurrentProject({ ...currentProject, video: e.target.value })} className="border-2" placeholder="e.g. YouTube or mp4 link" />
+                                <div className="space-y-3">
+                                    <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Reel URL (YouTube/MP4)</Label>
+                                    <Input value={currentProject.video || ""} onChange={(e) => setCurrentProject({ ...currentProject, video: e.target.value })} className="h-14 border-4 border-black rounded-2xl font-bold bg-white" placeholder="https://youtube.com/watch?v=..." />
                                 </div>
                             </TabsContent>
 
-                            <TabsContent value="details" className="p-8 space-y-6 pt-4">
-                                <div className="space-y-2">
-                                    <Label className="font-bold uppercase text-xs text-gray-500">Features List (One per line)</Label>
+                            <TabsContent value="content" className="mt-0 space-y-8">
+                                <div className="space-y-4">
+                                    <Label className="text-xs font-black uppercase tracking-widest text-[#8B5DFF] flex justify-between items-center">
+                                        Technical Narrative (Markdown)
+                                        <div className="relative">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={async (e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (!file) return;
+                                                    try {
+                                                        const url = await uploadToImgBB(file);
+                                                        const imageMarkdown = `\n![Project Image](${url})\n`;
+                                                        setCurrentProject(prev => ({ ...prev, content: (prev.content || "") + imageMarkdown }));
+                                                    } catch (err) {
+                                                        alert("Failed to upload content image");
+                                                    }
+                                                }}
+                                                className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                            />
+                                            <Button size="sm" variant="outline" className="text-[10px] h-7 bg-white border-2 border-black hover:bg-black hover:text-white uppercase font-bold">
+                                                <ImageIcon className="w-3 h-3 mr-2" /> Insert Image
+                                            </Button>
+                                        </div>
+                                    </Label>
                                     <Textarea
-                                        value={featuresText}
-                                        onChange={(e) => setFeaturesText(e.target.value)}
-                                        className="min-h-[150px] border-2 font-mono text-sm"
-                                        placeholder="Real-time Analytics&#10;Dark Mode&#10;Mobile Responsive"
+                                        value={currentProject.content || ""}
+                                        onChange={(e) => setCurrentProject({ ...currentProject, content: e.target.value })}
+                                        className="h-[500px] border-4 border-black rounded-3xl p-8 font-mono text-sm leading-relaxed bg-white focus:bg-gray-50 transition-colors placeholder:text-gray-300"
+                                        placeholder="## Architecture\nDescribe the technical layout...\n\n(Click 'Insert Image' to add visuals between text)"
                                     />
                                 </div>
-                                <div className="p-4 bg-yellow-50 border-2 border-yellow-200 rounded-xl text-sm font-medium text-yellow-800">
-                                    <p>Advanced fields like <strong>Process</strong> and <strong>Results</strong> are currently editable via raw JSON inputs in database or future updates.</p>
+                                <div className="grid grid-cols-2 gap-8">
+                                    <div className="space-y-4">
+                                        <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Services / Tech Stack</Label>
+                                        <div className="flex gap-2">
+                                            <Input value={techStackInput} onChange={e => setTechStackInput(e.target.value)} onKeyDown={e => {
+                                                if (e.key === "Enter" && techStackInput.trim()) {
+                                                    e.preventDefault();
+                                                    setCurrentProject({ ...currentProject, techStack: [...(currentProject.techStack || []), techStackInput] });
+                                                    setTechStackInput("");
+                                                }
+                                            }} className="border-4 border-black rounded-xl h-12 font-bold" />
+                                        </div>
+                                        <div className="flex flex-wrap gap-2">
+                                            {currentProject.techStack?.map((t, i) => (
+                                                <span key={i} className="px-3 py-1 bg-black text-white rounded-lg text-xs font-black flex items-center gap-2">{t} <X className="w-3 h-3 cursor-pointer" onClick={() => setCurrentProject({ ...currentProject, techStack: currentProject.techStack?.filter((_, idx) => idx !== i) })} /></span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <Label className="text-xs font-black uppercase tracking-widest text-gray-400">Tags</Label>
+                                        <Input value={tagInput} onChange={e => setTagInput(e.target.value)} onKeyDown={e => {
+                                            if (e.key === "Enter" && tagInput.trim()) {
+                                                e.preventDefault();
+                                                setCurrentProject({ ...currentProject, tags: [...(currentProject.tags || []), tagInput] });
+                                                setTagInput("");
+                                            }
+                                        }} className="border-4 border-black rounded-xl h-12 font-bold" />
+                                        <div className="flex flex-wrap gap-2">
+                                            {currentProject.tags?.map((t, i) => (
+                                                <span key={i} className="px-3 py-1 bg-[#8B5DFF] text-white rounded-lg text-xs font-black flex items-center gap-2">{t} <X className="w-3 h-3 cursor-pointer" onClick={() => setCurrentProject({ ...currentProject, tags: currentProject.tags?.filter((_, idx) => idx !== i) })} /></span>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
                             </TabsContent>
-                        </Tabs>
-                    </div>
-
-                    <div className="p-8 border-t-2 border-gray-100 bg-gray-50 flex justify-end gap-3 shrink-0">
-                        <Button variant="ghost" onClick={() => setIsDialogOpen(false)} className="h-12 px-6 font-bold text-gray-500">Cancel</Button>
-                        <Button onClick={handleSubmit} className="h-12 px-8 bg-black text-white rounded-xl font-bold uppercase hover:bg-[#FF4A60] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]">
-                            {isEditing ? "Update Project" : "Create Project"}
-                        </Button>
-                    </div>
+                        </div>
+                    </Tabs>
                 </DialogContent>
             </Dialog>
-        </div >
+        </div>
     );
 }

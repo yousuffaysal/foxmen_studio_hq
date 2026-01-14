@@ -1,10 +1,9 @@
 "use client"
 
-import { ArrowRight, Play, Check, ChevronRight, Award, Zap, Layout, Search, Code, Smartphone, Rocket } from "lucide-react"
+import { ArrowRight, Play, Award, Layout, Search, Code, Smartphone, Rocket } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { useState, useRef } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion } from "framer-motion"
 
 // Animation Variants
 const fadeInUp = {
@@ -214,7 +213,7 @@ export function ProjectAwards() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {awards.map((award, i) => (
                         <div key={i} className="bg-[#111] p-6 rounded-xl border border-white/5 flex flex-col items-center justify-center text-center hover:border-[#8B5DFF]/30 transition-colors group">
-                            <Award className="w-8 h-8 text-[#FFC224] mb-4 group-hover:scale-110 transition-transform" />
+                            <Award className="w-8 h-8 text-[#FFC224] mb-4 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
                             <span className="font-bold text-gray-300 group-hover:text-white" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>{award}</span>
                         </div>
                     ))}
@@ -244,7 +243,7 @@ export function ClientLogos() {
 export function FeaturedCaseStudyLong() {
     return (
         <section className="bg-[#050505] text-white py-32 px-4 overflow-hidden border-t border-white/5 relative">
-            <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-5"></div>
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
             <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
@@ -365,7 +364,7 @@ export function BehindTheScenes() {
 export function ProjectReel() {
     return (
         <section className="h-[60vh] md:h-[80vh] bg-black relative border-t border-white/10 flex items-center justify-center group cursor-pointer overflow-hidden">
-            <div className="absolute inset-0 opacity-20 bg-[url('/images/noise.png')]"></div>
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-80"></div>
 
             <motion.div

@@ -64,8 +64,10 @@ model Project {
   features    String[]
   link        String?
   github      String?
+  category    String?
 
   // Meta
+  goal        String?
   client      String?
   role        String?
   duration    String?
@@ -79,6 +81,8 @@ model Project {
   process     Json?    // Array of { title, desc, icon }
   results     Json?    // Array of { label, value }
   testimonial Json?    // Object { text, author, role }
+
+  content     String?
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

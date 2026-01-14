@@ -15,7 +15,14 @@ export function ProjectsHero() {
         <section className="relative min-h-[80vh] flex items-center justify-center bg-[#050505] text-white overflow-hidden pt-20">
             {/* Background Atmosphere */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
+                <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.03] mix-blend-overlay">
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <filter id="noiseFilter">
+                            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+                        </filter>
+                        <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+                    </svg>
+                </div>
                 <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#8B5DFF]/20 blur-[120px] rounded-full mix-blend-screen animate-pulse duration-[4000ms]"></div>
                 <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#2a2a2a]/40 blur-[100px] rounded-full mix-blend-screen"></div>
             </div>
@@ -105,7 +112,7 @@ export function ProjectGrid() {
             <div className="container mx-auto grid md:grid-cols-2 lg:grid-cols-2 gap-8 md:gap-12">
                 {filteredProjects.map((project, index) => (
                     <motion.div
-                        key={project._id}
+                        key={project.id}
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}

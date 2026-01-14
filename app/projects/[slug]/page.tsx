@@ -1,354 +1,353 @@
+"use client";
+
 import { Footer } from "@/components/footer"
 import { Navigation } from "@/components/navigation"
-import { ArrowLeft, CheckCircle2, Rocket, Code2, Layout, Database, Smartphone, Globe, ArrowUpRight, Calendar, User } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { notFound } from "next/navigation"
+import { notFound, useParams } from "next/navigation"
+import { useState, useEffect } from "react"
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import { ArrowUpRight, Github, X } from "lucide-react"
 
-async function getProject(slug: string) {
-    try {
-        const res = await fetch(`https://paperfolio-backend.vercel.app/api/projects/${slug}`, { cache: 'no-store' });
-        if (!res.ok) return null;
-        return res.json();
-    } catch (e) {
-        return null;
-    }
-}
+export default function ProjectPage() {
+    const { slug } = useParams();
+    const [project, setProject] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const { scrollYProgress } = useScroll();
+    const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
-export default async function ProjectPage(props: { params: Promise<{ slug: string }> }) {
-    const params = await props.params;
-    const project = await getProject(params.slug);
+    useEffect(() => {
+        const fetchProject = async () => {
+            try {
+                const res = await fetch(`/api/projects`);
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    const found = data.find((p: any) => p.slug === slug);
+                    if (found) setProject(found);
+                    else setProject(null);
+                }
+            } catch (e) {
+                console.error("Fetch failed:", e);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProject();
+    }, [slug]);
 
-    if (!project) {
-        notFound()
-    }
+    if (loading) return (
+        <div className="h-screen bg-[#F9F9F8] flex items-center justify-center">
+            <div className="text-[10px] md:text-xs font-medium animate-pulse text-black/50 font-mono tracking-widest uppercase">
+                Loading [ {slug} ]
+            </div>
+        </div>
+    );
 
-    // --- Fallbacks for optional fields ---
-    const client = project.client || "Confidential Client";
-    const role = project.role || "Full Stack Development";
-    const duration = project.duration || "Ongoing";
-
-    // Default Process Steps if not provided
-    const defaultProcess = [
-        { title: "Research", desc: "Competitor analysis & user personas" },
-        { title: "Design", desc: "Wireframes & High-fidelity UI" },
-        { title: "Development", desc: "Frontend & Backend Engineering" },
-        { title: "Deployment", desc: "CI/CD & Cloud Hosting" },
-    ];
-    const processSteps = Array.isArray(project.process) ? project.process : defaultProcess;
-
-    const features = Array.isArray(project.features) && project.features.length > 0
-        ? project.features
-        : ["Custom UI/UX", "Responsive Design", "Fast Performance", "Secure Authentication"];
-
-    // Default Results if not provided
-    const defaultResults = [
-        { label: "Performance", value: "100%" },
-        { label: "User Satisfaction", value: "5.0" },
-        { label: "Uptime", value: "99.9%" },
-    ];
-    const results = Array.isArray(project.results) ? project.results : defaultResults;
+    if (!project) notFound();
 
     return (
-        <div className="min-h-screen bg-[#FFFBF5] font-sans selection:bg-[#FFC224] selection:text-black">
+        <div className="min-h-screen bg-[#F9F9F8] text-[#1a1a1a] selection:bg-[#EAEAEA] selection:text-[#000]">
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                .bg-noise {
+                    position: fixed;
+                    top: 0; left: 0; width: 100%; height: 100%;
+                    pointer-events: none; z-index: 50; opacity: 0.03;
+                    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+                }
+                .font-header { font-family: var(--font-owners-medium), serif; }
+                .font-title-bold { font-family: var(--font-ibm-plex-sans-bold), sans-serif; }
+                .font-mono { font-family: var(--font-ibm-plex-mono), monospace; }
+                
+                /* Refined Editorial Prose */
+                .prose { max-width: 100%; }
+                .prose p { 
+                    margin-bottom: 2rem; 
+                    font-family: var(--font-ibm-plex-mono), monospace; 
+                    font-size: 1.0rem; 
+                    line-height: 1.8; 
+                    color: #444; 
+                    letter-spacing: -0.01em;
+                }
+                .prose h1, .prose h2, .prose h3, .prose h4 { 
+                    font-family: var(--font-ibm-plex-sans-bold), sans-serif; 
+                    color: #000; 
+                    margin-top: 5rem; 
+                    margin-bottom: 1.5rem; 
+                    line-height: 1.1; 
+                    letter-spacing: -0.02em;
+                    text-transform: uppercase; 
+                }
+                .prose h1 { font-size: 3rem; border-bottom: 2px solid #000; padding-bottom: 1rem; }
+                .prose h2 { font-size: 2.25rem; }
+                .prose h3 { font-size: 1.5rem; color: #333; }
+                
+                /* List Styling */
+                .prose ul, .prose ol { 
+                    margin-bottom: 2.5rem; 
+                    padding-left: 1.5rem; 
+                    font-family: var(--font-ibm-plex-mono), monospace; 
+                }
+                .prose li { margin-bottom: 0.5rem; color: #444; marker: #000; }
+                .prose strong { font-weight: 700; color: #000; }
+                
+                /* Table Styling */
+                .prose table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 3rem 0;
+                    font-family: var(--font-ibm-plex-mono), monospace;
+                    font-size: 0.9rem;
+                    border: 1px solid #e5e5e5;
+                }
+                .prose thead {
+                    background-color: #f5f5f5;
+                    border-bottom: 2px solid #000;
+                }
+                .prose th {
+                    text-align: left;
+                    padding: 1rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    font-size: 0.8rem;
+                }
+                .prose td {
+                    padding: 1rem;
+                    border-bottom: 1px solid #eee;
+                    vertical-align: top;
+                }
+                .prose tr:last-child td { border-bottom: none; }
+                
+                /* Blockquote */
+                .prose blockquote {
+                    border-left: 4px solid #8B5DFF; /* Brand Accent */
+                    padding-left: 2rem;
+                    margin-left: 0;
+                    margin-top: 3rem;
+                    margin-bottom: 3rem;
+                    font-family: var(--font-owners-medium), serif;
+                    font-size: 1.5rem;
+                    line-height: 1.4;
+                    font-style: italic;
+                    color: #000;
+                    background: #fdfdfd;
+                    padding-top: 2rem;
+                    padding-bottom: 2rem;
+                }
+                
+                /* Image handling in Markdown */
+                .prose img { 
+                    width: 100%; 
+                    height: auto; 
+                    border-radius: 8px; 
+                    margin-top: 3rem; 
+                    margin-bottom: 3rem; 
+                    display: block; 
+                    border: 1px solid rgba(0,0,0,0.05);
+                }
+                @media (min-width: 1024px) {
+                    .prose img { width: 115%; margin-left: -7.5%; }
+                }
+            `}} />
+            <div className="bg-noise" />
+
+            {/* Minimal Nav Overlay */}
+            <div className="fixed top-0 left-0 w-full z-40 bg-gradient-to-b from-[#F9F9F8] to-transparent h-24 pointer-events-none" />
             <Navigation />
 
-            <main className="pt-24">
-                {/* 1. Header & Back Link */}
-                <div className="max-w-7xl mx-auto px-6 mb-12">
-                    <Link href="/projects" className="inline-flex items-center text-lg font-bold hover:underline mb-8 uppercase tracking-wide">
-                        <ArrowLeft className="mr-2 w-5 h-5" /> Back to Projects
-                    </Link>
+            <main className="relative z-10 pt-32 md:pt-48 pb-24">
 
-                    <div className="flex flex-col md:flex-row gap-8 items-start justify-between">
-                        <div className="max-w-4xl">
-                            {/* Tags/Type */}
-                            <div className="flex gap-3 mb-6 flex-wrap">
-                                <span className="bg-[#FFC224] border-2 border-black px-4 py-1 rounded-full text-sm font-black uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                    {project.tags?.[0] || "Project"}
-                                </span>
-                                {project.tags?.slice(1, 3).map((tag: string) => (
-                                    <span key={tag} className="bg-white border-2 border-black px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider">
-                                        {tag}
-                                    </span>
-                                ))}
+                {/* 1. HEADER - Massive Typographic Layout */}
+                <section className="px-4 md:px-12 max-w-[1700px] mx-auto mb-20 md:mb-32">
+
+                    {/* Top: Giant Title */}
+                    <motion.h1
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="font-title-bold text-[14vw] leading-[0.8] text-[#111] uppercase tracking-[-0.07em] mb-16 md:mb-24 break-all"
+                    >
+                        {project.title}
+                    </motion.h1>
+
+                    {/* Bottom: Abstract Offset */}
+                    <div className="flex flex-col md:flex-row md:justify-end">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="max-w-2xl md:w-1/2"
+                        >
+                            <div className="flex items-center gap-4 mb-6">
+                                <span className="w-8 h-[1px] bg-gray-300"></span>
+                                <h2 className="font-mono text-[10px] text-gray-400 uppercase tracking-[0.25em]">
+                                    Abstract
+                                </h2>
                             </div>
 
-                            <h1 className="text-5xl md:text-7xl font-black mb-6 uppercase leading-tight md:leading-none">
-                                {project.title}
-                            </h1>
-                            <div className="text-xl md:text-3xl font-medium text-gray-700 leading-relaxed max-w-3xl">
+                            <p className="font-header text-2xl md:text-3xl lg:text-4xl leading-[1.2] text-[#222]">
                                 {project.description}
-                            </div>
-                        </div>
-
-                        {/* Project Meta Box */}
-                        <div className="w-full md:w-auto bg-white p-6 border-4 border-black rounded-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] min-w-[280px]">
-                            <div className="space-y-4">
-                                <div>
-                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Client</div>
-                                    <div className="font-bold text-lg">{client}</div>
-                                </div>
-                                <div>
-                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Role</div>
-                                    <div className="font-bold text-lg">{role}</div>
-                                </div>
-                                <div>
-                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Duration</div>
-                                    <div className="font-bold text-lg">{duration}</div>
-                                </div>
-                                <div className="pt-2">
-                                    {project.link && (
-                                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full bg-black text-white font-bold py-3 rounded-xl hover:bg-[#FF4A60] transition-colors">
-                                            Visit Live Site <ArrowUpRight className="ml-2 w-4 h-4" />
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* 3. Hero Image */}
-                <section className="px-6 mb-24">
-                    <div className="max-w-7xl mx-auto aspect-video relative rounded-3xl overflow-hidden border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] bg-gray-100">
-                        {project.image ? (
-                            <Image src={project.image} alt={project.title} fill className="object-cover" priority />
-                        ) : (
-                            <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
-                                <span className="text-gray-400 font-bold text-2xl">No Preview Available</span>
-                            </div>
-                        )}
+                            </p>
+                        </motion.div>
                     </div>
                 </section>
 
-                {/* 2. Introduction */}
-                <section className="max-w-4xl mx-auto px-6 mb-24 text-center">
-                    <h2 className="text-3xl font-black uppercase mb-8 decoration-[#FFC224] decoration-4 underline underline-offset-4">The Goal</h2>
-                    <div className="text-2xl md:text-3xl font-medium leading-relaxed text-gray-800">
-                        "{project.description}"
-                    </div>
-                </section>
-
-                {/* 4. Overview Sections (Challenge/Solution/Outcome) */}
-                <section className="bg-black text-white py-24 px-6 mb-24 skew-y-2">
-                    <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 -skew-y-2">
-                        <div className="bg-[#1A1A1A] p-8 rounded-2xl border border-gray-800">
-                            <div className="w-12 h-12 bg-[#FF4A60] rounded-full flex items-center justify-center mb-6 border-2 border-white text-black">
-                                <span className="font-black text-xl">01</span>
-                            </div>
-                            <h3 className="text-2xl font-bold mb-4 text-[#FF4A60]">The Challenge</h3>
-                            <div className="text-gray-300 text-lg leading-relaxed">{project.challenge || "Identification of core user problems and system bottlenecks."}</div>
-                        </div>
-                        <div className="bg-[#1A1A1A] p-8 rounded-2xl border border-gray-800">
-                            <div className="w-12 h-12 bg-[#FFC224] rounded-full flex items-center justify-center mb-6 border-2 border-white text-black">
-                                <span className="font-black text-xl">02</span>
-                            </div>
-                            <h3 className="text-2xl font-bold mb-4 text-[#FFC224]">The Solution</h3>
-                            <div className="text-gray-300 text-lg leading-relaxed">{project.solution || "Strategies and technologies implemented to address the issues."}</div>
-                        </div>
-                        <div className="bg-[#1A1A1A] p-8 rounded-2xl border border-gray-800">
-                            <div className="w-12 h-12 bg-[#4AFF93] rounded-full flex items-center justify-center mb-6 border-2 border-white text-black">
-                                <span className="font-black text-xl">03</span>
-                            </div>
-                            <h3 className="text-2xl font-bold mb-4 text-[#4AFF93]">The Outcome</h3>
-                            <div className="text-gray-300 text-lg leading-relaxed">{project.outcome || "Measurable results and key achievements delivered."}</div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* 5. Key Features */}
-                <section className="max-w-6xl mx-auto px-6 mb-24">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-black uppercase mb-6">Key Features</h2>
-                        <p className="text-xl text-gray-600">Engineered for performance and scalability.</p>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-6">
-                        {features.map((feature: string, i: number) => (
-                            <div key={i} className="flex items-center bg-white p-6 rounded-xl border-4 border-black hover:-translate-y-1 transition-transform">
-                                <CheckCircle2 className="w-8 h-8 text-[#FF4A60] mr-4 flex-shrink-0" />
-                                <span className="text-xl font-bold break-all">{feature}</span>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
-                {/* 6. Development Process */}
-                <section className="bg-[#FFC224] py-24 px-6 mb-24 border-y-4 border-black">
-                    <div className="max-w-7xl mx-auto">
-                        <h2 className="text-4xl md:text-5xl font-black uppercase mb-16 text-center">How We Built It</h2>
-                        <div className="grid md:grid-cols-4 gap-8">
-                            {processSteps.map((step: any, i: number) => (
-                                <div key={i} className="relative">
-                                    <div className="bg-white p-8 rounded-2xl border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] text-center h-full">
-                                        {/* Icons are tricky with JSON, using generic if missing */}
-                                        <Code2 className="w-12 h-12 mx-auto mb-6 text-black" />
-                                        <h3 className="text-xl font-black uppercase mb-2">{step.title}</h3>
-                                        <p className="text-gray-600 font-medium">{step.desc}</p>
-                                    </div>
-                                    {i < 3 && (
-                                        <div className="hidden md:block absolute top-1/2 -right-6 w-8 h-1 bg-black z-10" />
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* 7. Tech Stack */}
-                <section className="max-w-6xl mx-auto px-6 mb-24">
-                    <h2 className="text-4xl md:text-5xl font-black uppercase mb-12 text-center">Technology Stack</h2>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        {/* Dynamic Tech Stack */}
-                        {project.techStack && project.techStack.length > 0 ? (
-                            project.techStack.map((tech: string) => (
-                                <span key={tech} className="px-8 py-4 bg-gray-100 rounded-2xl text-xl font-bold border-2 border-gray-300 text-gray-500 hover:border-black hover:text-black hover:bg-white transition-all cursor-default">
-                                    {tech}
-                                </span>
-                            ))
-                        ) : (
-                            // Fallback to tags or defaults if no specific tech stack provided
-                            (project.tags || ["React", "TypeScript", "Node.js"]).slice(0, 6).map((tech: string) => (
-                                <span key={tech} className="px-8 py-4 bg-gray-100 rounded-2xl text-xl font-bold border-2 border-gray-300 text-gray-500 hover:border-black hover:text-black hover:bg-white transition-all cursor-default">
-                                    {tech}
-                                </span>
-                            ))
-                        )}
-                    </div>
-                </section>
-
-                {/* 8. Bento Grid Showcase */}
-                <section className="max-w-7xl mx-auto px-6 mb-24">
-                    <h2 className="text-4xl md:text-5xl font-black uppercase mb-16 text-center">Visual Showcase</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-[800px]">
-                        {/* Large Main Item */}
-                        <div className="md:col-span-2 md:row-span-2 relative bg-gray-100 rounded-[32px] border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden group">
-                            {project.gallery && project.gallery[0] ? (
-                                <Image src={project.gallery[0]} alt="Main View" fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-                            ) : project.image ? (
-                                <Image src={project.image} alt="Main View" fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-                            ) : (
-                                <div className="absolute inset-0 flex items-center justify-center font-black text-2xl text-gray-300">MAIN VIEW</div>
-                            )}
-                            <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                                <h3 className="text-2xl font-bold">Dashboard Home</h3>
-                            </div>
-                        </div>
-
-                        {/* Top Side Item */}
-                        <div className="relative bg-black rounded-[32px] border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden group">
-                            {project.gallery && project.gallery[1] ? (
-                                <Image src={project.gallery[1]} alt="Mobile View" fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-                            ) : (
-                                <>
-                                    <div className="absolute inset-0 flex items-center justify-center font-black text-xl text-gray-700">MOBILE VIEW</div>
-                                    <div className="absolute inset-0 bg-[#FFC224] opacity-10 group-hover:opacity-20 transition-opacity"></div>
-                                </>
-                            )}
-                        </div>
-
-                        {/* Bottom Side Item */}
-                        <div className="relative bg-[#FF4A60] rounded-[32px] border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden group flex items-center justify-center">
-                            {project.gallery && project.gallery[2] ? (
-                                <Image src={project.gallery[2]} alt="System View" fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-                            ) : (
-                                <span className="font-black text-4xl text-black mix-blend-multiply uppercase">Design System</span>
-                            )}
-                        </div>
-                    </div>
-                </section>
-
-                {/* 9. Video Section */}
-                <section className="max-w-6xl mx-auto px-6 mb-24">
-                    <div className="text-center mb-12">
-                        <h2 className="text-4xl md:text-5xl font-black uppercase mb-6">In Motion</h2>
-                        <p className="text-xl text-gray-600">See the interactions come to life.</p>
-                    </div>
-
-                    {project.video ? (
-                        <div className="aspect-video bg-black rounded-[32px] border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden relative">
-                            {/* Assuming project.video is a URL. If it's a YouTube link, we'd need to parse it or use an iframe. 
-                                For now, simplistically render an iframe if it looks like a URL, or a video tag.
-                                Let's assume the user inputs a full Embed URL for now OR we treat it as a source link.
-                            */}
-                            <iframe
-                                src={project.video.replace("watch?v=", "embed/")}
-                                className="w-full h-full"
-                                title="Project Video"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
+                {/* 2. HERO IMAGE (Now Second) */}
+                {project.image && (
+                    <div className="relative w-full h-[50vh] md:h-[90vh] overflow-hidden mb-24 md:mb-32">
+                        <motion.div style={{ y }} className="absolute inset-0 w-full h-[120%]">
+                            <Image
+                                src={project.image}
+                                alt={project.title}
+                                fill
+                                className="object-cover grayscale-[0.1]"
+                                priority
                             />
-                        </div>
-                    ) : (
-                        <div className="aspect-video bg-black rounded-[32px] border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] overflow-hidden relative group cursor-pointer hover:shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] transition-all">
-                            <div className="absolute inset-0 flex items-center justify-center bg-[url('/images/noise.png')] opacity-20"></div>
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-24 h-24 bg-[#FFC224] rounded-full flex items-center justify-center border-4 border-black group-hover:scale-110 transition-transform shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                                    <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-black border-b-[12px] border-b-transparent ml-1"></div>
-                                </div>
-                            </div>
-                            <div className="absolute bottom-8 left-8 bg-black/80 backdrop-blur-md px-6 py-2 rounded-full text-white font-bold border border-white/20 flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                                Watch Demo Reel
-                            </div>
-                        </div>
-                    )}
-                </section>
-
-                {/* 10. Results / Metrics */}
-                <section className="bg-black text-white py-24 px-6 mb-24">
-                    <div className="max-w-5xl mx-auto text-center">
-                        <h2 className="text-3xl font-bold mb-12 uppercase tracking-widest text-gray-400">Impact & Results</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                            {results.map((stat: any, i: number) => (
-                                <div key={i} className="p-6 border border-gray-800 rounded-2xl bg-[#0A0A0A]">
-                                    <div className="text-6xl font-black text-[#FFC224] mb-2">{stat.value}</div>
-                                    <div className="text-xl font-bold uppercase">{stat.label}</div>
-                                </div>
-                            ))}
-                        </div>
+                        </motion.div>
                     </div>
-                </section>
-
-                {/* 11. Testimonial */}
-                {project.testimonial?.text && (
-                    <section className="max-w-4xl mx-auto px-6 mb-32 text-center">
-                        <div className="bg-[#FFF8E6] p-12 rounded-[40px] border-4 border-black relative">
-                            <div className="text-6xl absolute -top-8 left-12 text-[#FFC224]">“</div>
-                            <div className="text-2xl md:text-3xl font-bold leading-relaxed mb-8">
-                                "{project.testimonial.text}"
-                            </div>
-                            <div className="flex items-center justify-center space-x-4">
-                                <div className="w-12 h-12 bg-gray-300 rounded-full border-2 border-black flex items-center justify-center font-bold text-gray-500">
-                                    {project.testimonial.author?.charAt(0) || "C"}
-                                </div>
-                                <div className="text-left">
-                                    <div className="font-bold text-lg">{project.testimonial.author || "Client"}</div>
-                                    <div className="text-sm text-gray-600 font-bold uppercase">{project.testimonial.role || "Role"}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
                 )}
 
-                {/* 12. Call To Action (CTA) */}
-                <section className="relative py-32 bg-[#FF4A60] overflow-hidden text-center text-white border-t-4 border-black">
-                    {/* Decorative background elements could go here */}
-                    <div className="relative z-10 max-w-4xl mx-auto px-6">
-                        <h2 className="text-5xl md:text-7xl font-black uppercase mb-8 leading-tight">
-                            Have a similar idea?
-                        </h2>
-                        <p className="text-2xl md:text-3xl font-bold mb-12 opacity-90 max-w-2xl mx-auto">
-                            Let's build your next game-changing digital product together.
-                        </p>
-                        <Link href="/contact" className="inline-flex items-center bg-white text-black text-xl font-black px-12 py-6 rounded-full border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all uppercase tracking-wide">
-                            Start Your Project <Rocket className="ml-3 w-6 h-6" />
-                        </Link>
+                <div className="max-w-[1600px] mx-auto px-4 md:px-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+
+                        {/* 3. SIDEBAR - "Blueprint" Metadata (Sticky) */}
+                        <aside className="lg:col-span-3 lg:sticky lg:top-32 h-fit max-h-[calc(100vh-10rem)] overflow-y-auto order-2 lg:order-1 scrollbar-hide">
+
+                            {/* Role - Renamed to "Our Role" */}
+                            <div className="border-t border-black/20 pt-6">
+                                <span className="font-mono text-xs text-[#8B5DFF] block mb-3 uppercase tracking-widest font-semibold">Our Role</span>
+                                <div className="font-header text-xl md:text-2xl leading-relaxed text-black">
+                                    {project.role || "Lead Designer"}
+                                </div>
+                            </div>
+
+                            {/* Duration */}
+                            <div className="border-t border-black/20 pt-6">
+                                <span className="font-mono text-xs text-[#8B5DFF] block mb-3 uppercase tracking-widest font-semibold">Duration</span>
+                                <div className="font-header text-xl md:text-2xl leading-relaxed text-black">
+                                    {project.duration || "Ongoing"}
+                                </div>
+                            </div>
+
+                            {/* Sector */}
+                            <div className="border-t border-black/20 pt-6">
+                                <span className="font-mono text-xs text-[#8B5DFF] block mb-3 uppercase tracking-widest font-semibold">Sector</span>
+                                <div className="font-header text-xl md:text-2xl leading-relaxed text-black">
+                                    {project.category || "Selected Work"}
+                                </div>
+                            </div>
+
+                            {/* Tech Stack */}
+                            <div className="border-t border-black/20 pt-6">
+                                <span className="font-mono text-xs text-[#8B5DFF] block mb-3 uppercase tracking-widest font-semibold">Tech Stack</span>
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                    {project.techStack?.map((t: string, i: number) => (
+                                        <span key={i} className="font-mono text-xs border border-black/20 px-3 py-1.5 rounded-sm uppercase bg-white/50">
+                                            {t}
+                                        </span>
+                                    ))}
+                                    {(!project.techStack || project.techStack.length === 0) && (
+                                        <span className="font-mono text-sm text-gray-400 italic">Not specified</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            {project.tags && project.tags.length > 0 && (
+                                <div className="border-t border-black/20 pt-6">
+                                    <span className="font-mono text-xs text-[#8B5DFF] block mb-3 uppercase tracking-widest font-semibold">Tags</span>
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        {project.tags.map((t: string, i: number) => (
+                                            <span key={i} className="font-mono text-xs text-gray-500">#{t}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="border-t border-black/20 pt-6 space-y-4">
+                                {project.link && (
+                                    <Link href={project.link} target="_blank" rel="noopener noreferrer" className="font-mono text-sm flex items-center justify-between group border-b border-transparent hover:border-[#8B5DFF] hover:text-[#8B5DFF] pb-1 transition-all">
+                                        <span className="uppercase tracking-wider font-medium">Live Project</span>
+                                        <ArrowUpRight className="w-5 h-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
+                                    </Link>
+                                )}
+                                {project.github && (
+                                    <Link href={project.github} target="_blank" rel="noopener noreferrer" className="font-mono text-sm flex items-center justify-between group border-b border-transparent hover:border-[#8B5DFF] hover:text-[#8B5DFF] pb-1 transition-all text-gray-600">
+                                        <span className="uppercase tracking-wider font-medium">View Source</span>
+                                        <Github className="w-5 h-5" />
+                                    </Link>
+                                )}
+                            </div>
+                        </aside>
+
+                        {/* 4. MAIN CONTENT - "Editorial Essay" */}
+                        <article className="lg:col-span-9 order-1 lg:order-2">
+                            {/* Markdown render (Abstract removed from here) */}
+                            <div className="prose prose-lg prose-neutral max-w-3xl mx-auto lg:ml-24">
+                                <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                                    img: (props) => (
+                                        <figure className="my-16 md:-ml-24 md:w-[130%]">
+                                            <img {...props} className="w-full h-auto shadow-2xl shadow-black/5" />
+                                            {props.alt && <figcaption className="font-mono text-xs text-gray-400 mt-4 text-center uppercase tracking-widest">{props.alt}</figcaption>}
+                                        </figure>
+                                    )
+                                }}>
+                                    {project.content || ""}
+                                </ReactMarkdown>
+                            </div>
+                        </article>
                     </div>
-                </section>
+
+                    {/* 4. GALLERY - "Contact Sheet" Grid */}
+                    {project.gallery && project.gallery.length > 0 && (
+                        <section className="mt-32 md:mt-48 border-t border-black pt-12">
+                            <div className="flex items-baseline justify-between mb-12">
+                                <h3 className="font-header text-4xl md:text-6xl uppercase">Visual Index</h3>
+                                <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">({project.gallery.length} Images)</span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-4">
+                                {project.gallery.map((img: string, i: number) => (
+                                    <motion.div
+                                        key={i}
+                                        className="relative aspect-[4/3] group cursor-zoom-in overflow-hidden bg-gray-100"
+                                        whileHover={{ scale: 0.98 }}
+                                        onClick={() => setSelectedImage(img)}
+                                    >
+                                        <Image src={img} alt={`Gallery ${i}`} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+                </div>
+
+                {/* LIGHTBOX */}
+                <AnimatePresence>
+                    {selectedImage && (
+                        <motion.div
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 md:p-10 cursor-zoom-out"
+                            onClick={() => setSelectedImage(null)}
+                        >
+                            <button className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors">
+                                <X className="w-8 h-8" />
+                            </button>
+                            <motion.img
+                                layoutId={selectedImage}
+                                src={selectedImage}
+                                className="max-w-full max-h-full object-contain shadow-2xl"
+                            />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
             </main>
             <Footer />
         </div>
-    )
+    );
 }

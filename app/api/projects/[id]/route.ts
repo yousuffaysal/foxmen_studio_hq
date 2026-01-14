@@ -47,6 +47,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
                 process: body.process,
                 results: body.results,
                 testimonial: body.testimonial,
+                content: body.content,
             }
         });
         return NextResponse.json(updatedProject);

@@ -46,11 +46,12 @@ export async function POST(request: Request) {
                 process: body.process,
                 results: body.results,
                 testimonial: body.testimonial,
+                content: body.content,
             },
         });
         return NextResponse.json(project, { status: 201 });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Failed to create project:', error);
-        return NextResponse.json({ error: 'Failed to create project' }, { status: 500 });
+        return NextResponse.json({ error: error.message || 'Failed to create project' }, { status: 500 });
     }
 }
