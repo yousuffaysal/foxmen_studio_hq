@@ -73,7 +73,7 @@ const ibmPlexMonoRegularFont = localFont({
 
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://foxmen.studio"),
+  metadataBase: new URL("https://www.foxmen.studio"),
   title: {
     default: "Foxmen Studio | Building End-to-End Premium Web, Mobile, UI/UX & SaaS Experiences",
     template: "%s | Foxmen Studio",
@@ -95,7 +95,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://foxmen.studio",
+    url: "https://www.foxmen.studio",
     title: "Foxmen Studio | Premium Digital Product Development",
     description:
       "From idea to launch, we build high-performance websites and mobile apps. Expert developers & designers for your next big project.",
@@ -129,7 +129,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://foxmen.studio",
+    canonical: "https://www.foxmen.studio",
   },
   icons: {
     icon: "/icon.png",
@@ -164,8 +164,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Foxmen Studio",
-              url: "https://foxmen.studio",
-              logo: "https://foxmen.studio/logo.png",
+              url: "https://www.foxmen.studio",
+              logo: "https://www.foxmen.studio/logo.png",
               sameAs: [
                 "https://x.com/FoxmenStudio",
                 "https://www.linkedin.com/company/foxmen-studio/",
