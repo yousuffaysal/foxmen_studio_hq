@@ -133,7 +133,10 @@ export const metadata: Metadata = {
     canonical: "https://www.foxmen.studio",
   },
   icons: {
-    icon: "/icon.png",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png" },
+    ],
     shortcut: "/favicon.ico",
     apple: "/apple-icon.png",
   },
