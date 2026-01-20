@@ -385,17 +385,17 @@ export function CommentsSection({ postId }: { postId: string }) {
 
 export function PostCTA() {
     return (
-        <section className="py-24 px-6 md:px-12 bg-[#fffff3] text-center border-t border-[#414042]/10">
+        <section className="py-12 md:py-16 lg:py-24 px-4 md:px-6 lg:px-12 bg-[#fffff3] text-center border-t border-[#414042]/10">
             <div className="max-w-4xl mx-auto">
-                <span className="block text-xs font-bold uppercase tracking-[0.3em] text-[#414042]/40 mb-8 animate-pulse">
+                <span className="block text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#414042]/40 mb-6 md:mb-8 animate-pulse">
                     /// System Ready
                 </span>
-                <h2 className="text-5xl md:text-7xl font-bold mb-12 text-[#414042] leading-[0.85]" style={{ fontFamily: "var(--font-owners-medium)" }}>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-8 md:mb-12 text-[#414042] leading-[0.9] md:leading-[0.85] px-2" style={{ fontFamily: "var(--font-owners-medium)" }}>
                     INITIATE <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6E35FF] to-[#FF4A60]">COLLABORATION</span>
                 </h2>
                 <Link href="/contact" className="inline-block relative group">
                     <div className="absolute inset-0 bg-[#414042] transform translate-y-1 translate-x-1 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
-                    <div className="relative border-2 border-[#414042] bg-[#fffff3] px-12 py-6 text-xl font-bold uppercase tracking-widest text-[#414042] group-hover:-translate-y-1 group-hover:-translate-x-1 transition-transform">
+                    <div className="relative border-2 border-[#414042] bg-[#fffff3] px-6 py-3 sm:px-8 sm:py-4 md:px-12 md:py-6 text-sm sm:text-base md:text-xl font-bold uppercase tracking-wider md:tracking-widest text-[#414042] group-hover:-translate-y-1 group-hover:-translate-x-1 transition-transform">
                         Start Project
                     </div>
                 </Link>
