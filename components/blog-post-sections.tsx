@@ -295,42 +295,42 @@ export function CommentsSection({ postId }: { postId: string }) {
     };
 
     return (
-        <section className="py-12 border-t border-[#414042]/10" id="comments">
-            <div className="flex items-center gap-4 mb-12">
+        <section className="py-8 md:py-12 border-t border-[#414042]/10" id="comments">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-8 md:mb-12">
                 <div className="bg-[#414042] text-[#fffff3] px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest">
                     Discussion_Thread
                 </div>
-                <h2 className="text-2xl font-bold text-[#414042]" style={{ fontFamily: "var(--font-owners-medium)" }}>Community_Thoughts ({comments.length})</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-[#414042]" style={{ fontFamily: "var(--font-owners-medium)" }}>Community_Thoughts ({comments.length})</h2>
             </div>
 
-            <div className="grid lg:grid-cols-[1fr_400px] gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 lg:gap-16">
                 {/* Comments List */}
-                <div className="space-y-8 order-2 lg:order-1">
+                <div className="space-y-6 md:space-y-8 order-2 lg:order-1">
                     {loading ? (
-                        <div className="p-8 text-center bg-white border border-[#414042]/10">
+                        <div className="p-6 md:p-8 text-center bg-white border border-[#414042]/10">
                             <p className="text-[#414042]/40 font-mono text-xs animate-pulse">Loading discussion...</p>
                         </div>
                     ) : comments.length === 0 ? (
-                        <div className="p-12 text-center bg-white border border-dashed border-[#414042]/20">
+                        <div className="p-8 md:p-12 text-center bg-white border border-dashed border-[#414042]/20">
                             <p className="text-[#414042]/40 italic font-mono text-sm">No thoughts shared yet. Start the conversation.</p>
                         </div>
                     ) : (
                         comments.map((comment) => (
-                            <div key={comment.id} className="bg-white p-8 border-l-2 border-[#414042]/10 hover:border-[#6E35FF] transition-colors shadow-sm">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 bg-[#414042] flex items-center justify-center font-bold text-[#fffff3] text-xs font-mono">
+                            <div key={comment.id} className="bg-white p-4 md:p-8 border-l-2 border-[#414042]/10 hover:border-[#6E35FF] transition-colors shadow-sm">
+                                <div className="flex justify-between items-start mb-3 md:mb-4">
+                                    <div className="flex items-center gap-2 md:gap-3">
+                                        <div className="w-8 h-8 bg-[#414042] flex items-center justify-center font-bold text-[#fffff3] text-xs font-mono flex-shrink-0">
                                             {comment.name?.[0]?.toUpperCase()}
                                         </div>
                                         <div>
-                                            <div className="font-bold text-[#414042] text-sm uppercase tracking-wider">{comment.name}</div>
+                                            <div className="font-bold text-[#414042] text-xs md:text-sm uppercase tracking-wider">{comment.name}</div>
                                             <div className="text-[10px] text-[#414042]/40 font-mono uppercase">
                                                 TIMESTAMP: {new Date(comment.createdAt).toLocaleDateString()}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <p className="text-[#414042]/80 leading-relaxed font-mono text-sm">{comment.content}</p>
+                                <p className="text-[#414042]/80 leading-relaxed font-mono text-xs md:text-sm">{comment.content}</p>
                             </div>
                         ))
                     )}
@@ -338,8 +338,8 @@ export function CommentsSection({ postId }: { postId: string }) {
 
                 {/* Comment Form */}
                 <div className="order-1 lg:order-2">
-                    <div className="bg-[#1C1C1C] p-8 text-[#fffff3] sticky top-32 border-2 border-[#414042]">
-                        <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-[#6E35FF]" style={{ fontFamily: "var(--font-owners-regular)" }}>
+                    <div className="bg-[#1C1C1C] p-6 md:p-8 text-[#fffff3] lg:sticky lg:top-32 border-2 border-[#414042]">
+                        <h3 className="text-lg md:text-xl font-bold mb-4 md:mb-6 flex items-center gap-2 text-[#6E35FF]" style={{ fontFamily: "var(--font-owners-regular)" }}>
                             <span className="w-2 h-2 bg-[#6E35FF] rounded-full animate-pulse" />
                             Share Your Thoughts
                         </h3>
@@ -350,7 +350,7 @@ export function CommentsSection({ postId }: { postId: string }) {
                                     required
                                     value={newItem.name}
                                     onChange={e => setNewItem({ ...newItem, name: e.target.value })}
-                                    className="h-12 bg-transparent border-b border-[#fffff3]/20 rounded-none px-0 focus:border-[#6E35FF] focus-visible:ring-0 placeholder:text-[#fffff3]/30 font-mono text-sm"
+                                    className="h-10 md:h-12 bg-transparent border-b border-[#fffff3]/20 rounded-none px-0 focus:border-[#6E35FF] focus-visible:ring-0 placeholder:text-[#fffff3]/30 font-mono text-xs md:text-sm"
                                 />
                                 <Input
                                     placeholder="CONTACT_EMAIL"
@@ -358,7 +358,7 @@ export function CommentsSection({ postId }: { postId: string }) {
                                     required
                                     value={newItem.email}
                                     onChange={e => setNewItem({ ...newItem, email: e.target.value })}
-                                    className="h-12 bg-transparent border-b border-[#fffff3]/20 rounded-none px-0 focus:border-[#6E35FF] focus-visible:ring-0 placeholder:text-[#fffff3]/30 font-mono text-sm"
+                                    className="h-10 md:h-12 bg-transparent border-b border-[#fffff3]/20 rounded-none px-0 focus:border-[#6E35FF] focus-visible:ring-0 placeholder:text-[#fffff3]/30 font-mono text-xs md:text-sm"
                                 />
                             </div>
                             <Textarea
@@ -366,12 +366,12 @@ export function CommentsSection({ postId }: { postId: string }) {
                                 required
                                 value={newItem.content}
                                 onChange={e => setNewItem({ ...newItem, content: e.target.value })}
-                                className="min-h-[120px] bg-[#fffff3]/5 border-0 rounded-none focus:ring-1 focus:ring-[#6E35FF] p-4 font-mono text-sm resize-y placeholder:text-[#fffff3]/30"
+                                className="min-h-[100px] md:min-h-[120px] bg-[#fffff3]/5 border-0 rounded-none focus:ring-1 focus:ring-[#6E35FF] p-3 md:p-4 font-mono text-xs md:text-sm resize-y placeholder:text-[#fffff3]/30"
                             />
                             <Button
                                 type="submit"
                                 disabled={submitting}
-                                className="h-12 w-full rounded-none bg-[#6E35FF] text-white font-bold uppercase tracking-widest hover:bg-[#ffffff] hover:text-[#6E35FF] transition-all"
+                                className="h-10 md:h-12 w-full rounded-none bg-[#6E35FF] text-white font-bold uppercase tracking-widest text-xs md:text-sm hover:bg-[#ffffff] hover:text-[#6E35FF] transition-all"
                             >
                                 {submitting ? "Posting..." : "Post_Comment"}
                             </Button>
