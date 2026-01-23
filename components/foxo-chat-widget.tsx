@@ -18,7 +18,7 @@ export function FoxoChatWidget() {
     const { isLoading: isGlobalLoading } = useLoading();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { role: "assistant", content: "Hi! I'm Foxo. How can I help you today?" }
+        { role: "assistant", content: "Hey there! 👋 I'm **Foxo**, your AI guide at Foxmen Studio. Whether you're dreaming up your next big project or just curious about what we do — I'm here to help! What brings you by today?" }
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
