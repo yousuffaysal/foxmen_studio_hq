@@ -69,16 +69,22 @@ export default function BlogAdmin() {
         }
     }, [currentPost]);
 
-    const uploadToImgBB = async (file: File) => {
+    const uploadImage = async (file: File) => {
         const formData = new FormData();
         formData.append("image", file);
-        const apiKey = "7eab2a6a17e2b25079c27dc0b2a0f6ef";
-        const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+
+        const res = await fetch("/api/upload", {
             method: "POST",
             body: formData,
         });
+
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.error || "Upload failed");
+        }
+
         const data = await res.json();
-        return data.data.url;
+        return data.url;
     };
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +93,7 @@ export default function BlogAdmin() {
 
         setUploading(true);
         try {
-            const imageUrl = await uploadToImgBB(file);
+            const imageUrl = await uploadImage(file);
             setCurrentPost((prev) => ({ ...prev, coverImage: imageUrl }));
         } catch (error) {
             console.error("Upload failed", error);
@@ -554,7 +560,7 @@ export default function BlogAdmin() {
                                                 if (!file) return;
                                                 setUploading(true);
                                                 try {
-                                                    const url = await uploadToImgBB(file);
+                                                    const url = await uploadImage(file);
                                                     setCurrentPost(prev => ({ ...prev, authorImage: url }));
                                                 } finally {
                                                     setUploading(false);
