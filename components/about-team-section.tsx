@@ -30,7 +30,7 @@ const teamMembers = [
         name: "Elena Vostok",
         role: "Design Systems Lead",
         bio: "Building the atomic structures of digital alchemy.",
-        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop",
+        image: "/images/elena.png",
         socials: { twitter: "#", github: "#", dribbble: "#" }
     }
 ]

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Phone } from "lucide-react"
+import { Phone, Mail } from "lucide-react"
 import { motion } from "framer-motion"
 import { AnimatedHamburgerButton } from "@/components/animated-hamburger"
 import { Button } from "@/components/ui/button"
@@ -57,7 +57,7 @@ export function Navigation({ delay = 0 }: NavigationProps) {
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 w-full h-[calc(100vh-100%)] bg-white/80 backdrop-blur-md border-t border-black/10 flex flex-col p-6 z-40 md:hidden animate-in slide-in-from-top-2 duration-300">
+        <div className="absolute top-full left-0 w-full h-[calc(100vh-100%)] bg-[#ffffff] border-t border-black/10 flex flex-col p-6 z-40 md:hidden animate-in slide-in-from-top-2 duration-300">
           <div className="flex flex-col gap-8 flex-1">
             <Link href="/about" className="text-3xl font-bold hover:underline" style={{ fontFamily: "var(--font-ibm-plex-mono)" }} onClick={() => setIsOpen(false)}>
               About Us
@@ -74,7 +74,23 @@ export function Navigation({ delay = 0 }: NavigationProps) {
           </div>
 
           {/* Mobile Contact Option */}
-          <div className="mt-auto pt-8 border-t border-black/10">
+          <div className="mt-auto pt-8 border-t border-black/10 flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
+              <p className="text-xs text-black/40 uppercase tracking-widest text-center font-medium" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
+                Get in touch
+              </p>
+              <a
+                href="mailto:info@foxmenstudio.com"
+                className="group flex items-center justify-center gap-3 p-4 rounded-2xl bg-gray-50 border border-black/5 hover:border-black/10 hover:bg-gray-100 transition-all duration-300"
+              >
+                <div className="w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-black/5 group-hover:scale-110 transition-transform duration-300">
+                  <Mail className="w-4 h-4 text-black/70" />
+                </div>
+                <span className="text-sm font-medium text-black/80 group-hover:text-black tracking-tight" style={{ fontFamily: "var(--font-ibm-plex-mono)" }}>
+                  info@foxmenstudio.com
+                </span>
+              </a>
+            </div>
             <ContactButton className="w-full" onClick={() => setIsOpen(false)} />
           </div>
         </div>
