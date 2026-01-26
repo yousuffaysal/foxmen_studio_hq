@@ -7,7 +7,6 @@ import Image from "next/image"
 import { useRef } from "react"
 import { useInView } from "framer-motion"
 import { cn } from "@/lib/utils"
-import imageLoader from "@/lib/image-loader"
 
 export function ServicesSection() {
   const services = [
@@ -147,7 +146,6 @@ function ServiceItem({ service }: { service: any }) {
           src={service.image}
           alt={service.title}
           fill
-          loader={imageLoader}
           className={cn(
             "object-cover transition-all duration-700 ease-out group-hover:scale-105",
             // Mobile: Color when in center (isInView). Desktop: Color on hover.

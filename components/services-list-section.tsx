@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import imageLoader from "@/lib/image-loader"
 
 export function ServicesListSection() {
     const services = [
@@ -128,7 +127,6 @@ function ServiceRow({ service, index }: { service: any, index: number }) {
                             src={service.image}
                             alt={service.title}
                             fill
-                            loader={imageLoader}
                             className="object-contain transition-transform duration-700 group-hover:scale-105"
                         />
                     </div>

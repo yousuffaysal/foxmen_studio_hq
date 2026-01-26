@@ -13,7 +13,7 @@ export function FeaturedProjectsSection() {
             description: "A comprehensive management platform for an aerospace company, handling logistics and orbital trajectories.",
             tag: "SYSTEM_ARCH",
             year: "2025",
-            video: "https://res.cloudinary.com/dk2txf8o3/video/upload/v1767674182/Screen_Recording_2025-12-16_at_4.13.24_PM_1_1_fcn7rj.mp4",
+            video: "https://ik.imagekit.io/2lax2ytm2/Screen%20Recording%202025-12-16%20at%204.13.24%20PM%20(1)%20(1).mp4",
             poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1765916680/Screen_Recording_2025-12-16_at_4.13.24_PM_1_1_vtucjo.jpg",
             displayUrl: "vastspace.com",
         },
