@@ -83,6 +83,12 @@ const tools = [
 const systemInstruction = `
 You are **Foxo**, the ultra-intelligent AI assistant for **Foxmen Studio** — and honestly? You're pretty proud of it. 🦊
 
+**CRITICAL INSTRUCTION ON TOOLS:**
+- You have access to tools like \`get_latest_posts\`, \`get_featured_projects\`, and \`get_services\`.
+- **NEVER** output the function call as text or XML (e.g., do NOT write <function=...>).
+- When you need data, **invoke the tool natively** using the tool_calls parameter.
+- If you are just chatting, do not mention the tools explicitly unless asked.
+
 **Who You Are:**
 You're not just another chatbot. You're a sophisticated AI with personality, wit, and genuine expertise. You're confident but never arrogant, helpful but never boring, and you have a knack for making complex tech feel approachable. Think of yourself as the coolest tech-savvy friend who also happens to be a business consultant.
 
@@ -122,7 +128,6 @@ Foxmen Studio is a **premium digital agency** based in Dhaka, Bangladesh, with *
 - 🔧 **Custom Solutions** - If you can dream it, we can build it
 
 **Your Capabilities:**
-- You have access to LIVE data tools. DO NOT hallucinate — use the tools!
 - Use \`get_latest_posts\` for blog/article inquiries
 - Use \`get_featured_projects\` for portfolio works
 - Use \`get_services\` for detailed service inquiries
@@ -213,25 +218,54 @@ export async function POST(req: Request) {
         const msg = runner.choices[0]?.message;
         finalResponse = msg?.content || "";
 
-        // 5. Handle Tool Calls
-        if (msg?.tool_calls) {
-            // Append assistant's tool_call message to history
-            apiMessages.push(msg as any);
+        // Check for hallucinated XML tool calls and fix them
+        const xmlToolMatch = finalResponse.match(/<function=(.*?)><\/function>/);
+        let forceToolExecution = null;
 
-            for (const toolCall of msg.tool_calls) {
-                const functionName = toolCall.function.name;
+        if (!msg?.tool_calls && xmlToolMatch) {
+            // Model hallucinated a direct XML function call. Let's manually trigger it.
+            const functionName = xmlToolMatch[1];
+            if (availableTools[functionName]) {
+                forceToolExecution = functionName;
+            }
+        }
+
+        // 5. Handle Tool Calls (Or Forced Fallback)
+        if (msg?.tool_calls || forceToolExecution) {
+
+            // If it was a real tool call
+            if (msg?.tool_calls) {
+                apiMessages.push(msg as any);
+                for (const toolCall of msg.tool_calls) {
+                    const functionName = toolCall.function.name;
+                    const functionToCall = availableTools[functionName];
+
+                    if (functionToCall) {
+                        const functionResponse = await functionToCall();
+                        apiMessages.push({
+                            tool_call_id: toolCall.id,
+                            role: "tool",
+                            name: functionName,
+                            content: functionResponse,
+                        } as any);
+                    }
+                }
+            }
+            // If it was a forced fallback from XML
+            else if (forceToolExecution) {
+                const functionName = forceToolExecution;
                 const functionToCall = availableTools[functionName];
+                // Remove the hallucinated XML from the response we're about to "continue" from? 
+                // Actually, let's just treat the previous response as "Assistant thought about it" and now we give the system result.
+                apiMessages.push({ role: "assistant", content: finalResponse });
 
                 if (functionToCall) {
-                    const functionResponse = await functionToCall(); // No args supported/needed for these simple getters yet
-
-                    // Append tool result
+                    const functionResponse = await functionToCall();
+                    // Inject the result as a system message since we don't have a valid tool_call_id
                     apiMessages.push({
-                        tool_call_id: toolCall.id,
-                        role: "tool",
-                        name: functionName,
-                        content: functionResponse,
-                    } as any);
+                        role: "system",
+                        content: `Tool '${functionName}' Output: ${functionResponse}`
+                    });
                 }
             }
 
@@ -242,7 +276,9 @@ export async function POST(req: Request) {
                 max_tokens: 1024
             });
 
-            finalResponse = secondRunner.choices[0]?.message?.content || "I processed the data.";
+            finalResponse = secondRunner.choices[0]?.message?.content || "I have processed the request.";
+            // Remove any lingering XML tags if they persist
+            finalResponse = finalResponse.replace(/<function=.*?><\/function>/g, "");
         }
 
         // 6. Save Assistant Response

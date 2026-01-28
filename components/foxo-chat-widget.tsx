@@ -119,7 +119,7 @@ export function FoxoChatWidget() {
                                     <div className="relative">
                                         <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#8B5DFF] to-[#bca4ff] flex items-center justify-center p-0.5">
                                             <div className="w-full h-full bg-white rounded-full flex items-center justify-center overflow-hidden">
-                                                <img src="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png" alt="Foxo Logo" className="w-5 h-5 object-contain" />
+                                                <img src="https://ik.imagekit.io/8fky5hetz/on_Logo.png" alt="Foxo Logo" className="w-5 h-5 object-contain" />
                                             </div>
                                         </div>
                                         <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></span>
@@ -140,7 +140,10 @@ export function FoxoChatWidget() {
                             {/* Messages Container */}
                             <div
                                 ref={scrollRef}
-                                className="flex-1 min-h-0 overflow-y-auto p-5 space-y-6 bg-white scroll-smooth overscroll-y-contain"
+                                className="flex-1 min-h-0 overflow-y-auto p-5 space-y-6 bg-white overscroll-contain"
+                                data-lenis-prevent
+                                onWheel={(e) => e.stopPropagation()}
+                                onTouchMove={(e) => e.stopPropagation()}
                             >
                                 {messages.map((msg, idx) => (
                                     <motion.div
@@ -152,7 +155,7 @@ export function FoxoChatWidget() {
                                         {/* Avatar for AI */}
                                         {msg.role === "assistant" && (
                                             <div className="w-8 h-8 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                                <img src="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png" alt="AI" className="w-5 h-5 object-contain opacity-80" />
+                                                <img src="https://ik.imagekit.io/8fky5hetz/on_Logo.png" alt="AI" className="w-5 h-5 object-contain opacity-80" />
                                             </div>
                                         )}
 
@@ -204,7 +207,7 @@ export function FoxoChatWidget() {
                                         className="flex gap-4"
                                     >
                                         <div className="w-8 h-8 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                            <img src="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png" alt="AI" className="w-5 h-5 object-contain opacity-80" />
+                                            <img src="https://ik.imagekit.io/8fky5hetz/on_Logo.png" alt="AI" className="w-5 h-5 object-contain opacity-80" />
                                         </div>
                                         <div className="flex items-center gap-1.5 h-8">
                                             <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" />
