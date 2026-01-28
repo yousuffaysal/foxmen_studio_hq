@@ -282,7 +282,12 @@ export default function ProjectsAdmin() {
                             </div>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto bg-[#FFFFF5] p-12">
+                        <div
+                            className="flex-1 overflow-y-auto bg-[#FFFFF5] p-12 overscroll-contain"
+                            data-lenis-prevent
+                            onWheel={(e) => e.stopPropagation()}
+                            onTouchMove={(e) => e.stopPropagation()}
+                        >
                             <TabsContent value="meta" className="mt-0 space-y-8">
                                 <div className="grid grid-cols-2 gap-8">
                                     <div className="space-y-3">

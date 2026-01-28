@@ -325,7 +325,12 @@ export default function BlogAdmin() {
 
             {/* Comments Manager Dialog */}
             <Dialog open={!!managingComments} onOpenChange={(open) => !open && setManagingComments(null)}>
-                <DialogContent className="sm:max-w-[600px] overflow-y-auto max-h-[80vh] bg-white border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] p-0 gap-0 sm:rounded-[32px]">
+                <DialogContent
+                    className="sm:max-w-[600px] overflow-y-auto max-h-[80vh] bg-white border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] p-0 gap-0 sm:rounded-[32px] overscroll-contain"
+                    data-lenis-prevent
+                    onWheel={(e) => e.stopPropagation()}
+                    onTouchMove={(e) => e.stopPropagation()}
+                >
                     <DialogHeader className="p-8 border-b-4 border-black bg-[#FFC224] relative">
                         <div className="absolute top-6 right-6">
                             <DialogClose className="rounded-full p-2 hover:bg-black/10 transition-colors">
@@ -391,7 +396,12 @@ export default function BlogAdmin() {
 
             {/* Edit/Add Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="sm:max-w-[800px] overflow-y-auto max-h-[90vh] bg-white border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] p-0 gap-0 sm:rounded-[32px]">
+                <DialogContent
+                    className="sm:max-w-[800px] overflow-y-auto max-h-[90vh] bg-white border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] p-0 gap-0 sm:rounded-[32px] overscroll-contain"
+                    data-lenis-prevent
+                    onWheel={(e) => e.stopPropagation()}
+                    onTouchMove={(e) => e.stopPropagation()}
+                >
                     <DialogHeader className="p-8 border-b-4 border-black bg-[#FFC224] relative">
                         <div className="absolute top-6 right-6">
                             <DialogClose className="rounded-full p-2 hover:bg-black/10 transition-colors">
