@@ -71,6 +71,16 @@ export function HeroSection() {
         }}
       />
 
+      {/* Background Map Overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.40]"
+        style={{
+          backgroundImage: 'url("https://ik.imagekit.io/8fky5hetz/Map=Default.svg")',
+          backgroundSize: 'contain',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+
       <div className="container mx-auto px-4 sm:px-6 md:px-8 flex-grow flex flex-col relative z-10">
 
         {/* Header Section */}
