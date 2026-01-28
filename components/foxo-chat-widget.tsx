@@ -140,7 +140,7 @@ export function FoxoChatWidget() {
                             {/* Messages Container */}
                             <div
                                 ref={scrollRef}
-                                className="flex-1 overflow-y-auto p-5 space-y-6 bg-white scroll-smooth"
+                                className="flex-1 min-h-0 overflow-y-auto p-5 space-y-6 bg-white scroll-smooth overscroll-y-contain"
                             >
                                 {messages.map((msg, idx) => (
                                     <motion.div
