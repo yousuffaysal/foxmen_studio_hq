@@ -169,7 +169,7 @@ export function AboutApproach() {
             {/* Background Logo Watermark */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-[0.03] pointer-events-none select-none">
                 <Image
-                    src="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png"
+                    src="https://ik.imagekit.io/8fky5hetz/on_Logo.png"
                     alt="Background Logo"
                     fill
                     className="object-contain"
@@ -180,7 +180,7 @@ export function AboutApproach() {
                 <div className="flex flex-col items-center text-center mb-16 md:mb-24">
                     <div className="w-12 h-12 md:w-16 md:h-16 mb-6 md:mb-8 relative">
                         <Image
-                            src="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png"
+                            src="https://ik.imagekit.io/8fky5hetz/on_Logo.png"
                             alt="Foxmen Logo"
                             fill
                             className="object-contain"
@@ -266,7 +266,7 @@ export function AboutStatsMarquee() {
                         <span className="text-xs md:text-base text-[#8B5DFF] font-mono uppercase tracking-wider">{stat.label}</span>
                         <div className="relative w-12 h-12 md:w-16 md:h-16 ml-4 md:ml-8">
                             <Image
-                                src="https://res.cloudinary.com/dk2txf8o3/image/upload/v1767629242/on_Logo_gma5n0.png"
+                                src="https://ik.imagekit.io/8fky5hetz/on_Logo.png"
                                 alt="Separator"
                                 fill
                                 className="object-contain"
