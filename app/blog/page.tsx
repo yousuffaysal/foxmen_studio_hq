@@ -14,8 +14,16 @@ import { HomePreloader } from "@/components/home-preloader"
 import { ScrollAnimation } from "@/components/scroll-animation"
 
 export const metadata: Metadata = {
-    title: "Blog & Insights",
+    title: "Blog & Insights | Foxmen Studio",
     description: "Explore the latest insights, trends, and articles on web development, UI/UX design, and SaaS product strategies from Foxmen Studio.",
+    openGraph: {
+        title: "Blog & Insights | Foxmen Studio",
+        description: "Explore the latest insights, trends, and articles on web development, UI/UX design, and SaaS product strategies from Foxmen Studio.",
+        url: 'https://www.foxmen.studio/blog',
+        siteName: 'Foxmen Studio',
+        locale: 'en_US',
+        type: 'website',
+    }
 }
 
 export default function BlogPage() {

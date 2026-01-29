@@ -167,19 +167,31 @@ export default function RootLayout({
               name: "Foxmen Studio",
               url: "https://www.foxmen.studio",
               logo: "https://www.foxmen.studio/logo.png",
+              description: "Foxmen Studio is a premier digital agency building high-performance websites, mobile apps, and AI agents.",
+              email: "contact@foxmenstudio.com",
+              telephone: "+880 1753973892",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Road 12, Block B",
+                addressLocality: "Dhaka",
+                postalCode: "1212",
+                addressCountry: "BD"
+              },
               sameAs: [
                 "https://x.com/FoxmenStudio",
                 "https://www.linkedin.com/company/foxmen-studio/",
                 "https://www.facebook.com/profile.php?id=61579940840061&sk=about",
                 "https://dribbble.com/foxmen-studio",
                 "https://www.youtube.com/@Foxmen-Studio",
+                "https://www.instagram.com/foxmen_studio"
               ],
               contactPoint: {
                 "@type": "ContactPoint",
-                telephone: "+1-555-0123",
+                telephone: "+880 1753973892",
                 contactType: "sales",
                 areaServed: "Worldwide",
                 availableLanguage: "English",
+                email: "contact@foxmenstudio.com"
               },
             }),
           }}

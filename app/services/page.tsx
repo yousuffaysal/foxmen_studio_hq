@@ -5,6 +5,14 @@ import { ServicesListSection } from "@/components/services-list-section"
 export const metadata = {
     title: "Our Services | Foxmen Studio",
     description: "Explore our comprehensive range of services including Website Development, UI/UX Design, Mobile App Development, AI Agents, and Branding.",
+    openGraph: {
+        title: "Our Services | Foxmen Studio",
+        description: "Explore our comprehensive range of services including Website Development, UI/UX Design, Mobile App Development, AI Agents, and Branding.",
+        url: 'https://www.foxmen.studio/services',
+        siteName: 'Foxmen Studio',
+        locale: 'en_US',
+        type: 'website',
+    }
 }
 
 export default function ServicesPage() {
