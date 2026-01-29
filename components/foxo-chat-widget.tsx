@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, Mic, MicOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useLoading } from "@/components/loading-context";
+import { toast } from "sonner";
 
 type Message = {
     role: "user" | "assistant";
@@ -30,6 +31,84 @@ export function FoxoChatWidget() {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messages]);
+
+    // Voice to Text Logic
+    const [isListening, setIsListening] = useState(false);
+    const recognitionRef = useRef<any>(null);
+    const finalTranscriptRef = useRef("");
+
+    // Initialize speech recognition (HMR force update)
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                recognitionRef.current = new SpeechRecognition();
+                recognitionRef.current.continuous = false;
+                recognitionRef.current.interimResults = true;
+                recognitionRef.current.lang = 'en-US';
+
+                recognitionRef.current.onstart = () => {
+                    finalTranscriptRef.current = input;
+                };
+
+                recognitionRef.current.onresult = (event: any) => {
+                    let interimTranscript = '';
+                    let finalStep = '';
+
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalStep += event.results[i][0].transcript;
+                        } else {
+                            interimTranscript += event.results[i][0].transcript;
+                        }
+                    }
+
+                    if (finalStep) {
+                        finalTranscriptRef.current += (finalTranscriptRef.current ? " " : "") + finalStep;
+                    }
+
+                    const displayInput = finalTranscriptRef.current + (finalTranscriptRef.current && interimTranscript ? " " : "") + interimTranscript;
+                    setInput(displayInput);
+                };
+
+                recognitionRef.current.onerror = (event: any) => {
+                    if (event.error === 'network') {
+                        toast.error("Network error: Please check your connection or try Chrome.", {
+                            description: "Voice recognition requires Google services."
+                        });
+                    } else if (event.error === 'not-allowed') {
+                        toast.error("Microphone access denied. Please allow permission.");
+                    } else if (event.error === 'no-speech') {
+                        return;
+                    } else {
+                        toast.error(`Voice error: ${event.error}`);
+                    }
+                    setIsListening(false);
+                };
+
+                recognitionRef.current.onend = () => {
+                    setIsListening(false);
+                };
+            }
+        }
+    }, [input]);
+
+    const toggleListening = () => {
+        if (isListening) {
+            recognitionRef.current?.stop();
+            setIsListening(false);
+        } else {
+            if (recognitionRef.current) {
+                finalTranscriptRef.current = input;
+                recognitionRef.current.start();
+                setIsListening(true);
+            } else {
+                toast.error("Voice recognition is not supported in this browser.", {
+                    description: "Please try using Google Chrome, Edge, or Safari."
+                });
+            }
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -218,29 +297,57 @@ export function FoxoChatWidget() {
                                 )}
                             </div>
 
-                            {/* Input Area */}
                             <div className="p-4 bg-white/80 backdrop-blur-sm border-t border-gray-50 shrink-0 pb-safe z-20">
                                 <form
                                     onSubmit={handleSubmit}
-                                    className="relative flex items-center bg-[#f4f4f5] rounded-full ring-1 ring-transparent focus-within:ring-[#8B5DFF]/20 focus-within:bg-white transition-all shadow-sm group"
+                                    className="relative flex items-end bg-[#f4f4f5] rounded-[24px] ring-1 ring-transparent focus-within:ring-[#8B5DFF]/20 focus-within:bg-white transition-all shadow-sm group"
                                 >
-                                    <input
-                                        type="text"
+                                    <textarea
+                                        ref={(el) => {
+                                            if (el) {
+                                                el.style.height = 'auto';
+                                                el.style.height = `${Math.min(el.scrollHeight, 150)}px`;
+                                            }
+                                        }}
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
-                                        placeholder="Message Foxo..."
-                                        className="flex-1 bg-transparent px-5 py-3.5 text-sm md:text-[15px] focus:outline-none placeholder:text-gray-400 text-gray-900"
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                e.preventDefault();
+                                                handleSubmit(e as any);
+                                            }
+                                        }}
+                                        placeholder={isListening ? "Listening..." : "Message Foxo..."}
+                                        rows={1}
+                                        className="flex-1 bg-transparent px-5 py-3.5 text-sm md:text-[15px] focus:outline-none placeholder:text-gray-400 text-gray-900 resize-none max-h-[150px] overflow-y-auto"
+                                        style={{ minHeight: '48px' }}
                                     />
-                                    <button
-                                        type="submit"
-                                        disabled={!input.trim() || isLoading}
-                                        className="absolute right-2 p-2 bg-[#8B5DFF] text-white rounded-full hover:bg-[#7a4ee0] disabled:opacity-0 disabled:scale-75 transition-all shadow-sm"
-                                    >
-                                        <Send size={16} className={isLoading ? "hidden" : "block"} />
-                                        {isLoading && (
-                                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    <div className="flex items-center gap-1 pr-2 pb-2">
+                                        <button
+                                            type="button"
+                                            onClick={toggleListening}
+                                            className={`p-2 rounded-full transition-all ${isListening ? 'text-red-500 bg-red-50 hover:bg-red-100' : 'text-gray-400 hover:text-[#8B5DFF] hover:bg-gray-100'}`}
+                                            title="Voice to Text"
+                                        >
+                                            {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                                        </button>
+
+                                        {(input.trim() || isLoading) && (
+                                            <motion.button
+                                                type="submit"
+                                                disabled={!input.trim() || isLoading}
+                                                initial={{ scale: 0, opacity: 0, width: 0 }}
+                                                animate={{ scale: 1, opacity: 1, width: "auto" }}
+                                                exit={{ scale: 0, opacity: 0, width: 0 }}
+                                                className="p-2 bg-[#8B5DFF] text-white rounded-full hover:bg-[#7a4ee0] disabled:opacity-0 disabled:scale-75 transition-all shadow-sm"
+                                            >
+                                                <Send size={16} className={isLoading ? "hidden" : "block"} />
+                                                {isLoading && (
+                                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                )}
+                                            </motion.button>
                                         )}
-                                    </button>
+                                    </div>
                                 </form>
                                 <div className="text-center mt-2">
                                     <p className="text-[10px] text-gray-400">Foxo can make mistakes. Check important info.</p>

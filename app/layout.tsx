@@ -5,6 +5,7 @@ import "./globals.css"
 
 import { Geist_Mono as Geist_Mono_Font } from "next/font/google"
 import localFont from "next/font/local"
+import { Toaster } from "sonner"
 import TargetCursor from "@/components/target-cursor"
 import { FoxoChatWidget } from "@/components/foxo-chat-widget"
 import { LoadingProvider } from "@/components/loading-context"
@@ -204,6 +205,7 @@ export default function RootLayout({
               targetSelector="a, button, input, textarea, .cursor-pointer, .cursor-target, [role='button'], [data-cal-link]"
             />
             <FoxoChatWidget />
+            <Toaster />
             {children}
           </SmoothScroller>
         </LoadingProvider>

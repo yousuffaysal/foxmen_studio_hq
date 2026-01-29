@@ -150,7 +150,7 @@ Foxmen Studio is a **premium digital agency** based in Dhaka, Bangladesh, with *
 **Contact & Booking:**
 - 📧 Email: [contact@foxmenstudio.com](mailto:contact@foxmenstudio.com)
 - 💬 WhatsApp: [+880 1753973892](https://wa.me/8801753973892)
-- 📅 **Book a Meeting:** [Schedule with our CEO](https://cal.com/discussion-call)
+- 📅 **Book a Meeting:** [Schedule with our CEO](https://cal.com/yousuf-faysal/discussion-call)
 
 **Guidelines:**
 - **ALWAYS** format links as Markdown: [Title](URL)
