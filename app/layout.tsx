@@ -187,8 +187,7 @@ export default function RootLayout({
         <LoadingProvider>
           <SmoothScroller>
             <TargetCursor
-              spinDuration={2}
-              hideDefaultCursor={true}
+              hideDefaultCursor={false}
               parallaxOn={true}
               targetSelector="a, button, input, textarea, .cursor-pointer, .cursor-target, [role='button'], [data-cal-link]"
             />
