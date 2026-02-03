@@ -79,8 +79,7 @@ prisma generate && next build
 
 ### 2. Environment Variables
 Add the following in Vercel Project Settings:
--   `GROQ_API_KEY`: Your production API key.
--   `DATABASE_URL`: `file:./dev.db` (or a remote Postgres URL if you need persistent history).
+
 
 ### ❗ Important Note on Database
 Vercel Serverless Functions have a **read-only file system**. 
