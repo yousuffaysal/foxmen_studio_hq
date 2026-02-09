@@ -23,7 +23,7 @@ export function FeaturedProjectsSection() {
             description: "Exclusive private jet charter platform offering seamless booking and premium travel experiences.",
             tag: "AVIATION_UI",
             year: "2025",
-            video: "https://ik.imagekit.io/hkhhsyhak/Screen%20Recording%202026-02-09%20at%203.07.50%20PM%20(2)%20(1).mp4",
+            video: "https://ik.imagekit.io/hkhhsyhak/Screen%20Recording%202026-02-09%20at%203.07.50%20PM%20(2)%20(1).mp4?tr=f-auto,q-80,w-1280",
             displayUrl: "jeskojets.com",
         },
         {
