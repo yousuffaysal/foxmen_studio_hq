@@ -19,13 +19,12 @@ export function FeaturedProjectsSection() {
         },
         {
             id: "02",
-            title: "Digital Wallet",
-            description: "Seamless money transfers and payments infrastructure built for high-frequency trading and retail use.",
-            tag: "FINTECH_CORE",
+            title: "Jeskojets",
+            description: "Exclusive private jet charter platform offering seamless booking and premium travel experiences.",
+            tag: "AVIATION_UI",
             year: "2025",
-            video: "https://res.cloudinary.com/dk2txf8o3/video/upload/v1767674056/From_KlickPin_CF_UI_Design_for_money_transfer_and_digital_payment_services_Payoneer_Interactive_web_design_Mobile_app_design_inspiration_Banking_app_bazz7f.mp4",
-            poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766068763/From_KlickPin_CF_UI_Design_for_money_transfer_and_digital_payment_services_Payoneer_Interactive_web_design_Mobile_app_design_inspiration_Banking_app_b58lz8.jpg",
-            displayUrl: "app store",
+            video: "https://ik.imagekit.io/hkhhsyhak/Screen%20Recording%202026-02-09%20at%203.07.50%20PM%20(2)%20(1).mp4",
+            displayUrl: "jeskojets.com",
         },
         {
             id: "03",

@@ -1,11 +1,13 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const { protect } = require('../middleware/authMiddleware');
+const cacheMiddleware = require('../middleware/cacheMiddleware');
+const invalidateCache = require('../utils/cacheInvalidate');
 const router = express.Router();
 const prisma = new PrismaClient();
 
 // Get all posts
-router.get('/', async (req, res) => {
+router.get('/', cacheMiddleware(3600), async (req, res) => {
     try {
         const posts = await prisma.post.findMany({ orderBy: { createdAt: 'desc' } });
         const mappedPosts = posts.map(p => ({ ...p, _id: p.id }));
@@ -16,7 +18,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get single post
-router.get('/:idOrSlug', async (req, res) => {
+router.get('/:idOrSlug', cacheMiddleware(3600), async (req, res) => {
     try {
         const { idOrSlug } = req.params;
         let post;
@@ -63,6 +65,10 @@ router.post('/', protect, async (req, res) => {
                 slug: finalSlug
             }
         });
+
+        // Invalidate cache
+        await invalidateCache('api:/api/posts*');
+
         res.status(201).json({ ...newPost, _id: newPost.id });
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -96,6 +102,10 @@ router.put('/:id', protect, async (req, res) => {
                 slug
             }
         });
+
+        // Invalidate cache
+        await invalidateCache('api:/api/posts*');
+
         res.json({ ...updatedPost, _id: updatedPost.id });
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -106,6 +116,10 @@ router.put('/:id', protect, async (req, res) => {
 router.delete('/:id', protect, async (req, res) => {
     try {
         await prisma.post.delete({ where: { id: req.params.id } });
+
+        // Invalidate cache
+        await invalidateCache('api:/api/posts*');
+
         res.json({ message: 'Post removed' });
     } catch (error) {
         res.status(500).json({ message: error.message });
