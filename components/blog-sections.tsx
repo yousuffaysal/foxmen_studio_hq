@@ -112,6 +112,7 @@ export function ArticleGrid() {
         fetch('/api/posts')
             .then(res => res.json())
             .then(data => {
+                console.log("Fetched articles:", data)
                 setArticles(data)
                 setLoading(false)
             })
@@ -148,6 +149,7 @@ export function ArticleGrid() {
                                                     src={art.coverImage}
                                                     alt={art.title}
                                                     fill
+                                                    unoptimized
                                                     className="object-cover transition-all duration-700 ease-[0.22,1,0.36,1] group-hover:scale-105 group-hover:contrast-110 grayscale-[20%] group-hover:grayscale-0"
                                                 />
                                             )}
@@ -191,6 +193,7 @@ export function ArticleGrid() {
                                             src={art.coverImage}
                                             alt={art.title}
                                             fill
+                                            unoptimized
                                             className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                                         />
                                     )}
