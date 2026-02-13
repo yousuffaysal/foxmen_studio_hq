@@ -1,6 +1,8 @@
-
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import redis from '@/lib/redis';
+
+const CACHE_KEY = 'api:posts';
 
 export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
     try {
@@ -43,6 +45,11 @@ export async function PUT(request: Request, props: { params: Promise<{ id: strin
                 date: body.date ? new Date(body.date) : undefined,
             },
         });
+
+        // Invalidate cache
+        await redis.del(CACHE_KEY);
+        console.log('Cache INVALIDATED: post updated');
+
         console.log(`[PUT] Update success`, updatedPost);
         return NextResponse.json(updatedPost);
     } catch (error: any) {
@@ -57,6 +64,11 @@ export async function DELETE(request: Request, props: { params: Promise<{ id: st
         await prisma.post.delete({
             where: { id: params.id },
         });
+
+        // Invalidate cache
+        await redis.del(CACHE_KEY);
+        console.log('Cache INVALIDATED: post deleted');
+
         return NextResponse.json({ message: 'Post deleted' });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 });
