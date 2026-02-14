@@ -9,10 +9,16 @@ const CACHE_DURATION = 3600; // 1 hour
 export async function GET() {
     try {
         // Check cache
-        const cachedPosts = await redis.get(CACHE_KEY);
-        if (cachedPosts) {
-            console.log('Cache HIT: outputting cached posts');
-            return NextResponse.json(cachedPosts);
+        if (redis) {
+            try {
+                const cachedPosts = await redis.get(CACHE_KEY);
+                if (cachedPosts) {
+                    console.log('Cache HIT: outputting cached posts');
+                    return NextResponse.json(cachedPosts);
+                }
+            } catch (redisError) {
+                console.error('Redis GET Error:', redisError);
+            }
         }
 
         console.log('Cache MISS: fetching from DB');
@@ -22,7 +28,13 @@ export async function GET() {
         });
 
         // Set cache
-        await redis.set(CACHE_KEY, posts, { ex: CACHE_DURATION });
+        if (redis) {
+            try {
+                await redis.set(CACHE_KEY, posts, { ex: CACHE_DURATION });
+            } catch (redisError) {
+                console.error('Redis SET Error:', redisError);
+            }
+        }
 
         return NextResponse.json(posts);
     } catch (error) {
@@ -54,8 +66,14 @@ export async function POST(request: Request) {
         });
 
         // Invalidate cache
-        await redis.del(CACHE_KEY);
-        console.log('Cache INVALIDATED: new post created');
+        if (redis) {
+            try {
+                await redis.del(CACHE_KEY);
+                console.log('Cache INVALIDATED: new post created');
+            } catch (redisError) {
+                console.error('Redis DEL Error:', redisError);
+            }
+        }
 
         // Broadcast to subscribers
         try {

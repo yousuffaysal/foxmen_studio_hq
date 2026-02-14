@@ -47,8 +47,14 @@ export async function PUT(request: Request, props: { params: Promise<{ id: strin
         });
 
         // Invalidate cache
-        await redis.del(CACHE_KEY);
-        console.log('Cache INVALIDATED: post updated');
+        if (redis) {
+            try {
+                await redis.del(CACHE_KEY);
+                console.log('Cache INVALIDATED: post updated');
+            } catch (redisError) {
+                console.error('Redis DEL Error:', redisError);
+            }
+        }
 
         console.log(`[PUT] Update success`, updatedPost);
         return NextResponse.json(updatedPost);
@@ -66,8 +72,14 @@ export async function DELETE(request: Request, props: { params: Promise<{ id: st
         });
 
         // Invalidate cache
-        await redis.del(CACHE_KEY);
-        console.log('Cache INVALIDATED: post deleted');
+        if (redis) {
+            try {
+                await redis.del(CACHE_KEY);
+                console.log('Cache INVALIDATED: post deleted');
+            } catch (redisError) {
+                console.error('Redis DEL Error:', redisError);
+            }
+        }
 
         return NextResponse.json({ message: 'Post deleted' });
     } catch (error) {
