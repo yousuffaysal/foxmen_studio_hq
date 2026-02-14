@@ -14,7 +14,7 @@ export function FeaturedProjectsSection() {
             tag: "SYSTEM_ARCH",
             year: "2025",
             video: "https://ik.imagekit.io/2lax2ytm2/Screen%20Recording%202025-12-16%20at%204.13.24%20PM%20(1)%20(1).mp4",
-            poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1765916680/Screen_Recording_2025-12-16_at_4.13.24_PM_1_1_vtucjo.jpg",
+            // poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1765916680/Screen_Recording_2025-12-16_at_4.13.24_PM_1_1_vtucjo.jpg",
             displayUrl: "vastspace.com",
         },
         {
@@ -33,7 +33,7 @@ export function FeaturedProjectsSection() {
             tag: "VISUAL_SYS",
             year: "2024",
             video: "https://ik.imagekit.io/2lax2ytm2/coinbase_brand_film%20(1080p).mp4",
-            poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766061712/coinbase_brand_film_1080p_ym70u6.jpg",
+            // poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766061712/coinbase_brand_film_1080p_ym70u6.jpg",
             displayUrl: "coinbase.com",
         },
         {
@@ -43,7 +43,7 @@ export function FeaturedProjectsSection() {
             tag: "MOBILE_ENG",
             year: "2024",
             video: "https://ik.imagekit.io/2lax2ytm2/Screen%20Recording%202025-12-18%20at%203.23.38%20PM%20(1).mov",
-            poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766050597/Screen_Recording_2025-12-18_at_3.23.38_PM_1_b0becr.jpg",
+            // poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766050597/Screen_Recording_2025-12-18_at_3.23.38_PM_1_b0becr.jpg",
             displayUrl: "wefunder.com",
         },
         {
@@ -53,7 +53,7 @@ export function FeaturedProjectsSection() {
             tag: "EDTECH_AI",
             year: "2023",
             video: "https://ik.imagekit.io/2lax2ytm2/Screen%20Recording%202025-12-18%20at%202.32.23%20PM%20(1).mov",
-            poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766047326/Screen_Recording_2025-12-18_at_2.32.23_PM_nmuegb.jpg",
+            // poster: "https://res.cloudinary.com/duh7c5x99/video/upload/so_0,f_jpg,q_auto/v1766047326/Screen_Recording_2025-12-18_at_2.32.23_PM_1_nmuegb.jpg",
             displayUrl: "pluralsight.com",
         },
     ]
