@@ -372,9 +372,16 @@ export default function ProjectPage() {
                                         return <p>{children}</p>;
                                     },
                                     img: (props) => (
-                                        <figure className="my-16 md:-ml-24 md:w-[130%]">
-                                            <img {...props} className="w-full h-auto shadow-2xl shadow-black/5" />
-                                            {props.alt && <figcaption className="font-mono text-xs text-gray-400 mt-4 text-center uppercase tracking-widest">{props.alt}</figcaption>}
+                                        <figure className="my-16 md:-ml-24 md:w-[130%] relative aspect-video">
+                                            {props.src && (
+                                                <Image
+                                                    src={props.src}
+                                                    alt={props.alt || "Project Image"}
+                                                    fill
+                                                    className="object-cover shadow-2xl shadow-black/5 rounded-lg"
+                                                    sizes="(max-width: 1024px) 100vw, 85vw"
+                                                />
+                                            )}
                                         </figure>
                                     )
                                 }}>

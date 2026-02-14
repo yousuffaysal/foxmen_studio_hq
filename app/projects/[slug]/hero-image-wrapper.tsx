@@ -40,6 +40,7 @@ export function HeroImageWrapper({ project }: { project: any }) {
                         fill
                         className="object-cover grayscale-[0.1]"
                         priority
+                        sizes="100vw"
                     />
                 </div>
             </motion.div>
