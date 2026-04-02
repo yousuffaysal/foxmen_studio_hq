@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#fffff0] w-full overflow-x-hidden">
       <HomePreloader />
-      <Navigation delay={3.2} />
+      <Navigation delay={5.6} />
       <HeroSection />
 
       <ScrollAnimation>
