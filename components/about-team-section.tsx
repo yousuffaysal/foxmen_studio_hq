@@ -7,14 +7,14 @@ import Image from "next/image"
 const teamMembers = [
     {
         name: "Yousuf H Faysal",
-        role: "Founder & Lead Alchemist",
+        role: "Founder & CEO",
         bio: "Visionary traversing the void between design and code.",
         image: "/images/Gemini_Generated_Image_ug8ze2ug8ze2ug8z (1).png",
         socials: { twitter: "https://x.com/yousuf_faysal_", linkedin: "https://www.linkedin.com/in/yusuf-faysal/", github: "https://github.com/yousuffaysal" }
     },
     {
         name: "Rayhan Ahmed",
-        role: "Principal Software Engineer",
+        role: "Co-Founder & CTO",
         bio: "(Core architecture, complex systems, clean code)",
         image: "/images/rhn (1).png",
         socials: { twitter: "#", linkedin: "https://www.linkedin.com/in/rayhan-ahmed-0ab5aa33a", facebook: "#" }
