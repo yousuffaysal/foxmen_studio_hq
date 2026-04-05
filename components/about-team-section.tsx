@@ -14,7 +14,7 @@ const teamMembers = [
     },
     {
         name: "Rayhan Ahmed",
-        role: "Co-Founder & CTO",
+        role: "Co-Founder & COO",
         bio: "(Core architecture, complex systems, clean code)",
         image: "/images/rhn (1).png",
         socials: { twitter: "#", linkedin: "https://www.linkedin.com/in/rayhan-ahmed-0ab5aa33a", facebook: "#" }
