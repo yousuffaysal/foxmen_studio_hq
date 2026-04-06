@@ -16,10 +16,19 @@ dotenv.config();
 const app = express();
 const prisma = new PrismaClient();
 
-// Connect to Database - Prisma connection is usually lazy but good for testing
-prisma.$connect()
-    .then(() => console.log('PostgreSQL Connected via Prisma'))
-    .catch(err => console.log('Prisma connection error:', err));
+// Connect to Database
+const connectDb = async () => {
+    try {
+        await prisma.$connect();
+        console.log('✅ PostgreSQL Connected via Prisma');
+    } catch (err) {
+        console.error('❌ Prisma Connection Error:', err.message);
+        // We don't crash the entire function, but log the error for Vercel logs
+    }
+};
+
+// Start DB connection
+connectDb();
 
 // Middleware
 app.use(cors());
@@ -38,8 +47,9 @@ app.use('/api/posts', postRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// Static Asset Serving (Note: Vercel serverless has temporary ephemeral storage, not recommended for real persistence)
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Static Asset Serving
+const uploadDir = process.env.VERCEL === '1' ? '/tmp/uploads' : path.join(__dirname, '../uploads');
+app.use('/uploads', express.static(uploadDir));
 
 app.get('/', (req, res) => {
     res.send('Foxmen Studio Backend is running on Vercel');

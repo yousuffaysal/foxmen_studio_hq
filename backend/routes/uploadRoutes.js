@@ -6,15 +6,22 @@ const router = express.Router();
 const fs = require('fs');
 
 // Ensure uploads directory exists
-const uploadDir = 'uploads/';
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+const isVercel = process.env.VERCEL === '1';
+const uploadDir = isVercel ? '/tmp/uploads' : 'uploads/';
+
+try {
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+        console.log(`Successfully created upload directory at: ${uploadDir}`);
+    }
+} catch (err) {
+    console.error(`Warning: Could not create upload directory at ${uploadDir}. This is expected on Vercel production.`);
 }
 
 // Configure storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname.replace(/ /g, '_')}`);
