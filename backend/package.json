@@ -19,7 +19,6 @@
         "prisma": "^5.22.0"
     },
     "scripts": {
-        "build": "prisma generate",
         "start": "node server.js",
         "dev": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && nodemon server.js",
         "postinstall": "prisma generate"
