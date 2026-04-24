@@ -76,6 +76,7 @@ export function PostHero({ image }: { image: string }) {
                         src={image}
                         alt="Hero"
                         fill
+                        unoptimized
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                 ) : (
@@ -147,7 +148,7 @@ export function SidebarAuthorBio({ post }: { post: any }) {
             <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 bg-[#f0f0f0] border border-[#414042]/10 relative overflow-hidden">
                     {post.authorImage ? (
-                        <Image src={post.authorImage} alt={post.author} width={80} height={80} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+                        <Image src={post.authorImage} alt={post.author} width={80} height={80} unoptimized className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center bg-[#f0f0f0] font-bold text-xl text-[#414042]/30">
                             {post.author?.[0]?.toUpperCase()}
@@ -238,7 +239,7 @@ export function SidebarRelated({ posts }: { posts?: any[] }) {
                     <Link href={`/blog/${post.slug}`} key={post.id} className="block group">
                         <div className="aspect-[1073/663] bg-[#f0f0f0] mb-3 overflow-hidden relative border border-[#414042]/10">
                             {post.coverImage ? (
-                                <Image src={post.coverImage} alt={post.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                                <Image src={post.coverImage} alt={post.title} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />
                             ) : (
                                 <div className="absolute inset-0 flex items-center justify-center bg-[#f0f0f0] text-[#414042]/20 font-bold uppercase text-xs">No Signal</div>
                             )}
