@@ -12,31 +12,31 @@ export function ServicesListSection() {
             title: "Website Development",
             description: "From high-performance Fintech and Medical platforms to immersive 3D, EdTech, and animated web experiences. We build complex, modern solutions that drive impact.",
             tags: ["Next.js", "Django", "React", "3D Web", "Fintech", "HealthTech"],
-            image: "https://ik.imagekit.io/2lax2ytm2/Website%20Developemt.svg",
+            image: "/images/services/website-development.svg",
         },
         {
             title: "UI/UX Design",
             description: "User-centric design that blends aesthetics with functionality, creating intuitive and engaging digital experiences.",
             tags: ["User Research", "Wireframing", "Prototyping", "Design Systems", "Figma"],
-            image: "https://ik.imagekit.io/2lax2ytm2/thursday.social%20(1).svg",
+            image: "/images/services/ui-ux-design.svg",
         },
         {
             title: "Mobile App Development",
             description: "Scalable, native and cross-platform mobile applications engineered for seamless performance and user retention.",
             tags: ["React Native", "iOS", "Android", "Flutter", "App Store Optimization"],
-            image: "https://ik.imagekit.io/2lax2ytm2/Mobile%20Deve%20(1).svg",
+            image: "/images/services/mobile-app-development.svg",
         },
         {
             title: "AI Agent & Automation",
             description: "Custom AI solutions and intelligent automation to streamline operations, optimize workflows, and scale your business efficiency.",
             tags: ["LLMs", "Chatbots", "Workflow Automation", "Python", "Data Analysis"],
-            image: "https://ik.imagekit.io/2lax2ytm2/agent%20(1).svg",
+            image: "/images/services/ai-agent.svg",
         },
         {
             title: "Branding",
             description: "Strategic brand identity design that communicates your core values, resonates with your audience, and creates lasting market impact.",
             tags: ["Logo Design", "Brand Strategy", "Visual Identity", "Guidelines", "Marketing Assets"],
-            image: "https://ik.imagekit.io/2lax2ytm2/Frame%20427319390.png",
+            image: "/images/services/branding.png",
         },
     ]
 

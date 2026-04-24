@@ -15,35 +15,35 @@ export function ServicesSection() {
       title: "Website Development",
       description: "Custom, high-performance websites built with modern technologies (Next.js, React) to capture your brand's essence and convert visitors.",
       capabilities: ["Next.js / React", "Performance Optimization", "SEO Architecture", "CMS Integration"],
-      image: "https://ik.imagekit.io/2lax2ytm2/Website%20Developemt.svg"
+      image: "/images/services/website-development.svg"
     },
     {
       id: "02",
       title: "UI/UX Design",
       description: "User-centric design that blends aesthetics with functionality, creating intuitive and engaging digital experiences.",
       capabilities: ["User Research", "Wireframing & Prototyping", "Design Systems", "Interaction Design"],
-      image: "https://ik.imagekit.io/2lax2ytm2/thursday.social%20(1).svg"
+      image: "/images/services/ui-ux-design.svg"
     },
     {
       id: "03",
       title: "Mobile App Development",
       description: "Scalable, native and cross-platform mobile applications engineered for seamless performance and user retention.",
       capabilities: ["React Native", "iOS & Android", "App Store Optimization", "Offline-First Architecture"],
-      image: "https://ik.imagekit.io/2lax2ytm2/Mobile%20Deve%20(1).svg"
+      image: "/images/services/mobile-app-development.svg"
     },
     {
       id: "04",
       title: "AI Agent & Automation",
       description: "Custom AI solutions and intelligent automation to streamline operations, optimize workflows, and scale your business efficiency.",
       capabilities: ["LLM Integration", "Workflow Automation", "Chatbot Development", "Data Analysis"],
-      image: "https://ik.imagekit.io/2lax2ytm2/agent%20(1).svg"
+      image: "/images/services/ai-agent.svg"
     },
     {
       id: "05",
       title: "Branding & Strategy",
       description: "Strategic brand identity design that communicates your core values, resonates with your audience, and creates lasting market impact.",
       capabilities: ["Brand Identity", "Visual Language", "Market Positioning", "Content Strategy"],
-      image: "https://ik.imagekit.io/2lax2ytm2/Frame%20427319390.png"
+      image: "/images/services/branding.png"
     },
   ]
 
@@ -146,6 +146,8 @@ function ServiceItem({ service }: { service: any }) {
           src={service.image}
           alt={service.title}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority={service.id === "01" || service.id === "02"}
           className={cn(
             "object-cover transition-all duration-700 ease-out group-hover:scale-105",
             // Mobile: Color when in center (isInView). Desktop: Color on hover.
