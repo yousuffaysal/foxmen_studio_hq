@@ -84,6 +84,7 @@ export function ArticlesSection() {
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 50vw"
                     priority
+                    unoptimized
                     className="object-cover transition-all duration-700 ease-[0.22,1,0.36,1] group-hover:scale-105"
                   />
                 )}
@@ -120,6 +121,7 @@ export function ArticlesSection() {
                       alt={article.title}
                       fill
                       sizes="(max-width: 768px) 33vw, 20vw"
+                      unoptimized
                       className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     />
                   )}
