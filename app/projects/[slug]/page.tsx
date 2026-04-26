@@ -64,7 +64,7 @@ export default function ProjectPage() {
     if (!project) notFound();
 
     return (
-        <div ref={containerRef} className="min-h-screen bg-[#050505] text-[#F0F0F0] selection:bg-[#B86CF9] selection:text-white overflow-x-hidden">
+        <div ref={containerRef} className="min-h-screen bg-[#050505] text-[#F0F0F0] selection:bg-[#B86CF9] selection:text-white">
             <style dangerouslySetInnerHTML={{
                 __html: `
                 @font-face {
@@ -98,7 +98,7 @@ export default function ProjectPage() {
                     color: #A1A1A1;
                     font-family: var(--font-neue-montreal), sans-serif;
                 }
-                .prose p { 
+                .prose p, .prose .paragraph { 
                     font-size: 1.125rem; 
                     line-height: 1.7; 
                     margin-bottom: 2rem;
@@ -230,10 +230,10 @@ export default function ProjectPage() {
 
                 {/* CONTENT GRID */}
                 <section className="px-6 md:px-12 pt-8 md:pt-16 pb-24 md:pb-48 max-w-[1800px] mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-32 items-start">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-32 items-start relative">
                         
-                        {/* SIDEBAR METADATA */}
-                        <aside className="lg:col-span-4 space-y-12 lg:sticky lg:top-40 h-fit">
+                        {/* SIDEBAR METADATA (LEFT PANEL) */}
+                        <aside className="md:col-span-4 space-y-12 md:sticky md:top-40 h-fit z-20">
                             <div className="space-y-8">
                                 <div className="glass-card p-8 rounded-2xl">
                                     <h3 className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest mb-6 block">Technologies Used</h3>
@@ -271,60 +271,69 @@ export default function ProjectPage() {
                             </div>
                         </aside>
 
-                        {/* MAIN CONTENT ARTICLE */}
-                        <article className="lg:col-span-8">
-                            <div className="prose prose-invert prose-lg">
-                                <ReactMarkdown 
-                                    remarkPlugins={[remarkGfm]} 
-                                    components={{
-                                        p: ({ children }: any) => <p className="mb-8">{children}</p>,
-                                        h1: ({ children }: any) => <h1 className="text-4xl md:text-5xl font-owners mb-8">{children}</h1>,
-                                        h2: ({ children }: any) => <h2 className="text-3xl md:text-4xl font-owners mb-6">{children}</h2>,
-                                        img: (props) => (
-                                            <figure className="my-16 md:my-24 relative aspect-video rounded-3xl overflow-hidden glass-card group">
-                                                {props.src && (
-                                                    <Image
-                                                        src={props.src}
-                                                        alt={props.alt || "Project Visual"}
-                                                        fill
-                                                        className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                                                        sizes="(max-width: 1024px) 100vw, 60vw"
-                                                    />
-                                                )}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/40 to-transparent pointer-events-none" />
-                                            </figure>
-                                        )
-                                    }}
-                                >
-                                    {project.content || ""}
-                                </ReactMarkdown>
-                            </div>
-                        </article>
+                        {/* MAIN CONTENT ARTICLE (RIGHT PANEL) */}
+                        <div className="md:col-span-8 space-y-32">
+                            <article>
+                                <div className="prose prose-invert prose-lg">
+                                    <ReactMarkdown 
+                                        remarkPlugins={[remarkGfm]} 
+                                        components={{
+                                            p: ({ children }: any) => {
+                                                const hasFigure = Array.isArray(children) 
+                                                    ? children.some(child => typeof child === 'object' && child.type === 'figure')
+                                                    : typeof children === 'object' && children.type === 'figure';
+                                                
+                                                if (hasFigure) return <div className="paragraph">{children}</div>;
+                                                return <p className="mb-8">{children}</p>;
+                                            },
+                                            h1: ({ children }: any) => <h1 className="text-4xl md:text-5xl font-owners mb-8">{children}</h1>,
+                                            h2: ({ children }: any) => <h2 className="text-3xl md:text-4xl font-owners mb-6">{children}</h2>,
+                                            img: (props) => (
+                                                <figure className="my-16 md:my-24 relative aspect-video rounded-3xl overflow-hidden group">
+                                                    {props.src && (
+                                                        <Image
+                                                            src={props.src}
+                                                            alt={props.alt || "Project Visual"}
+                                                            fill
+                                                            className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                                                            sizes="(max-width: 1024px) 100vw, 60vw"
+                                                        />
+                                                    )}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/40 to-transparent pointer-events-none" />
+                                                </figure>
+                                            )
+                                        }}
+                                    >
+                                        {project.content || ""}
+                                    </ReactMarkdown>
+                                </div>
+                            </article>
+
+                            {/* VISUAL INDEX / GALLERY */}
+                            {project.gallery && project.gallery.length > 0 && (
+                                <section>
+                                    <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-8">
+                                        <h2 className="font-owners text-[8vw] md:text-[5vw] uppercase text-white leading-none">Visual Index</h2>
+                                        <div className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest">
+                                            [{project.gallery.length} Shots]
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                                        {project.gallery.map((img: string, i: number) => (
+                                            <GalleryItem 
+                                                key={i} 
+                                                src={img} 
+                                                index={i} 
+                                                onClick={() => setSelectedImage(img)} 
+                                            />
+                                        ))}
+                                    </div>
+                                </section>
+                            )}
+                        </div>
                     </div>
                 </section>
-
-                {/* VISUAL INDEX / GALLERY */}
-                {project.gallery && project.gallery.length > 0 && (
-                    <section className="px-6 md:px-12 pb-48 max-w-[1800px] mx-auto">
-                        <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-8">
-                            <h2 className="font-owners text-[8vw] md:text-[5vw] uppercase text-white leading-none">Visual Index</h2>
-                            <div className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest">
-                                [{project.gallery.length} Shots]
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                            {project.gallery.map((img: string, i: number) => (
-                                <GalleryItem 
-                                    key={i} 
-                                    src={img} 
-                                    index={i} 
-                                    onClick={() => setSelectedImage(img)} 
-                                />
-                            ))}
-                        </div>
-                    </section>
-                )}
 
                 {/* LIGHTBOX */}
                 <AnimatePresence>
