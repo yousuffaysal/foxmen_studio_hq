@@ -5,11 +5,11 @@ import { Navigation } from "@/components/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { notFound, useParams } from "next/navigation"
-import { useState, useEffect } from "react"
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { useState, useEffect, useRef } from "react"
+import { motion, useScroll, useTransform, AnimatePresence, useSpring, useInView } from "framer-motion"
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { ArrowUpRight, Github, X } from "lucide-react"
+import { ArrowUpRight, Github, X, Clock, Target, Layers, ExternalLink } from "lucide-react"
 import { HeroImageWrapper } from "./hero-image-wrapper";
 
 export default function ProjectPage() {
@@ -17,13 +17,19 @@ export default function ProjectPage() {
     const [project, setProject] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const containerRef = useRef(null);
+    
     const { scrollYProgress } = useScroll();
-    const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
+
+    // Top-level hooks for background effects
+    const plasmaX1 = useTransform(scrollYProgress, [0, 1], [0, 100]);
+    const plasmaY1 = useTransform(scrollYProgress, [0, 1], [0, -50]);
+    const plasmaX2 = useTransform(scrollYProgress, [0, 1], [0, -80]);
+    const plasmaY2 = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
     useEffect(() => {
         const fetchProject = async () => {
             try {
-                // Fetch ONLY the specific project, not the entire database
                 const res = await fetch(`/api/projects/by-slug/${slug}`);
                 if (!res.ok) {
                     if (res.status === 404) setProject(null);
@@ -33,7 +39,6 @@ export default function ProjectPage() {
                 setProject(data);
             } catch (e) {
                 console.error("Fetch failed:", e);
-                // Optionally handle distinct error states here
             } finally {
                 setLoading(false);
             }
@@ -42,408 +47,361 @@ export default function ProjectPage() {
     }, [slug]);
 
     if (loading) return (
-        <div className="h-screen bg-[#F9F9F8] flex items-center justify-center">
-            <div className="text-[10px] md:text-xs font-medium animate-pulse text-black/50 font-mono tracking-widest uppercase">
-                Loading [ {slug} ]
-            </div>
+        <div className="h-screen bg-[#050505] flex items-center justify-center">
+            <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center gap-4"
+            >
+                <div className="w-12 h-12 border-2 border-[#B86CF9]/20 border-t-[#B86CF9] rounded-full animate-spin" />
+                <div className="text-[10px] font-medium text-[#B86CF9] font-mono tracking-[0.3em] uppercase">
+                    Initializing [ {slug} ]
+                </div>
+            </motion.div>
         </div>
     );
 
     if (!project) notFound();
 
     return (
-        <div className="min-h-screen bg-[#fffff0] text-[#1a1a1a] selection:bg-[#EAEAEA] selection:text-[#000]">
+        <div ref={containerRef} className="min-h-screen bg-[#050505] text-[#F0F0F0] selection:bg-[#B86CF9] selection:text-white overflow-x-hidden">
             <style dangerouslySetInnerHTML={{
                 __html: `
-                /* Geometric Layout Background */
-                .bg-geometric-layout {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100vw;
-                    height: 100vh;
-                    z-index: 0;
-                    pointer-events: none;
+                @font-face {
+                    font-family: 'Owners';
+                    src: url('/fonts/OwnersTRIAL-Medium-BF64361ef81f92b.otf') format('opentype');
                 }
                 
-                /* 1. Dotted Pattern */
-                .bg-dots {
-                    position: absolute;
-                    inset: 0;
-                    background-image: radial-gradient(#e5e5e5 1.5px, transparent 1.5px);
-                    background-size: 24px 24px;
-                    opacity: 0.6;
-                }
-
-                /* 2. Geometric Shapes */
-                .bg-shape-1 {
-                    position: absolute;
-                    top: -10%;
-                    right: -5%;
-                    width: 60vw;
-                    height: auto;
-                    opacity: 0.15;
-                    mix-blend-mode: multiply;
-                }
-                .bg-shape-2 {
-                    position: absolute;
-                    bottom: 0%;
-                    left: -10%;
-                    width: 50vw;
-                    height: auto;
-                    opacity: 0.08;
-                    mix-blend-mode: multiply;
-                }
-                
-                /* Keep Header Font */
-                .font-header { font-family: var(--font-owners-medium), serif; }
-                .font-title-bold { font-family: var(--font-ibm-plex-sans-bold), sans-serif; }
+                .font-owners { font-family: var(--font-owners-medium), 'Owners', sans-serif; }
+                .font-montreal { font-family: var(--font-neue-montreal), sans-serif; }
                 .font-mono { font-family: var(--font-ibm-plex-mono), monospace; }
                 
-                /* Refined Editorial Prose */
-                .prose { max-width: 100%; }
+                /* Noise Texture */
+                .noise {
+                    position: fixed;
+                    inset: -200%;
+                    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+                    opacity: 0.04;
+                    pointer-events: none;
+                    z-index: 100;
+                }
+
+                /* Custom Scrollbar */
+                ::-webkit-scrollbar { width: 6px; }
+                ::-webkit-scrollbar-track { background: #050505; }
+                ::-webkit-scrollbar-thumb { background: #1A1A1A; border-radius: 10px; }
+                ::-webkit-scrollbar-thumb:hover { background: #B86CF9; }
+
+                /* Prose Refinement */
+                .prose { 
+                    max-width: 100%; 
+                    color: #A1A1A1;
+                    font-family: var(--font-neue-montreal), sans-serif;
+                }
                 .prose p { 
-                    margin-bottom: 2rem; 
-                    font-family: var(--font-ibm-plex-mono), monospace; 
-                    font-size: 1.0rem; 
-                    line-height: 1.8; 
-                    color: #444; 
-                    letter-spacing: -0.01em;
+                    font-size: 1.125rem; 
+                    line-height: 1.7; 
+                    margin-bottom: 2rem;
                 }
-                .prose h1, .prose h2, .prose h3, .prose h4 { 
-                    font-family: var(--font-ibm-plex-sans-bold), sans-serif; 
-                    color: #000; 
-                    margin-top: 5rem; 
-                    margin-bottom: 1.5rem; 
-                    line-height: 1.1; 
-                    letter-spacing: -0.02em;
-                    text-transform: uppercase; 
-                }
-                .prose h1 { font-size: 3rem; border-bottom: 2px solid #000; padding-bottom: 1rem; }
-                .prose h2 { font-size: 2.25rem; }
-                .prose h3 { font-size: 1.5rem; color: #333; }
-                
-                /* List Styling */
-                .prose ul, .prose ol { 
-                    margin-bottom: 2.5rem; 
-                    padding-left: 1.5rem; 
-                    font-family: var(--font-ibm-plex-mono), monospace; 
-                }
-                .prose li { margin-bottom: 0.5rem; color: #444; marker: #000; }
-                .prose strong { font-weight: 700; color: #000; }
-                
-                /* Table Styling */
-                .prose table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 3rem 0;
-                    font-family: var(--font-ibm-plex-mono), monospace;
-                    font-size: 0.9rem;
-                    border: 1px solid #e5e5e5;
-                }
-                .prose thead {
-                    background-color: #f5f5f5;
-                    border-bottom: 2px solid #000;
-                }
-                .prose th {
-                    text-align: left;
-                    padding: 1rem;
-                    font-weight: 600;
+                .prose h1, .prose h2, .prose h3 { 
+                    color: #FFFFFF;
+                    font-family: var(--font-owners-medium), sans-serif;
                     text-transform: uppercase;
-                    letter-spacing: 0.05em;
-                    font-size: 0.8rem;
+                    margin-top: 4rem;
+                    margin-bottom: 1.5rem;
+                    letter-spacing: -0.02em;
                 }
-                .prose td {
-                    padding: 1rem;
-                    border-bottom: 1px solid #eee;
-                    vertical-align: top;
-                }
-                .prose tr:last-child td { border-bottom: none; }
+                .prose h2 { font-size: 2.5rem; }
+                .prose h3 { font-size: 1.75rem; }
                 
-                /* Blockquote */
                 .prose blockquote {
-                    border-left: 4px solid #8B5DFF; /* Brand Accent */
+                    border-left: 2px solid #B86CF9;
                     padding-left: 2rem;
-                    margin-left: 0;
-                    margin-top: 3rem;
-                    margin-bottom: 3rem;
-                    font-family: var(--font-owners-medium), serif;
-                    font-size: 1.5rem;
-                    line-height: 1.4;
+                    font-family: var(--font-owners-medium), sans-serif;
+                    font-size: 2rem;
+                    color: #FFFFFF;
                     font-style: italic;
-                    color: #000;
-                    background: #fdfdfd;
-                    padding-top: 2rem;
-                    padding-bottom: 2rem;
+                    margin: 4rem 0;
+                    line-height: 1.2;
+                }
+
+                .glass-card {
+                    background: rgba(255, 255, 255, 0.02);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
                 }
                 
-                /* Image handling in Markdown */
-                .prose img { 
-                    width: 100%; 
-                    height: auto; 
-                    border-radius: 8px; 
-                    margin-top: 3rem; 
-                    margin-bottom: 3rem; 
-                    display: block; 
-                    border: 1px solid rgba(0,0,0,0.05);
-                }
-                @media (min-width: 1024px) {
-                    .prose img { width: 115%; margin-left: -7.5%; }
+                .glow-text {
+                    text-shadow: 0 0 20px rgba(184, 108, 249, 0.3);
                 }
             `}} />
-            {/* Geometric Background Layer (Dots + Shapes) */}
-            <div className="bg-geometric-layout will-change-transform">
-                <div className="bg-dots" />
-                <img src="/images/Frame.svg" className="bg-shape-1" alt="" />
-                <img src="/images/Group 1 (1).svg" className="bg-shape-2" alt="" />
+
+            <div className="noise" />
+            
+            {/* Background Plasma Glows */}
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                <motion.div 
+                    style={{ 
+                        x: plasmaX1,
+                        y: plasmaY1
+                    }}
+                    className="absolute -top-[20%] -right-[10%] w-[60vw] h-[60vw] bg-[#B86CF9]/10 blur-[120px] rounded-full"
+                />
+                <motion.div 
+                    style={{ 
+                        x: plasmaX2,
+                        y: plasmaY2
+                    }}
+                    className="absolute -bottom-[10%] -left-[5%] w-[50vw] h-[50vw] bg-[#B86CF9]/5 blur-[100px] rounded-full"
+                />
             </div>
 
-            {/* Minimal Nav Overlay */}
-            {/* Minimal Nav Overlay - Removed per request */}
-            {/* <div className="fixed top-0 left-0 w-full z-40 bg-gradient-to-b from-[#fffff0] to-transparent h-24 pointer-events-none" /> */}
             <Navigation />
 
-            <main className="relative z-10 pt-32 md:pt-48 pb-24">
-
-                {/* 1. HEADER - Massive Typographic Layout */}
-                <section className="px-4 md:px-12 max-w-[1700px] mx-auto mb-20 md:mb-32">
-
-                    {/* Top: Giant Title */}
-                    <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="font-title-bold text-[14vw] leading-[0.8] text-[#111] uppercase tracking-[-0.07em] mb-16 md:mb-24 break-all"
-                    >
-                        {project.title}
-                    </motion.h1>
-
-                    {/* Bottom: Abstract Offset */}
-                    <div className="flex flex-col md:flex-row md:justify-between items-start gap-12">
-                        {/* New Metadata Header Block (Left Side) */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.5 }}
-                            className="hidden md:grid grid-cols-2 gap-x-12 gap-y-8 w-full md:w-1/2"
-                        >
-                            <div>
-                                <span className="font-mono text-xs text-black/60 uppercase tracking-widest block mb-2 font-medium">Our Role</span>
-                                <div className="font-header text-2xl leading-none">{project.role || "Lead Designer"}</div>
-                            </div>
-                            <div>
-                                <span className="font-mono text-xs text-black/60 uppercase tracking-widest block mb-2 font-medium">Duration</span>
-                                <div className="font-header text-2xl leading-none">{project.duration || "Ongoing"}</div>
-                            </div>
-                            <div>
-                                <span className="font-mono text-xs text-black/60 uppercase tracking-widest block mb-2 font-medium">Sector</span>
-                                <div className="font-header text-2xl leading-none">{project.category || "Selected Work"}</div>
-                            </div>
-                            <div>
-                                <span className="font-mono text-xs text-black/60 uppercase tracking-widest block mb-2 font-medium">Tech Stack</span>
-                                <div className="flex flex-wrap gap-1.5">
-                                    {project.techStack?.slice(0, 3).map((t: string, i: number) => (
-                                        <span key={i} className="font-mono text-xs border border-black/20 px-2.5 py-1 rounded-full uppercase bg-white/50">{t}</span>
+            <main className="relative z-10">
+                
+                {/* HERO SECTION: TYPOGRAPHIC EXPLOSION */}
+                <section className="min-h-screen flex flex-col justify-end px-6 md:px-12 pb-12 md:pb-24">
+                    <div className="max-w-[1800px] mx-auto w-full">
+                        <div className="flex flex-col gap-8 md:gap-12">
+                            <motion.div
+                                initial={{ opacity: 0, y: 40 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                            >
+                                <span className="font-mono text-[10px] md:text-xs text-[#B86CF9] uppercase tracking-[0.5em] mb-4 block glow-text">
+                                    Project Case Study No. {project.id || "01"}
+                                </span>
+                                <h1 className="font-owners text-[18vw] md:text-[14vw] leading-[0.8] tracking-[-0.05em] uppercase text-white break-all">
+                                    {project.title.split('').map((char: string, i: number) => (
+                                        <motion.span
+                                            key={i}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: i * 0.02 + 0.3, duration: 0.8, ease: "easeOut" }}
+                                            className="inline-block"
+                                        >
+                                            {char === ' ' ? '\u00A0' : char}
+                                        </motion.span>
                                     ))}
-                                    {project.techStack?.length > 3 && <span className="font-mono text-xs text-gray-500 self-center">+{project.techStack.length - 3}</span>}
-                                </div>
-                            </div>
-                            {project.link && (
-                                <div className="col-span-2 pt-2 border-t border-black/10">
-                                    <Link href={project.link} target="_blank" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider hover:text-[#8B5DFF] transition-colors group font-semibold">
-                                        Live Project <ArrowUpRight className="w-3.5 h-3.5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
-                                    </Link>
-                                </div>
-                            )}
-                        </motion.div>
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                            className="max-w-2xl md:w-1/2"
-                        >
-                            <div className="flex items-center gap-4 mb-6">
-                                <span className="w-8 h-[1px] bg-gray-300"></span>
-                                <h2 className="font-mono text-[10px] text-gray-400 uppercase tracking-[0.25em]">
-                                    Abstract
-                                </h2>
-                            </div>
+                                </h1>
+                            </motion.div>
 
-                            <p className="font-header text-2xl md:text-3xl lg:text-4xl leading-[1.2] text-[#222]">
-                                {project.description}
-                            </p>
-                        </motion.div>
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-end mt-12">
+                                <motion.div 
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 1, duration: 1 }}
+                                    className="md:col-span-5"
+                                >
+                                    <p className="font-montreal text-lg md:text-xl text-[#A1A1A1] leading-relaxed max-w-xl">
+                                        {project.description}
+                                    </p>
+                                </motion.div>
+
+                                <motion.div 
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 1.2, duration: 1 }}
+                                    className="md:col-span-7 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4"
+                                >
+                                    <MetadataBox label="Role" value={project.role || "Lead Designer"} icon={<Target className="w-3 h-3" />} />
+                                    <MetadataBox label="Sector" value={project.category || "Selected Work"} icon={<Layers className="w-3 h-3" />} />
+                                    <MetadataBox label="Duration" value={project.duration || "4 Months"} icon={<Clock className="w-3 h-3" />} />
+                                    <div className="flex flex-col justify-end">
+                                        {project.link && (
+                                            <Link 
+                                                href={project.link} 
+                                                target="_blank" 
+                                                className="group inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-white hover:text-[#B86CF9] transition-colors"
+                                            >
+                                                Launch Site <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                            </Link>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
-                {/* 2. HERO IMAGE (Now Second) */}
-                {/* Scroll-triggered Animation Wrapper */}
+                {/* HERO IMAGE */}
                 <HeroImageWrapper project={project} />
 
-                <div className="max-w-[1600px] mx-auto px-4 md:px-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-
-                        {/* 3. SIDEBAR - "Blueprint" Metadata (Sticky) */}
-                        <aside className="lg:col-span-3 lg:sticky lg:top-32 h-fit max-h-[calc(100vh-10rem)] overflow-y-auto overflow-x-hidden order-2 lg:order-1 scrollbar-hide p-1">
-
-                            {/* Role - Renamed to "Our Role" */}
-                            <div className="border-t border-black/20 pt-6">
-                                <span className="font-mono text-xs text-[#8B5DFF] block mb-3 uppercase tracking-widest font-semibold">Our Role</span>
-                                <div className="font-header text-xl md:text-2xl leading-relaxed text-black">
-                                    {project.role || "Lead Designer"}
-                                </div>
-                            </div>
-
-                            {/* Duration */}
-                            <div className="border-t border-black/20 pt-6">
-                                <span className="font-mono text-xs text-[#8B5DFF] block mb-3 uppercase tracking-widest font-semibold">Duration</span>
-                                <div className="font-header text-xl md:text-2xl leading-relaxed text-black">
-                                    {project.duration || "Ongoing"}
-                                </div>
-                            </div>
-
-                            {/* Sector */}
-                            <div className="border-t border-black/20 pt-6">
-                                <span className="font-mono text-xs text-[#8B5DFF] block mb-3 uppercase tracking-widest font-semibold">Sector</span>
-                                <div className="font-header text-xl md:text-2xl leading-relaxed text-black">
-                                    {project.category || "Selected Work"}
-                                </div>
-                            </div>
-
-                            {/* Tech Stack */}
-                            <div className="border-t border-black/20 pt-6">
-                                <span className="font-mono text-xs text-[#8B5DFF] block mb-4 uppercase tracking-widest font-semibold">Tech Stack</span>
-                                <div className="flex flex-wrap gap-2">
-                                    {project.techStack?.map((t: string, i: number) => (
-                                        <span key={i} className="font-mono text-[10px] md:text-xs border border-black px-4 py-2 rounded-full uppercase bg-white text-black hover:bg-black hover:text-white transition-all cursor-default tracking-wider font-medium">
-                                            {t}
-                                        </span>
-                                    ))}
-                                    {(!project.techStack || project.techStack.length === 0) && (
-                                        <span className="font-mono text-sm text-gray-400 italic">Not specified</span>
-                                    )}
-                                </div>
-                            </div>
-
-                            {project.tags && project.tags.length > 0 && (
-                                <div className="border-t border-black/20 pt-6">
-                                    <span className="font-mono text-xs text-[#8B5DFF] block mb-4 uppercase tracking-widest font-semibold">Tags</span>
+                {/* CONTENT GRID */}
+                <section className="px-6 md:px-12 pt-8 md:pt-16 pb-24 md:pb-48 max-w-[1800px] mx-auto">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-32 items-start">
+                        
+                        {/* SIDEBAR METADATA */}
+                        <aside className="lg:col-span-4 space-y-12 lg:sticky lg:top-40 h-fit">
+                            <div className="space-y-8">
+                                <div className="glass-card p-8 rounded-2xl">
+                                    <h3 className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest mb-6 block">Technologies Used</h3>
                                     <div className="flex flex-wrap gap-2">
-                                        {project.tags.map((t: string, i: number) => (
-                                            <span key={i} className="font-mono text-[10px] md:text-xs text-gray-500 bg-gray-100/50 border border-transparent px-3 py-1.5 rounded-md hover:border-gray-300 hover:text-black transition-all cursor-default">
-                                                #{t}
+                                        {project.techStack?.map((t: string, i: number) => (
+                                            <span key={i} className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 font-mono text-[10px] text-white/80 uppercase tracking-wider">
+                                                {t}
                                             </span>
                                         ))}
                                     </div>
                                 </div>
-                            )}
 
-                            <div className="border-t border-black/20 pt-6 space-y-4">
-                                {project.link && (
-                                    <Link href={project.link} target="_blank" rel="noopener noreferrer" className="font-mono text-sm flex items-center justify-between group border-b border-transparent hover:border-[#8B5DFF] hover:text-[#8B5DFF] pb-1 transition-all">
-                                        <span className="uppercase tracking-wider font-medium">Live Project</span>
-                                        <ArrowUpRight className="w-5 h-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
-                                    </Link>
-                                )}
+                                <div className="glass-card p-8 rounded-2xl">
+                                    <h3 className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest mb-6 block">Project Deliverables</h3>
+                                    <div className="space-y-4">
+                                        {["UI/UX Research", "System Architecture", "Visual Identity", "Full-Stack Development"].map((d, i) => (
+                                            <div key={i} className="flex items-center gap-3 text-sm text-white/60">
+                                                <div className="w-1 h-1 rounded-full bg-[#B86CF9]" />
+                                                <span className="font-montreal">{d}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
                                 {project.github && (
-                                    <Link href={project.github} target="_blank" rel="noopener noreferrer" className="font-mono text-sm flex items-center justify-between group border-b border-transparent hover:border-[#8B5DFF] hover:text-[#8B5DFF] pb-1 transition-all text-gray-600">
-                                        <span className="uppercase tracking-wider font-medium">View Source</span>
-                                        <Github className="w-5 h-5" />
+                                    <Link 
+                                        href={project.github} 
+                                        target="_blank"
+                                        className="flex items-center justify-between p-6 rounded-2xl bg-[#B86CF9] text-black font-owners uppercase tracking-wider group hover:bg-white transition-colors duration-500"
+                                    >
+                                        <span>View Codebase</span>
+                                        <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                                     </Link>
                                 )}
                             </div>
                         </aside>
 
-                        {/* 4. MAIN CONTENT - "Editorial Essay" */}
-                        <article className="lg:col-span-9 order-1 lg:order-2">
-                            {/* Markdown render (Abstract removed from here) */}
-                            <div className="prose prose-lg prose-neutral max-w-3xl mx-auto lg:ml-24">
-                                <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
-                                    p: ({ node, children }: any) => {
-                                        // Check if any child is an image tag
-                                        const hasImage = node?.children?.some((child: any) =>
-                                            child.type === 'element' && child.tagName === 'img'
-                                        );
-
-                                        if (hasImage) {
-                                            // Render as div (valid parent for figure) but keep spacing
-                                            return <div className="mb-8">{children}</div>;
-                                        }
-                                        return <p>{children}</p>;
-                                    },
-                                    img: (props) => (
-                                        <figure className="my-16 md:-ml-24 md:w-[130%] relative aspect-video">
-                                            {props.src && (
-                                                <Image
-                                                    src={props.src}
-                                                    alt={props.alt || "Project Image"}
-                                                    fill
-                                                    className="object-cover shadow-2xl shadow-black/5 rounded-lg"
-                                                    sizes="(max-width: 1024px) 100vw, 85vw"
-                                                />
-                                            )}
-                                        </figure>
-                                    )
-                                }}>
+                        {/* MAIN CONTENT ARTICLE */}
+                        <article className="lg:col-span-8">
+                            <div className="prose prose-invert prose-lg">
+                                <ReactMarkdown 
+                                    remarkPlugins={[remarkGfm]} 
+                                    components={{
+                                        p: ({ children }: any) => <p className="mb-8">{children}</p>,
+                                        h1: ({ children }: any) => <h1 className="text-4xl md:text-5xl font-owners mb-8">{children}</h1>,
+                                        h2: ({ children }: any) => <h2 className="text-3xl md:text-4xl font-owners mb-6">{children}</h2>,
+                                        img: (props) => (
+                                            <figure className="my-16 md:my-24 relative aspect-video rounded-3xl overflow-hidden glass-card group">
+                                                {props.src && (
+                                                    <Image
+                                                        src={props.src}
+                                                        alt={props.alt || "Project Visual"}
+                                                        fill
+                                                        className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                                                        sizes="(max-width: 1024px) 100vw, 60vw"
+                                                    />
+                                                )}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/40 to-transparent pointer-events-none" />
+                                            </figure>
+                                        )
+                                    }}
+                                >
                                     {project.content || ""}
                                 </ReactMarkdown>
                             </div>
                         </article>
                     </div>
+                </section>
 
-                    {/* 4. GALLERY - "Contact Sheet" Grid */}
-                    {project.gallery && project.gallery.length > 0 && (
-                        <section className="mt-32 md:mt-48 border-t border-black pt-12">
-                            <div className="flex items-baseline justify-between mb-12">
-                                <h3 className="font-header text-4xl md:text-6xl uppercase">Visual Index</h3>
-                                <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">({project.gallery.length} Images)</span>
+                {/* VISUAL INDEX / GALLERY */}
+                {project.gallery && project.gallery.length > 0 && (
+                    <section className="px-6 md:px-12 pb-48 max-w-[1800px] mx-auto">
+                        <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-8">
+                            <h2 className="font-owners text-[8vw] md:text-[5vw] uppercase text-white leading-none">Visual Index</h2>
+                            <div className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest">
+                                [{project.gallery.length} Shots]
                             </div>
+                        </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-4">
-                                {project.gallery.map((img: string, i: number) => (
-                                    <motion.div
-                                        key={i}
-                                        className="relative aspect-video group cursor-zoom-in overflow-hidden bg-gray-100"
-                                        whileHover={{ scale: 0.98 }}
-                                        onClick={() => setSelectedImage(img)}
-                                    >
-                                        <Image
-                                            src={img}
-                                            alt={`Gallery ${i}`}
-                                            fill
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
-                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </section>
-                    )}
-                </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                            {project.gallery.map((img: string, i: number) => (
+                                <GalleryItem 
+                                    key={i} 
+                                    src={img} 
+                                    index={i} 
+                                    onClick={() => setSelectedImage(img)} 
+                                />
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 {/* LIGHTBOX */}
                 <AnimatePresence>
                     {selectedImage && (
                         <motion.div
-                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 md:p-10 cursor-zoom-out"
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[200] bg-[#050505]/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-12 cursor-zoom-out"
                             onClick={() => setSelectedImage(null)}
                         >
-                            <button className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors">
-                                <X className="w-8 h-8" />
-                            </button>
-                            <motion.img
-                                layoutId={selectedImage}
-                                src={selectedImage}
-                                className="max-w-full max-h-full object-contain shadow-2xl"
-                            />
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.9, opacity: 0 }}
+                                transition={{ type: "spring", damping: 25 }}
+                                className="relative max-w-6xl w-full h-full flex items-center justify-center"
+                            >
+                                <button className="absolute top-0 right-0 p-4 text-white/40 hover:text-white transition-colors z-10">
+                                    <X className="w-8 h-8" />
+                                </button>
+                                <img
+                                    src={selectedImage}
+                                    alt="Selected visualization"
+                                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                                />
+                            </motion.div>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
             </main>
+            
             <Footer />
         </div>
+    );
+}
+
+function MetadataBox({ label, value, icon }: { label: string; value: string; icon: React.ReactNode }) {
+    return (
+        <div className="space-y-1">
+            <span className="font-mono text-[9px] text-white/40 uppercase tracking-[0.2em] flex items-center gap-2">
+                {icon} {label}
+            </span>
+            <div className="font-owners text-xl text-white uppercase tracking-tight">
+                {value}
+            </div>
+        </div>
+    );
+}
+
+function GalleryItem({ src, index, onClick }: { src: string; index: number; onClick: () => void }) {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+    return (
+        <motion.div
+            ref={ref}
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: index * 0.1 }}
+            className="group relative aspect-[4/3] rounded-2xl overflow-hidden glass-card cursor-zoom-in"
+            onClick={onClick}
+        >
+            <Image
+                src={src}
+                alt={`Gallery visual ${index + 1}`}
+                fill
+                className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                sizes="(max-width: 768px) 100vw, 33vw"
+            />
+            <div className="absolute inset-0 bg-[#B86CF9]/0 group-hover:bg-[#B86CF9]/10 transition-colors duration-500" />
+            <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                <span className="font-mono text-[9px] text-white bg-black/40 backdrop-blur-md px-3 py-1 rounded-full uppercase tracking-widest border border-white/10">
+                    Shot {String(index + 1).padStart(2, '0')}
+                </span>
+            </div>
+        </motion.div>
     );
 }

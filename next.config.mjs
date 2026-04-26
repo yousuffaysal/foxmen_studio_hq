@@ -4,6 +4,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -17,10 +18,12 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'i.ibb.co',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
-
-
 }
 
 export default nextConfig

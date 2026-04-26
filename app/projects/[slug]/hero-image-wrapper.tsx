@@ -1,49 +1,49 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
 
 export function HeroImageWrapper({ project }: { project: any }) {
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Track scroll specifically for this image container
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start end", "center center"] // Starts when top of img hits bottom of screen, ends when center hits center
+        offset: ["start end", "end start"]
     });
 
-    // "Come from zoom in to actual size" -> Scale starts large (1.2) and settles to 1
-    const scale = useTransform(scrollYProgress, [0, 1], [1.15, 1]);
+    // Smooth physics-based spring for the zoom
+    const springScroll = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
-    // "Come slowly" -> Fade in
-    const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-
-    // Existing Parallax for the inner image content
-    // We Map global scroll for parallax or just use the local one? 
-    // Let's use local for self-contained effect, but for true parallax often global is used.
-    // However, mixing transforms can be tricky. Let's apply Scale to a wrapper and Parallax to the img if needed.
-    // But the user specifically asked for "zoom in to actual size".
+    const scale = useTransform(springScroll, [0, 0.5, 1], [1.05, 1, 1.05]);
+    const translateY = useTransform(springScroll, [0, 1], [-20, 20]);
 
     if (!project.image) return null;
 
     return (
-        <div ref={containerRef} className="relative w-full h-[50vh] md:h-[90vh] overflow-hidden mb-24 md:mb-32">
-            <motion.div
-                style={{ scale, opacity }}
-                className="w-full h-full origin-center will-change-transform"
+        <section ref={containerRef} className="relative w-full h-[70vh] md:h-[85vh] overflow-hidden mt-16 md:mt-32 mb-0 px-4 md:px-8">
+            <motion.div 
+                style={{ scale }}
+                className="relative w-full h-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-white/5"
             >
-                <div className="relative w-full h-full">
+                <motion.div 
+                    style={{ y: translateY }}
+                    className="absolute inset-0 w-full h-full"
+                >
                     <Image
                         src={project.image}
                         alt={project.title}
                         fill
-                        className="object-cover grayscale-[0.1]"
+                        className="object-cover object-center transition-opacity duration-1000"
                         priority
                         sizes="100vw"
                     />
-                </div>
+                </motion.div>
+                
+                {/* Gradient Overlays - Subtler */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/40 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-[#B86CF9]/5 mix-blend-overlay pointer-events-none" />
             </motion.div>
-        </div>
+        </section>
     );
 }
