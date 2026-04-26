@@ -9,7 +9,7 @@ import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform, AnimatePresence, useSpring, useInView } from "framer-motion"
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { ArrowUpRight, Github, X, Clock, Target, Layers, ExternalLink } from "lucide-react"
+import { ArrowUpRight, Github, X, Clock, Target, Layers, ExternalLink, Globe } from "lucide-react"
 import { HeroImageWrapper } from "./hero-image-wrapper";
 
 export default function ProjectPage() {
@@ -67,12 +67,7 @@ export default function ProjectPage() {
         <div ref={containerRef} className="min-h-screen bg-[#050505] text-[#F0F0F0] selection:bg-[#B86CF9] selection:text-white">
             <style dangerouslySetInnerHTML={{
                 __html: `
-                @font-face {
-                    font-family: 'Owners';
-                    src: url('/fonts/OwnersTRIAL-Medium-BF64361ef81f92b.otf') format('opentype');
-                }
-                
-                .font-owners { font-family: var(--font-owners-medium), 'Owners', sans-serif; }
+                .font-inter { font-family: var(--font-inter-semibold), 'Inter', sans-serif; }
                 .font-montreal { font-family: var(--font-neue-montreal), sans-serif; }
                 .font-mono { font-family: var(--font-ibm-plex-mono), monospace; }
                 
@@ -105,7 +100,7 @@ export default function ProjectPage() {
                 }
                 .prose h1, .prose h2, .prose h3 { 
                     color: #FFFFFF;
-                    font-family: var(--font-owners-medium), sans-serif;
+                    font-family: var(--font-inter-semibold), sans-serif;
                     text-transform: uppercase;
                     margin-top: 4rem;
                     margin-bottom: 1.5rem;
@@ -117,7 +112,7 @@ export default function ProjectPage() {
                 .prose blockquote {
                     border-left: 2px solid #B86CF9;
                     padding-left: 2rem;
-                    font-family: var(--font-owners-medium), sans-serif;
+                    font-family: var(--font-inter-semibold), sans-serif;
                     font-size: 2rem;
                     color: #FFFFFF;
                     font-style: italic;
@@ -161,9 +156,9 @@ export default function ProjectPage() {
             <main className="relative z-10">
                 
                 {/* HERO SECTION: TYPOGRAPHIC EXPLOSION */}
-                <section className="min-h-screen flex flex-col justify-end px-6 md:px-12 pb-12 md:pb-24">
+                <section className="flex flex-col px-6 md:px-12 pt-16 md:pt-32 pb-12 md:pb-24">
                     <div className="max-w-[1800px] mx-auto w-full">
-                        <div className="flex flex-col gap-8 md:gap-12">
+                        <div className="flex flex-col gap-6 md:gap-8">
                             <motion.div
                                 initial={{ opacity: 0, y: 40 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -172,7 +167,7 @@ export default function ProjectPage() {
                                 <span className="font-mono text-[10px] md:text-xs text-[#B86CF9] uppercase tracking-[0.5em] mb-4 block glow-text">
                                     Project Case Study No. {project.id || "01"}
                                 </span>
-                                <h1 className="font-owners text-[18vw] md:text-[14vw] leading-[0.8] tracking-[-0.05em] uppercase text-white break-all">
+                                <h1 className="font-inter text-[14vw] md:text-[10vw] leading-[0.8] tracking-[-0.05em] uppercase text-white break-all font-bold">
                                     {project.title.split('').map((char: string, i: number) => (
                                         <motion.span
                                             key={i}
@@ -187,7 +182,7 @@ export default function ProjectPage() {
                                 </h1>
                             </motion.div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-end mt-12">
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start mt-8 md:mt-12">
                                 <motion.div 
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
@@ -208,7 +203,7 @@ export default function ProjectPage() {
                                     <MetadataBox label="Role" value={project.role || "Lead Designer"} icon={<Target className="w-3 h-3" />} />
                                     <MetadataBox label="Sector" value={project.category || "Selected Work"} icon={<Layers className="w-3 h-3" />} />
                                     <MetadataBox label="Duration" value={project.duration || "4 Months"} icon={<Clock className="w-3 h-3" />} />
-                                    <div className="flex flex-col justify-end">
+                                    <div className="flex flex-col justify-start">
                                         {project.link && (
                                             <Link 
                                                 href={project.link} 
@@ -233,7 +228,33 @@ export default function ProjectPage() {
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-32 items-start relative">
                         
                         {/* SIDEBAR METADATA (LEFT PANEL) */}
-                        <aside className="md:col-span-4 space-y-12 md:sticky md:top-40 h-fit z-20">
+                        <aside className="md:col-span-4 space-y-8 md:sticky md:top-40 h-fit z-20">
+                            
+                            {/* CTA ACTIONS */}
+                            <div className="space-y-4">
+                                {project.link && (
+                                    <Link 
+                                        href={project.link} 
+                                        target="_blank"
+                                        className="flex items-center justify-between p-6 rounded-2xl bg-[#B86CF9] text-black font-inter font-bold text-lg uppercase tracking-wider group hover:bg-white transition-all duration-500 shadow-[0_0_30px_rgba(184,108,249,0.3)] hover:shadow-[0_0_50px_rgba(184,108,249,0.5)]"
+                                    >
+                                        <span>Live Preview</span>
+                                        <ExternalLink className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                    </Link>
+                                )}
+
+                                {project.github && (
+                                    <Link 
+                                        href={project.github} 
+                                        target="_blank"
+                                        className="flex items-center justify-between p-6 rounded-2xl bg-white/5 border border-white/10 text-white font-inter font-bold uppercase tracking-wider group hover:bg-white hover:text-black transition-all duration-500"
+                                    >
+                                        <span>Source Code</span>
+                                        <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                                    </Link>
+                                )}
+                            </div>
+
                             <div className="space-y-8">
                                 <div className="glass-card p-8 rounded-2xl">
                                     <h3 className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest mb-6 block">Technologies Used</h3>
@@ -257,17 +278,6 @@ export default function ProjectPage() {
                                         ))}
                                     </div>
                                 </div>
-
-                                {project.github && (
-                                    <Link 
-                                        href={project.github} 
-                                        target="_blank"
-                                        className="flex items-center justify-between p-6 rounded-2xl bg-[#B86CF9] text-black font-owners uppercase tracking-wider group hover:bg-white transition-colors duration-500"
-                                    >
-                                        <span>View Codebase</span>
-                                        <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                                    </Link>
-                                )}
                             </div>
                         </aside>
 
@@ -286,8 +296,8 @@ export default function ProjectPage() {
                                                 if (hasFigure) return <div className="paragraph">{children}</div>;
                                                 return <p className="mb-8">{children}</p>;
                                             },
-                                            h1: ({ children }: any) => <h1 className="text-4xl md:text-5xl font-owners mb-8">{children}</h1>,
-                                            h2: ({ children }: any) => <h2 className="text-3xl md:text-4xl font-owners mb-6">{children}</h2>,
+                                            h1: ({ children }: any) => <h1 className="text-4xl md:text-5xl font-inter font-bold mb-8">{children}</h1>,
+                                            h2: ({ children }: any) => <h2 className="text-3xl md:text-4xl font-inter font-bold mb-6">{children}</h2>,
                                             img: (props) => (
                                                 <figure className="my-16 md:my-24 relative aspect-video rounded-3xl overflow-hidden group">
                                                     {props.src && (
@@ -313,7 +323,7 @@ export default function ProjectPage() {
                             {project.gallery && project.gallery.length > 0 && (
                                 <section>
                                     <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-8">
-                                        <h2 className="font-owners text-[8vw] md:text-[5vw] uppercase text-white leading-none">Visual Index</h2>
+                                        <h2 className="font-inter font-bold text-[8vw] md:text-[5vw] uppercase text-white leading-none">Visual Index</h2>
                                         <div className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest">
                                             [{project.gallery.length} Shots]
                                         </div>
@@ -378,7 +388,7 @@ function MetadataBox({ label, value, icon }: { label: string; value: string; ico
             <span className="font-mono text-[9px] text-white/40 uppercase tracking-[0.2em] flex items-center gap-2">
                 {icon} {label}
             </span>
-            <div className="font-owners text-xl text-white uppercase tracking-tight">
+            <div className="font-inter font-bold text-xl text-white uppercase tracking-tight">
                 {value}
             </div>
         </div>
