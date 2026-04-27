@@ -1,3 +1,4 @@
+export {}
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -6,7 +7,7 @@ async function main() {
     const targetSlug = "lesonpaw-Online-Learning-Platform";
     // Also try to find it blindly if the case is slightly different
     const projects = await prisma.project.findMany();
-    const project = projects.find(p => p.slug && p.slug.toLowerCase() === "lesonpaw-online-learning-platform");
+    const project = projects.find((p: { slug: string | null; title: string; id: string }) => p.slug && p.slug.toLowerCase() === "lesonpaw-online-learning-platform");
 
     if (project) {
         console.log(`Found project: ${project.title} with slug: ${project.slug}`);
