@@ -41,6 +41,9 @@ export function Footer() {
             <a href="/services" className="text-2xl md:text-2xl font-bold hover:text-[#8B5DFF] transition-colors" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
               Services
             </a>
+            <a href="/pricing" className="text-2xl md:text-2xl font-bold hover:text-[#8B5DFF] transition-colors" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
+              Pricing
+            </a>
             <a href="/blog" className="text-2xl md:text-2xl font-bold hover:text-[#8B5DFF] transition-colors" style={{ fontFamily: "var(--font-ibm-plex-sans-bold)" }}>
               Blogs
             </a>

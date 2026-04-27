@@ -26,7 +26,7 @@ export function Navigation({ delay = 0 }: NavigationProps) {
           <img 
             src="/images/navlogo.svg" 
             alt="Foxmen Studio Logo" 
-            className="h-full w-auto object-contain scale-150 md:scale-[2] origin-left" 
+            className="h-full w-auto object-contain scale-125 md:scale-150 origin-left" 
           />
         </Link>
 
@@ -37,6 +37,9 @@ export function Navigation({ delay = 0 }: NavigationProps) {
           </Link>
           <Link href="/services" className="text-lg md:text-xl font-medium hover:text-[#B86CF9] transition-colors font-mono uppercase tracking-wider">
             Services
+          </Link>
+          <Link href="/pricing" className="text-lg md:text-xl font-medium hover:text-[#B86CF9] transition-colors font-mono uppercase tracking-wider">
+            Pricing
           </Link>
           <Link href="/projects" className="text-lg md:text-xl font-medium hover:text-[#B86CF9] transition-colors font-mono uppercase tracking-wider">
             Projects
@@ -69,6 +72,9 @@ export function Navigation({ delay = 0 }: NavigationProps) {
             </Link>
             <Link href="/services" className="text-3xl font-bold hover:text-[#B86CF9] font-mono uppercase" onClick={() => setIsOpen(false)}>
               Services
+            </Link>
+            <Link href="/pricing" className="text-3xl font-bold hover:text-[#B86CF9] font-mono uppercase" onClick={() => setIsOpen(false)}>
+              Pricing
             </Link>
             <Link href="/projects" className="text-3xl font-bold hover:text-[#B86CF9] font-mono uppercase" onClick={() => setIsOpen(false)}>
               Projects
