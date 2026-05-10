@@ -194,6 +194,7 @@ function ProjectItem({ project, index }: { project: any, index: number }) {
                             fill
                             sizes="(max-width: 768px) 100vw, 66vw"
                             priority={index === 0}
+                            quality={85}
                             className={cn(
                                 "object-cover transition-all duration-700",
                                 // Mobile: Color when in center view (isInView). Desktop: Color on hover.

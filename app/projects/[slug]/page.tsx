@@ -1,424 +1,437 @@
 "use client";
 
-import { Footer } from "@/components/footer"
-import { Navigation } from "@/components/navigation"
-import Link from "next/link"
-import Image from "next/image"
-import { notFound, useParams } from "next/navigation"
-import { useState, useEffect, useRef } from "react"
-import { motion, useScroll, useTransform, AnimatePresence, useSpring, useInView } from "framer-motion"
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import { ArrowUpRight, Github, X, Clock, Target, Layers, ExternalLink, Globe } from "lucide-react"
-import { HeroImageWrapper } from "./hero-image-wrapper";
+import { Footer } from "@/components/footer";
+import { Navigation } from "@/components/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import { notFound, useParams } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { motion, useScroll, useTransform, AnimatePresence, useInView } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { ArrowUpRight, X, ArrowLeft, Clock, User, Layers, Globe, CheckCircle } from "lucide-react";
+
+/* ─── helpers ─────────────────────────────────────────────── */
+
+function Fade({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+    const ref = useRef(null);
+    const inView = useInView(ref, { once: true, margin: "-60px" });
+    return (
+        <motion.div ref={ref} initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }} className={className}>
+            {children}
+        </motion.div>
+    );
+}
+
+function Label({ children }: { children: React.ReactNode }) {
+    return <p className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-[0.35em]">{children}</p>;
+}
+
+/* ─── main page ───────────────────────────────────────────── */
 
 export default function ProjectPage() {
     const { slug } = useParams();
     const [project, setProject] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const containerRef = useRef(null);
-    
+    const [lightbox, setLightbox] = useState<string | null>(null);
     const { scrollYProgress } = useScroll();
-
-    // Top-level hooks for background effects
-    const plasmaX1 = useTransform(scrollYProgress, [0, 1], [0, 100]);
-    const plasmaY1 = useTransform(scrollYProgress, [0, 1], [0, -50]);
-    const plasmaX2 = useTransform(scrollYProgress, [0, 1], [0, -80]);
-    const plasmaY2 = useTransform(scrollYProgress, [0, 1], [0, 100]);
+    const heroY = useTransform(scrollYProgress, [0, 0.25], ["0%", "25%"]);
+    const heroOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0]);
 
     useEffect(() => {
-        const fetchProject = async () => {
-            try {
-                const res = await fetch(`/api/projects/by-slug/${slug}`);
-                if (!res.ok) {
-                    if (res.status === 404) setProject(null);
-                    throw new Error("Project not found");
-                }
-                const data = await res.json();
-                setProject(data);
-            } catch (e) {
-                console.error("Fetch failed:", e);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProject();
+        fetch(`/api/projects/by-slug/${slug}`)
+            .then(r => r.ok ? r.json() : Promise.reject(r.status))
+            .then(setProject)
+            .catch(() => setProject(null))
+            .finally(() => setLoading(false));
     }, [slug]);
 
     if (loading) return (
         <div className="h-screen bg-[#050505] flex items-center justify-center">
-            <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex flex-col items-center gap-4"
-            >
-                <div className="w-12 h-12 border-2 border-[#B86CF9]/20 border-t-[#B86CF9] rounded-full animate-spin" />
-                <div className="text-[10px] font-medium text-[#B86CF9] font-mono tracking-[0.3em] uppercase">
-                    Initializing [ {slug} ]
-                </div>
-            </motion.div>
+            <div className="flex flex-col items-center gap-4">
+                <div className="w-10 h-10 border-2 border-[#B86CF9]/20 border-t-[#B86CF9] rounded-full animate-spin" />
+                <p className="text-[10px] font-mono text-[#B86CF9] uppercase tracking-[0.4em]">Loading</p>
+            </div>
         </div>
     );
 
     if (!project) notFound();
 
+    const hasChallenge = project.challenge || project.solution || project.outcome;
+    const hasTech = project.techStack?.length > 0;
+    const hasFeatures = project.features?.length > 0;
+    const hasGallery = project.gallery?.filter(Boolean).length > 0;
+    const hasResults = Array.isArray(project.results) && project.results.length > 0;
+    const hasTestimonial = project.testimonial?.text;
+    const hasProcess = Array.isArray(project.process) && project.process.length > 0;
+
     return (
-        <div ref={containerRef} className="min-h-screen bg-[#050505] text-[#F0F0F0] selection:bg-[#B86CF9] selection:text-white">
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                .font-inter { font-family: var(--font-inter-semibold), 'Inter', sans-serif; }
-                .font-montreal { font-family: var(--font-neue-montreal), sans-serif; }
-                .font-mono { font-family: var(--font-ibm-plex-mono), monospace; }
-                
-                /* Noise Texture */
-                .noise {
-                    position: fixed;
-                    inset: -200%;
-                    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-                    opacity: 0.04;
-                    pointer-events: none;
-                    z-index: 100;
-                }
-
-                /* Custom Scrollbar */
-                ::-webkit-scrollbar { width: 6px; }
+        <div className="min-h-screen bg-[#050505] text-[#F0F0F0] selection:bg-[#B86CF9]/30">
+            <style dangerouslySetInnerHTML={{ __html: `
+                .case-prose { color: #888; font-size: 1.0625rem; line-height: 1.8; }
+                .case-prose p { margin-bottom: 1.75rem; }
+                .case-prose h1, .case-prose h2, .case-prose h3 { color: #fff; letter-spacing: -0.02em; margin-top: 3.5rem; margin-bottom: 1.25rem; line-height: 1.15; }
+                .case-prose h1 { font-size: 2.5rem; font-weight: 700; }
+                .case-prose h2 { font-size: 1.875rem; font-weight: 700; }
+                .case-prose h3 { font-size: 1.375rem; font-weight: 600; }
+                .case-prose blockquote { border-left: 2px solid #B86CF9; padding: 0.5rem 0 0.5rem 1.75rem; margin: 3rem 0; color: #ccc; font-size: 1.25rem; font-style: italic; }
+                .case-prose ul { list-style: none; padding: 0; margin-bottom: 1.75rem; }
+                .case-prose ul li { padding-left: 1.25rem; position: relative; margin-bottom: 0.5rem; }
+                .case-prose ul li::before { content: ""; position: absolute; left: 0; top: 0.65rem; width: 5px; height: 5px; border-radius: 50%; background: #B86CF9; }
+                .case-prose strong { color: #fff; font-weight: 600; }
+                .case-prose a { color: #B86CF9; text-decoration: underline; text-underline-offset: 3px; }
+                ::-webkit-scrollbar { width: 5px; }
                 ::-webkit-scrollbar-track { background: #050505; }
-                ::-webkit-scrollbar-thumb { background: #1A1A1A; border-radius: 10px; }
+                ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
                 ::-webkit-scrollbar-thumb:hover { background: #B86CF9; }
-
-                /* Prose Refinement */
-                .prose { 
-                    max-width: 100%; 
-                    color: #A1A1A1;
-                    font-family: var(--font-neue-montreal), sans-serif;
-                }
-                .prose p, .prose .paragraph { 
-                    font-size: 1.125rem; 
-                    line-height: 1.7; 
-                    margin-bottom: 2rem;
-                }
-                .prose h1, .prose h2, .prose h3 { 
-                    color: #FFFFFF;
-                    font-family: var(--font-inter-semibold), sans-serif;
-                    text-transform: uppercase;
-                    margin-top: 4rem;
-                    margin-bottom: 1.5rem;
-                    letter-spacing: -0.02em;
-                }
-                .prose h2 { font-size: 2.5rem; }
-                .prose h3 { font-size: 1.75rem; }
-                
-                .prose blockquote {
-                    border-left: 2px solid #B86CF9;
-                    padding-left: 2rem;
-                    font-family: var(--font-inter-semibold), sans-serif;
-                    font-size: 2rem;
-                    color: #FFFFFF;
-                    font-style: italic;
-                    margin: 4rem 0;
-                    line-height: 1.2;
-                }
-
-                .glass-card {
-                    background: rgba(255, 255, 255, 0.02);
-                    backdrop-filter: blur(10px);
-                    border: 1px solid rgba(255, 255, 255, 0.05);
-                }
-                
-                .glow-text {
-                    text-shadow: 0 0 20px rgba(184, 108, 249, 0.3);
-                }
             `}} />
-
-            <div className="noise" />
-            
-            {/* Background Plasma Glows */}
-            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-                <motion.div 
-                    style={{ 
-                        x: plasmaX1,
-                        y: plasmaY1
-                    }}
-                    className="absolute -top-[20%] -right-[10%] w-[60vw] h-[60vw] bg-[#B86CF9]/10 blur-[120px] rounded-full"
-                />
-                <motion.div 
-                    style={{ 
-                        x: plasmaX2,
-                        y: plasmaY2
-                    }}
-                    className="absolute -bottom-[10%] -left-[5%] w-[50vw] h-[50vw] bg-[#B86CF9]/5 blur-[100px] rounded-full"
-                />
-            </div>
 
             <Navigation />
 
-            <main className="relative z-10">
-                
-                {/* HERO SECTION: TYPOGRAPHIC EXPLOSION */}
-                <section className="flex flex-col px-6 md:px-12 pt-16 md:pt-32 pb-12 md:pb-24">
-                    <div className="max-w-[1800px] mx-auto w-full">
-                        <div className="flex flex-col gap-6 md:gap-8">
-                            <motion.div
-                                initial={{ opacity: 0, y: 40 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                            >
-                                <span className="font-mono text-[10px] md:text-xs text-[#B86CF9] uppercase tracking-[0.5em] mb-4 block glow-text">
-                                    Project Case Study No. {project.id || "01"}
+            {/* ── HERO ── */}
+            <section className="relative h-[92vh] overflow-hidden">
+                {project.image ? (
+                    <motion.div style={{ y: heroY }} className="absolute inset-0 scale-110">
+                        <Image src={project.image} alt={project.title} fill className="object-cover object-center" priority sizes="100vw" />
+                    </motion.div>
+                ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#B86CF9]/20 via-[#050505]/60 to-[#050505]" />
+                )}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/60 to-transparent" />
+
+                <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-0 left-0 right-0 px-6 md:px-16 pb-14 md:pb-20">
+                    <div className="max-w-7xl mx-auto">
+                        <motion.p
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2, duration: 0.8 }}
+                            className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-[0.5em] mb-5"
+                        >
+                            Case Study
+                        </motion.p>
+
+                        <motion.h1
+                            initial={{ opacity: 0, y: 32 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.35, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                            className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-[-0.03em] text-white leading-[0.9] mb-8 max-w-4xl"
+                        >
+                            {project.title}
+                        </motion.h1>
+
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.6, duration: 0.8 }}
+                            className="flex flex-wrap items-center gap-x-8 gap-y-3"
+                        >
+                            {[
+                                { Icon: Layers, label: project.category },
+                                { Icon: User, label: project.role },
+                                { Icon: Clock, label: project.duration },
+                                { Icon: Globe, label: project.client },
+                            ].filter(m => m.label).map(({ Icon, label }, i) => (
+                                <span key={i} className="flex items-center gap-2 text-sm text-white/60">
+                                    <Icon size={13} className="text-[#B86CF9]" /> {label}
                                 </span>
-                                <h1 className="font-inter text-[14vw] md:text-[10vw] leading-[0.8] tracking-[-0.05em] uppercase text-white break-all font-bold">
-                                    {project.title.split('').map((char: string, i: number) => (
-                                        <motion.span
-                                            key={i}
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: i * 0.02 + 0.3, duration: 0.8, ease: "easeOut" }}
-                                            className="inline-block"
-                                        >
-                                            {char === ' ' ? '\u00A0' : char}
-                                        </motion.span>
-                                    ))}
-                                </h1>
-                            </motion.div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 items-start mt-8 md:mt-12">
-                                <motion.div 
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ delay: 1, duration: 1 }}
-                                    className="md:col-span-5"
+                            ))}
+                            {project.link && (
+                                <Link
+                                    href={project.link}
+                                    target="_blank"
+                                    className="flex items-center gap-2 text-sm font-medium text-white hover:text-[#B86CF9] transition-colors ml-auto"
                                 >
-                                    <p className="font-montreal text-lg md:text-xl text-[#A1A1A1] leading-relaxed max-w-xl">
-                                        {project.description}
-                                    </p>
-                                </motion.div>
+                                    Visit site <ArrowUpRight size={15} />
+                                </Link>
+                            )}
+                        </motion.div>
+                    </div>
+                </motion.div>
+            </section>
 
-                                <motion.div 
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 1.2, duration: 1 }}
-                                    className="md:col-span-7 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4"
-                                >
-                                    <MetadataBox label="Role" value={project.role || "Lead Designer"} icon={<Target className="w-3 h-3" />} />
-                                    <MetadataBox label="Sector" value={project.category || "Selected Work"} icon={<Layers className="w-3 h-3" />} />
-                                    <MetadataBox label="Duration" value={project.duration || "4 Months"} icon={<Clock className="w-3 h-3" />} />
-                                    <div className="flex flex-col justify-start">
-                                        {project.link && (
-                                            <Link 
-                                                href={project.link} 
-                                                target="_blank" 
-                                                className="group inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-white hover:text-[#B86CF9] transition-colors"
-                                            >
-                                                Launch Site <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                                            </Link>
-                                        )}
+            <main className="max-w-7xl mx-auto px-6 md:px-16">
+
+                {/* ── OVERVIEW ── */}
+                <section className="py-16 md:py-24 border-b border-white/[0.06]">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20">
+                        <Fade className="lg:col-span-7">
+                            <Label>Overview</Label>
+                            <p className="text-xl md:text-2xl text-white/75 leading-relaxed font-light mt-5 max-w-2xl">
+                                {project.description}
+                            </p>
+                        </Fade>
+                        <Fade delay={0.1} className="lg:col-span-5">
+                            <div className="grid grid-cols-2 gap-3">
+                                {[
+                                    { label: "Client", value: project.client },
+                                    { label: "Role", value: project.role },
+                                    { label: "Duration", value: project.duration },
+                                    { label: "Sector", value: project.category },
+                                ].filter(m => m.value).map(({ label, value }) => (
+                                    <div key={label} className="border border-white/[0.07] rounded-xl p-5 bg-white/[0.02] hover:border-white/[0.12] transition-colors">
+                                        <p className="font-mono text-[9px] text-[#B86CF9] uppercase tracking-widest mb-2">{label}</p>
+                                        <p className="text-white text-sm font-medium leading-snug">{value}</p>
                                     </div>
-                                </motion.div>
+                                ))}
                             </div>
-                        </div>
+                        </Fade>
                     </div>
                 </section>
 
-                {/* HERO IMAGE */}
-                <HeroImageWrapper project={project} />
+                {/* ── CHALLENGE / SOLUTION / OUTCOME ── */}
+                {hasChallenge && (
+                    <section className="py-16 md:py-24 border-b border-white/[0.06]">
+                        <Fade><Label>The Brief</Label></Fade>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
+                            {[
+                                { num: "01", heading: "Challenge", body: project.challenge },
+                                { num: "02", heading: "Solution", body: project.solution },
+                                { num: "03", heading: "Outcome", body: project.outcome },
+                            ].filter(s => s.body).map((s, i) => (
+                                <Fade key={s.num} delay={i * 0.08}>
+                                    <div className="relative rounded-2xl border border-white/[0.07] bg-white/[0.02] p-8 h-full overflow-hidden group hover:border-[#B86CF9]/25 transition-colors duration-500">
+                                        <span className="font-mono text-[10px] text-[#B86CF9]/40 tracking-widest mb-5 block">{s.num}</span>
+                                        <h3 className="text-base font-semibold text-white mb-4">{s.heading}</h3>
+                                        <p className="text-[#888] text-sm leading-relaxed">{s.body}</p>
+                                    </div>
+                                </Fade>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
-                {/* CONTENT GRID */}
-                <section className="px-6 md:px-12 pt-8 md:pt-16 pb-24 md:pb-48 max-w-[1800px] mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-32 items-start relative">
-                        
-                        {/* SIDEBAR METADATA (LEFT PANEL) */}
-                        <aside className="md:col-span-4 space-y-8 md:sticky md:top-40 h-fit z-20">
-                            
-                            {/* CTA ACTIONS */}
-                            <div className="space-y-4">
-                                {project.link && (
-                                    <Link 
-                                        href={project.link} 
-                                        target="_blank"
-                                        className="flex items-center justify-between p-6 rounded-2xl bg-[#B86CF9] text-black font-inter font-bold text-lg uppercase tracking-wider group hover:bg-white transition-all duration-500 shadow-[0_0_30px_rgba(184,108,249,0.3)] hover:shadow-[0_0_50px_rgba(184,108,249,0.5)]"
-                                    >
-                                        <span>Live Preview</span>
-                                        <ExternalLink className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                    </Link>
-                                )}
+                {/* ── PROCESS STEPS ── */}
+                {hasProcess && (
+                    <section className="py-16 md:py-24 border-b border-white/[0.06]">
+                        <Fade><Label>Our Process</Label></Fade>
+                        <div className="mt-10">
+                            {(project.process as any[]).map((step: any, i: number) => (
+                                <Fade key={i} delay={i * 0.06}>
+                                    <div className="flex gap-6 md:gap-10 py-7 border-b border-white/[0.05] group last:border-b-0">
+                                        <span className="font-mono text-[10px] text-[#B86CF9]/40 w-7 flex-shrink-0 pt-0.5">
+                                            {String(i + 1).padStart(2, "0")}
+                                        </span>
+                                        <div>
+                                            <h4 className="text-white font-semibold text-sm mb-2 group-hover:text-[#B86CF9] transition-colors duration-300">{step.title}</h4>
+                                            <p className="text-[#888] text-sm leading-relaxed">{step.desc}</p>
+                                        </div>
+                                    </div>
+                                </Fade>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
-                                {project.github && (
-                                    <Link 
-                                        href={project.github} 
-                                        target="_blank"
-                                        className="flex items-center justify-between p-6 rounded-2xl bg-white/5 border border-white/10 text-white font-inter font-bold uppercase tracking-wider group hover:bg-white hover:text-black transition-all duration-500"
-                                    >
-                                        <span>Source Code</span>
-                                        <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                                    </Link>
-                                )}
-                            </div>
-
-                            <div className="space-y-8">
-                                <div className="glass-card p-8 rounded-2xl">
-                                    <h3 className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest mb-6 block">Technologies Used</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {project.techStack?.map((t: string, i: number) => (
-                                            <span key={i} className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 font-mono text-[10px] text-white/80 uppercase tracking-wider">
+                {/* ── TECH + FEATURES ── */}
+                {(hasTech || hasFeatures) && (
+                    <section className="py-16 md:py-24 border-b border-white/[0.06]">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
+                            {hasTech && (
+                                <Fade>
+                                    <Label>Tech Stack</Label>
+                                    <div className="flex flex-wrap gap-2 mt-6">
+                                        {project.techStack.map((t: string, i: number) => (
+                                            <span key={i} className="text-xs font-mono text-white/60 border border-white/[0.08] rounded-full px-4 py-1.5 hover:border-[#B86CF9]/40 hover:text-white transition-all duration-300">
                                                 {t}
                                             </span>
                                         ))}
                                     </div>
-                                </div>
-
-                                <div className="glass-card p-8 rounded-2xl">
-                                    <h3 className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest mb-6 block">Project Deliverables</h3>
-                                    <div className="space-y-4">
-                                        {["UI/UX Research", "System Architecture", "Visual Identity", "Full-Stack Development"].map((d, i) => (
-                                            <div key={i} className="flex items-center gap-3 text-sm text-white/60">
-                                                <div className="w-1 h-1 rounded-full bg-[#B86CF9]" />
-                                                <span className="font-montreal">{d}</span>
-                                            </div>
+                                </Fade>
+                            )}
+                            {hasFeatures && (
+                                <Fade delay={0.1}>
+                                    <Label>Key Features</Label>
+                                    <ul className="mt-6 space-y-3">
+                                        {project.features.map((f: string, i: number) => (
+                                            <li key={i} className="flex items-start gap-3 text-sm text-[#888]">
+                                                <CheckCircle size={14} className="text-[#B86CF9] mt-0.5 flex-shrink-0" />
+                                                {f}
+                                            </li>
                                         ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </aside>
-
-                        {/* MAIN CONTENT ARTICLE (RIGHT PANEL) */}
-                        <div className="md:col-span-8 space-y-32">
-                            <article>
-                                <div className="prose prose-invert prose-lg">
-                                    <ReactMarkdown 
-                                        remarkPlugins={[remarkGfm]} 
-                                        components={{
-                                            p: ({ children }: any) => {
-                                                const hasFigure = Array.isArray(children) 
-                                                    ? children.some(child => typeof child === 'object' && child.type === 'figure')
-                                                    : typeof children === 'object' && children.type === 'figure';
-                                                
-                                                if (hasFigure) return <div className="paragraph">{children}</div>;
-                                                return <p className="mb-8">{children}</p>;
-                                            },
-                                            h1: ({ children }: any) => <h1 className="text-4xl md:text-5xl font-inter font-bold mb-8">{children}</h1>,
-                                            h2: ({ children }: any) => <h2 className="text-3xl md:text-4xl font-inter font-bold mb-6">{children}</h2>,
-                                            img: (props) => (
-                                                <figure className="my-16 md:my-24 relative aspect-video rounded-3xl overflow-hidden group">
-                                                    {props.src && (
-                                                        <Image
-                                                            src={props.src}
-                                                            alt={props.alt || "Project Visual"}
-                                                            fill
-                                                            className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                                                            sizes="(max-width: 1024px) 100vw, 60vw"
-                                                        />
-                                                    )}
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/40 to-transparent pointer-events-none" />
-                                                </figure>
-                                            )
-                                        }}
-                                    >
-                                        {project.content || ""}
-                                    </ReactMarkdown>
-                                </div>
-                            </article>
-
-                            {/* VISUAL INDEX / GALLERY */}
-                            {project.gallery && project.gallery.length > 0 && (
-                                <section>
-                                    <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-8">
-                                        <h2 className="font-inter font-bold text-[8vw] md:text-[5vw] uppercase text-white leading-none">Visual Index</h2>
-                                        <div className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest">
-                                            [{project.gallery.length} Shots]
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                                        {project.gallery.map((img: string, i: number) => (
-                                            <GalleryItem 
-                                                key={i} 
-                                                src={img} 
-                                                index={i} 
-                                                onClick={() => setSelectedImage(img)} 
-                                            />
-                                        ))}
-                                    </div>
-                                </section>
+                                    </ul>
+                                </Fade>
                             )}
                         </div>
-                    </div>
+                    </section>
+                )}
+
+                {/* ── MAIN CONTENT (MARKDOWN) ── */}
+                {project.content && (
+                    <section className="py-16 md:py-24 border-b border-white/[0.06]">
+                        <Fade><Label>Full Case Study</Label></Fade>
+                        <div className="mt-10 max-w-3xl">
+                            <div className="case-prose">
+                                <ReactMarkdown
+                                    remarkPlugins={[remarkGfm]}
+                                    components={{
+                                        p: ({ children }: any) => {
+                                            const hasImg = Array.isArray(children)
+                                                ? children.some((c: any) => c?.type === "img" || c?.props?.src)
+                                                : (children as any)?.type === "img" || (children as any)?.props?.src;
+                                            return hasImg ? <div>{children}</div> : <p>{children}</p>;
+                                        },
+                                        img: (props: any) => (
+                                            <figure className="my-12 relative aspect-video rounded-2xl overflow-hidden cursor-zoom-in" onClick={() => props.src && setLightbox(props.src)}>
+                                                {props.src && (
+                                                    <Image
+                                                        src={props.src}
+                                                        alt={props.alt || ""}
+                                                        fill
+                                                        className="object-cover hover:scale-[1.02] transition-transform duration-700"
+                                                        sizes="(max-width: 1024px) 100vw, 56rem"
+                                                    />
+                                                )}
+                                            </figure>
+                                        ),
+                                    }}
+                                >
+                                    {project.content}
+                                </ReactMarkdown>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+                {/* ── GALLERY ── */}
+                {hasGallery && (
+                    <section className="py-16 md:py-24 border-b border-white/[0.06]">
+                        <div className="flex items-center justify-between mb-10">
+                            <Fade><Label>Gallery</Label></Fade>
+                            <span className="font-mono text-[10px] text-[#B86CF9]/50 uppercase tracking-widest">
+                                {project.gallery.filter(Boolean).length} images
+                            </span>
+                        </div>
+                        <GalleryGrid images={project.gallery.filter(Boolean)} onOpen={setLightbox} />
+                    </section>
+                )}
+
+                {/* ── RESULTS ── */}
+                {hasResults && (
+                    <section className="py-16 md:py-24 border-b border-white/[0.06]">
+                        <Fade><Label>Impact & Results</Label></Fade>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-px mt-10 border border-white/[0.07] rounded-2xl overflow-hidden bg-white/[0.04]">
+                            {(project.results as any[]).map((r: any, i: number) => (
+                                <Fade key={i} delay={i * 0.07}>
+                                    <div className="bg-[#050505] px-8 py-10">
+                                        <p className="text-4xl md:text-5xl font-bold text-white tracking-tight">{r.value}</p>
+                                        <p className="font-mono text-[10px] text-[#B86CF9] uppercase tracking-widest mt-3">{r.label}</p>
+                                    </div>
+                                </Fade>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
+                {/* ── TESTIMONIAL ── */}
+                {hasTestimonial && (
+                    <section className="py-16 md:py-24 border-b border-white/[0.06]">
+                        <Fade>
+                            <div className="max-w-2xl mx-auto text-center px-4">
+                                <div className="text-6xl text-[#B86CF9]/20 font-serif leading-none mb-6 select-none">"</div>
+                                <blockquote className="text-xl md:text-2xl font-light text-white/90 leading-relaxed mb-8">
+                                    {project.testimonial.text}
+                                </blockquote>
+                                <div className="flex flex-col items-center gap-1 pt-4 border-t border-white/[0.06]">
+                                    <span className="text-white font-semibold text-sm">{project.testimonial.author}</span>
+                                    <span className="text-xs text-[#888]">{project.testimonial.role}</span>
+                                </div>
+                            </div>
+                        </Fade>
+                    </section>
+                )}
+
+                {/* ── CTA ── */}
+                <section className="py-16 md:py-24 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                    <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-[#888] hover:text-white transition-colors group">
+                        <ArrowLeft size={15} className="group-hover:-translate-x-0.5 transition-transform" />
+                        All Projects
+                    </Link>
+                    {project.link && (
+                        <Link
+                            href={project.link}
+                            target="_blank"
+                            className="group inline-flex items-center gap-3 bg-[#B86CF9] hover:bg-white text-black font-semibold text-sm px-7 py-3.5 rounded-xl transition-all duration-300"
+                        >
+                            View Live Site
+                            <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        </Link>
+                    )}
                 </section>
 
-                {/* LIGHTBOX */}
-                <AnimatePresence>
-                    {selectedImage && (
-                        <motion.div
-                            initial={{ opacity: 0 }} 
-                            animate={{ opacity: 1 }} 
-                            exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-[200] bg-[#050505]/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-12 cursor-zoom-out"
-                            onClick={() => setSelectedImage(null)}
-                        >
-                            <motion.div
-                                initial={{ scale: 0.9, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0.9, opacity: 0 }}
-                                transition={{ type: "spring", damping: 25 }}
-                                className="relative max-w-6xl w-full h-full flex items-center justify-center"
-                            >
-                                <button className="absolute top-0 right-0 p-4 text-white/40 hover:text-white transition-colors z-10">
-                                    <X className="w-8 h-8" />
-                                </button>
-                                <img
-                                    src={selectedImage}
-                                    alt="Selected visualization"
-                                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-                                />
-                            </motion.div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
             </main>
-            
+
             <Footer />
+
+            {/* ── LIGHTBOX ── */}
+            <AnimatePresence>
+                {lightbox && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-12 cursor-zoom-out"
+                        onClick={() => setLightbox(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.92, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.92, opacity: 0 }}
+                            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                            className="relative max-w-6xl w-full flex items-center justify-center"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <button onClick={() => setLightbox(null)} className="absolute -top-10 right-0 p-2 text-white/40 hover:text-white transition-colors">
+                                <X size={20} />
+                            </button>
+                            <img src={lightbox} alt="" className="max-w-full max-h-[85vh] object-contain rounded-xl" />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
 
-function MetadataBox({ label, value, icon }: { label: string; value: string; icon: React.ReactNode }) {
+/* ─── Gallery Grid ───────────────────────────────────────── */
+
+function GalleryGrid({ images, onOpen }: { images: string[]; onOpen: (s: string) => void }) {
     return (
-        <div className="space-y-1">
-            <span className="font-mono text-[9px] text-white/40 uppercase tracking-[0.2em] flex items-center gap-2">
-                {icon} {label}
-            </span>
-            <div className="font-inter font-bold text-xl text-white uppercase tracking-tight">
-                {value}
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+            {images.map((src, i) => {
+                const wide = i === 0 || i % 5 === 3;
+                return <GalleryImage key={i} src={src} index={i} wide={wide} onOpen={onOpen} />;
+            })}
         </div>
     );
 }
 
-function GalleryItem({ src, index, onClick }: { src: string; index: number; onClick: () => void }) {
+function GalleryImage({ src, index, wide, onOpen }: { src: string; index: number; wide: boolean; onOpen: (s: string) => void }) {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const inView = useInView(ref, { once: true, margin: "-80px" });
 
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: index * 0.1 }}
-            className="group relative aspect-[4/3] rounded-2xl overflow-hidden glass-card cursor-zoom-in"
-            onClick={onClick}
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.65, delay: index * 0.04 }}
+            className={`group relative rounded-2xl overflow-hidden cursor-zoom-in bg-white/[0.03] ${wide ? "md:col-span-8" : "md:col-span-4"}`}
+            style={{ aspectRatio: wide ? "16/9" : "4/3" }}
+            onClick={() => onOpen(src)}
         >
             <Image
                 src={src}
-                alt={`Gallery visual ${index + 1}`}
+                alt={`Gallery ${index + 1}`}
                 fill
-                className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 800px"
             />
-            <div className="absolute inset-0 bg-[#B86CF9]/0 group-hover:bg-[#B86CF9]/10 transition-colors duration-500" />
-            <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-                <span className="font-mono text-[9px] text-white bg-black/40 backdrop-blur-md px-3 py-1 rounded-full uppercase tracking-widest border border-white/10">
-                    Shot {String(index + 1).padStart(2, '0')}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+            <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="font-mono text-[9px] text-white bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full tracking-widest uppercase">
+                    {String(index + 1).padStart(2, "0")}
                 </span>
             </div>
         </motion.div>

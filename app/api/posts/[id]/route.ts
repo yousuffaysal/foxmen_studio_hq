@@ -1,41 +1,41 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import redis from '@/lib/redis';
+import { verifyAuth } from '@/lib/auth';
 
 const CACHE_KEY = 'api:posts';
 
-export async function GET(request: Request, props: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
     try {
-        const params = await props.params;
-        const post = await prisma.post.findUnique({
-            where: { id: params.id },
-            include: { comments: true }
-        });
-        if (!post) {
-            return NextResponse.json({ error: 'Post not found' }, { status: 404 });
-        }
+        const { id } = await props.params;
+        const post = await prisma.post.findUnique({ where: { id }, include: { comments: true } });
+        if (!post) return NextResponse.json({ error: 'Post not found' }, { status: 404 });
         return NextResponse.json(post);
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to fetch post' }, { status: 500 });
     }
 }
 
-export async function PUT(request: Request, props: { params: Promise<{ id: string }> }) {
+export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
     try {
-        const params = await props.params;
-        const body = await request.json();
-        console.log(`[PUT] Updating post ${params.id}`, body);
+        verifyAuth(request);
+    } catch {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-        const updatedPost = await prisma.post.update({
-            where: { id: params.id },
+    try {
+        const { id } = await props.params;
+        const body = await request.json();
+        const updated = await prisma.post.update({
+            where: { id },
             data: {
                 title: body.title,
                 slug: body.slug,
                 excerpt: body.excerpt,
                 content: body.content,
                 coverImage: body.coverImage,
-                tags: body.tags,
-                references: body.references,
+                tags: body.tags ?? [],
+                references: body.references ?? [],
                 author: body.author,
                 authorRole: body.authorRole,
                 authorBio: body.authorBio,
@@ -46,43 +46,29 @@ export async function PUT(request: Request, props: { params: Promise<{ id: strin
             },
         });
 
-        // Invalidate cache
-        if (redis) {
-            try {
-                await redis.del(CACHE_KEY);
-                console.log('Cache INVALIDATED: post updated');
-            } catch (redisError) {
-                console.error('Redis DEL Error:', redisError);
-            }
-        }
+        if (redis) { try { await redis.del(CACHE_KEY); } catch {} }
 
-        console.log(`[PUT] Update success`, updatedPost);
-        return NextResponse.json(updatedPost);
+        return NextResponse.json(updated);
     } catch (error: any) {
-        console.error("Failed to update post:", error);
         return NextResponse.json({ error: error.message || 'Failed to update post' }, { status: 500 });
     }
 }
 
-export async function DELETE(request: Request, props: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
     try {
-        const params = await props.params;
-        await prisma.post.delete({
-            where: { id: params.id },
-        });
+        verifyAuth(request);
+    } catch {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-        // Invalidate cache
-        if (redis) {
-            try {
-                await redis.del(CACHE_KEY);
-                console.log('Cache INVALIDATED: post deleted');
-            } catch (redisError) {
-                console.error('Redis DEL Error:', redisError);
-            }
-        }
+    try {
+        const { id } = await props.params;
+        await prisma.post.delete({ where: { id } });
+
+        if (redis) { try { await redis.del(CACHE_KEY); } catch {} }
 
         return NextResponse.json({ message: 'Post deleted' });
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 });
     }
 }

@@ -2,21 +2,20 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AdminLogin() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError("");
+        setLoading(true);
         try {
-            const res = await fetch("https://paperfolio-backend.vercel.app/api/auth/login", {
+            const res = await fetch("/api/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, password }),
@@ -29,64 +28,77 @@ export default function AdminLogin() {
                 localStorage.setItem("adminUser", JSON.stringify(data.admin));
                 router.push("/admin/projects");
             } else {
-                if (data.message && data.message.includes("Can't reach database")) {
-                    setError("Database is offline (Neon DB paused). Please check your console.");
-                } else if (data.message && data.message.includes("Server error")) {
-                    setError(data.message); // The middleware now returns clean "Server error: ..." messages
-                } else {
-                    setError(data.message || "Login failed");
-                }
+                setError(data.message || "Login failed");
             }
-        } catch (err) {
-            setError("Something went wrong. Is backend running?");
+        } catch {
+            setError("Something went wrong. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-[#FFC224] font-sans">
-            <div className="w-full max-w-md bg-white p-8 rounded-3xl border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-black uppercase tracking-tight mb-2">Admin Portal</h1>
-                    <p className="text-gray-500 font-bold uppercase text-xs tracking-widest">Foxmen Studio</p>
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+            <div className="w-full max-w-sm">
+                {/* Logo */}
+                <div className="flex justify-center mb-8">
+                    <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </div>
                 </div>
 
-                <form onSubmit={handleLogin} className="space-y-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="username" className="font-bold uppercase text-xs tracking-wide">Username</Label>
-                        <Input
+                <div className="text-center mb-8">
+                    <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Admin Portal</h1>
+                    <p className="text-sm text-slate-500 mt-1">Sign in to manage your portfolio</p>
+                </div>
+
+                <form onSubmit={handleLogin} className="space-y-4">
+                    <div>
+                        <label htmlFor="username" className="block text-sm font-medium text-slate-700 mb-1.5">
+                            Username
+                        </label>
+                        <input
                             id="username"
+                            type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="border-2 border-black rounded-xl h-12 text-lg font-bold focus-visible:ring-0 focus-visible:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
-                            placeholder="Enter username"
+                            className="w-full px-3.5 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
+                            placeholder="Enter your username"
                             required
                         />
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="password" className="font-bold uppercase text-xs tracking-wide">Password</Label>
-                        <Input
+
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-1.5">
+                            Password
+                        </label>
+                        <input
                             id="password"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="border-2 border-black rounded-xl h-12 text-lg font-bold focus-visible:ring-0 focus-visible:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                            className="w-full px-3.5 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
                             placeholder="••••••••"
                             required
                         />
                     </div>
 
                     {error && (
-                        <div className="bg-red-100 border-2 border-red-500 text-red-600 p-3 rounded-xl text-sm font-bold flex items-center justify-center">
+                        <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3.5 py-2.5">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                             {error}
                         </div>
                     )}
 
-                    <Button
+                    <button
                         type="submit"
-                        className="w-full h-14 bg-black text-white text-lg font-black uppercase tracking-wide rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:bg-[#FF4A60] transition-all"
+                        disabled={loading}
+                        className="w-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium py-2.5 px-4 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                        Access Dashboard
-                    </Button>
+                        {loading ? "Signing in..." : "Sign in"}
+                    </button>
                 </form>
             </div>
         </div>

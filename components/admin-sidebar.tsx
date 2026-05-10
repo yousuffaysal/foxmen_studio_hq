@@ -1,35 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText, MessageSquare, LogOut, FolderKanban, Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { FolderKanban, FileText, MessageSquare, LogOut, Layers, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+
+const links = [
+    { href: "/admin/projects", label: "Projects", icon: FolderKanban },
+    { href: "/admin/blog", label: "Blog", icon: FileText },
+    { href: "/admin/messages", label: "Messages", icon: MessageSquare },
+    { href: "/admin/dashboard", label: "AI Chats", icon: LayoutDashboard },
+];
 
 export function AdminSidebar() {
     const pathname = usePathname();
     const router = useRouter();
-    const [isOpen, setIsOpen] = useState(false);
     const [username, setUsername] = useState("Admin");
-
-    // Close sidebar on route change (mobile)
-    useEffect(() => {
-        setIsOpen(false);
-    }, [pathname]);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("adminUser");
-        if (storedUser) {
-            try {
-                const user = JSON.parse(storedUser);
-                if (user.username) setUsername(user.username);
-            } catch (e) {
-                console.error("Failed to parse admin user");
-            }
+        const stored = localStorage.getItem("adminUser");
+        if (stored) {
+            try { setUsername(JSON.parse(stored).username || "Admin"); } catch {}
         }
     }, []);
+
+    useEffect(() => { setMobileOpen(false); }, [pathname]);
+
+    if (pathname === "/admin/login") return null;
 
     const handleLogout = () => {
         localStorage.removeItem("adminToken");
@@ -37,85 +36,86 @@ export function AdminSidebar() {
         router.push("/admin/login");
     };
 
-    const links = [
-        { href: "/admin/projects", label: "Projects", icon: FolderKanban },
-        { href: "/admin/blog", label: "Blog", icon: FileText },
-        { href: "/admin/messages", label: "Messages", icon: MessageSquare },
-    ];
+    const SidebarContent = () => (
+        <div className="flex flex-col h-full">
+            {/* Brand */}
+            <div className="px-5 py-5 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-md bg-white/10 flex items-center justify-center flex-shrink-0">
+                        <Layers size={14} className="text-white" />
+                    </div>
+                    <span className="text-sm font-semibold text-white">Studio Admin</span>
+                </div>
+            </div>
 
-    if (pathname === "/admin/login") return null;
+            {/* Nav */}
+            <nav className="flex-1 px-3 py-4 space-y-0.5">
+                {links.map(({ href, label, icon: Icon }) => {
+                    const active = pathname.startsWith(href);
+                    return (
+                        <Link
+                            key={href}
+                            href={href}
+                            className={cn(
+                                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                                active
+                                    ? "bg-white/10 text-white"
+                                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                            )}
+                        >
+                            <Icon size={16} />
+                            {label}
+                        </Link>
+                    );
+                })}
+            </nav>
+
+            {/* Footer */}
+            <div className="px-3 py-4 border-t border-white/10">
+                <div className="flex items-center gap-3 px-3 py-2 mb-1">
+                    <div className="w-7 h-7 rounded-full bg-slate-600 flex items-center justify-center text-xs font-semibold text-white flex-shrink-0">
+                        {username[0]?.toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-white truncate capitalize">{username}</p>
+                        <p className="text-xs text-slate-500">Administrator</p>
+                    </div>
+                </div>
+                <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+                >
+                    <LogOut size={16} />
+                    Sign out
+                </button>
+            </div>
+        </div>
+    );
 
     return (
         <>
-            {/* Mobile Toggle Button */}
+            {/* Desktop sidebar */}
+            <aside className="hidden lg:flex w-56 min-h-screen bg-slate-900 flex-col flex-shrink-0">
+                <SidebarContent />
+            </aside>
+
+            {/* Mobile toggle */}
             <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden fixed bottom-6 right-6 z-[60] p-4 bg-black text-white rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] hover:scale-105 active:scale-95 transition-all"
+                onClick={() => setMobileOpen(true)}
+                className="lg:hidden fixed bottom-5 right-5 z-50 w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center shadow-lg"
             >
-                <Menu size={24} />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
 
-            {/* Mobile Backdrop */}
-            {isOpen && (
-                <div
-                    className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm"
-                    onClick={() => setIsOpen(false)}
-                />
+            {/* Mobile drawer */}
+            {mobileOpen && (
+                <>
+                    <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
+                    <aside className="fixed top-0 left-0 h-full w-56 bg-slate-900 z-50 flex flex-col lg:hidden">
+                        <SidebarContent />
+                    </aside>
+                </>
             )}
-
-            {/* Sidebar */}
-            <aside className={cn(
-                "w-80 min-h-screen bg-white border-r-4 border-black flex flex-col fixed lg:static top-0 left-0 z-50 transition-transform duration-300",
-                isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-            )}>
-                {/* Header / Brand */}
-                <div className="p-8 border-b-4 border-black flex justify-center">
-                    <img src="/images/navlogo.svg" alt="Logo" className="h-12 w-auto" />
-                </div>
-
-                {/* Navigation */}
-                <nav className="flex-1 p-6 space-y-4 overflow-y-auto">
-                    {links.map((link) => {
-                        const Icon = link.icon;
-                        const isActive = pathname.startsWith(link.href);
-                        return (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className={cn(
-                                    "flex items-center gap-4 px-6 py-4 rounded-xl transition-all border-4 text-lg font-bold uppercase tracking-wide",
-                                    isActive
-                                        ? "bg-[#FFC224] text-black border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-1"
-                                        : "bg-white text-gray-500 border-transparent hover:border-black hover:bg-gray-50 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]"
-                                )}
-                            >
-                                <Icon size={24} strokeWidth={isActive ? 3 : 2} />
-                                {link.label}
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                {/* Footer / Logout */}
-                <div className="p-8 border-t-4 border-black bg-[#FFFBF5]">
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className="w-12 h-12 rounded-full border-4 border-black bg-gray-200 overflow-hidden">
-                            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`} alt="Admin" />
-                        </div>
-                        <div>
-                            <p className="font-bold text-lg leading-tight capitalize">{username}</p>
-                            <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Administrator</p>
-                        </div>
-                    </div>
-                    <Button
-                        onClick={handleLogout}
-                        className="w-full h-14 bg-white text-[#FF4A60] border-4 border-[#FF4A60] hover:bg-[#FF4A60] hover:text-white font-bold text-lg rounded-xl shadow-[4px_4px_0px_0px_rgba(255,74,96,0.2)] hover:shadow-[4px_4px_0px_0px_rgba(255,74,96,0.4)] transition-all uppercase tracking-wider flex items-center justify-center gap-2"
-                    >
-                        <LogOut size={20} />
-                        Logout
-                    </Button>
-                </div>
-            </aside>
         </>
     );
 }

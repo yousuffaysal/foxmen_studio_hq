@@ -1,31 +1,30 @@
-
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { verifyAuth } from '@/lib/auth';
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
-        const messages = await prisma.contactMessage.findMany({
-            orderBy: { createdAt: 'desc' }
-        });
+        verifyAuth(request);
+    } catch {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    try {
+        const messages = await prisma.contactMessage.findMany({ orderBy: { createdAt: 'desc' } });
         return NextResponse.json(messages);
     } catch (error: any) {
-        console.error("Failed to fetch messages:", error);
-        return NextResponse.json({ error: "Failed to fetch messages", details: error.message }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to fetch messages' }, { status: 500 });
     }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
 
-        // Basic validation
         if (!body.email || !body.message) {
-            return NextResponse.json(
-                { error: "Email and Message are required" },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: 'Email and message are required' }, { status: 400 });
         }
 
         const newMessage = await prisma.contactMessage.create({
@@ -43,11 +42,6 @@ export async function POST(request: Request) {
 
         return NextResponse.json(newMessage, { status: 201 });
     } catch (error: any) {
-        console.error("Message API Error:", error);
-        return NextResponse.json({
-            error: "Internal Server Error",
-            details: error.message,
-            stack: error.stack
-        }, { status: 500 });
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
